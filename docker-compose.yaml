@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  reelwin-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reelwin-admin
+    restart: always
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
