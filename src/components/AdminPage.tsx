@@ -65,7 +65,6 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
           "Content-Type": "multipart/form-data",
         },
       });
-
     },
   });
 
@@ -601,7 +600,8 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
 
             {addingContent && (
               <div className="mt-4 text-sm text-gray-500">
-                ⏳ يتم الآن معالجة المحتوى، وقد يستغرق ذلك بين بضع ثوانٍ إلى 5 دقائق... يرجى الانتظار.
+                ⏳ يتم الآن معالجة المحتوى، وقد يستغرق ذلك بين بضع ثوانٍ إلى 5
+                دقائق... يرجى الانتظار.
               </div>
             )}
             {/* Status Messages */}

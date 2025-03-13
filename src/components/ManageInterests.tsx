@@ -5,7 +5,16 @@ import { Table, Button, Modal, Form, Input, Select, message } from "antd";
 
 const { Option } = Select;
 
-const fetchInterests = async () => {
+// تعريف الأنواع
+interface Interest {
+  id: string;
+  name: string;
+  targetedGender?: "MALE" | "FEMALE" | null;
+  minAge: number;
+  maxAge: number;
+}
+
+const fetchInterests = async (): Promise<Interest[]> => {
   const response = await axios.get("/reel-win/api/interests/list");
   return response.data;
 };
@@ -13,62 +22,79 @@ const fetchInterests = async () => {
 export default function ManageInterests() {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingInterest, setEditingInterest] = useState(null);
-  const [form] = Form.useForm();
+  const [editingInterest, setEditingInterest] = useState<Interest | null>(null);
+  const [form] = Form.useForm<Interest>();
 
-  const { data: interests, isLoading } = useQuery({
+  const { data: interests, isLoading } = useQuery<Interest[]>({
     queryKey: ["interests"],
     queryFn: fetchInterests,
   });
 
   const addInterestMutation = useMutation({
-    mutationFn: (newInterest) => axios.post("/reel-win/api/interests", newInterest),
+    mutationFn: (newInterest: Omit<Interest, "id">) =>
+      axios.post("/reel-win/api/interests", newInterest),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["interests"]});
-      message.success("Interest added successfully");
+      queryClient.invalidateQueries({ queryKey: ["interests"] });
+      message.success("تمت إضافة الاهتمام بنجاح");
       setIsModalOpen(false);
     },
   });
 
   const updateInterestMutation = useMutation({
-    mutationFn: ({ id, updatedInterest }) => axios.put(`/reel-win/api/interests/${id}`, updatedInterest),
+    mutationFn: ({
+      id,
+      updatedInterest,
+    }: {
+      id: string;
+      updatedInterest: Partial<Interest>;
+    }) => axios.put(`/reel-win/api/interests/${id}`, updatedInterest),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["interests"]});
-      message.success("Interest updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["interests"] });
+      message.success("تم تحديث الاهتمام بنجاح");
       setIsModalOpen(false);
     },
   });
 
   const deleteInterestMutation = useMutation({
-    mutationFn: (id) => axios.delete(`/reel-win/api/interests/${id}`),
+    mutationFn: (id: string) => axios.delete(`/reel-win/api/interests/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["interests"]});
-      message.success("Interest deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["interests"] });
+      message.success("تم حذف الاهتمام بنجاح");
     },
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: Omit<Interest, "id">) => {
     if (editingInterest) {
-      updateInterestMutation.mutate({ id: editingInterest.id, updatedInterest: values });
+      updateInterestMutation.mutate({
+        id: editingInterest.id,
+        updatedInterest: values,
+      });
     } else {
       addInterestMutation.mutate(values);
     }
   };
 
-  const handleEdit = (interest) => {
+  const handleEdit = (interest: Interest) => {
     setEditingInterest(interest);
     form.setFieldsValue(interest);
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     deleteInterestMutation.mutate(id);
   };
 
   return (
     <div>
-      <Button type="primary" onClick={() => { setEditingInterest(null); form.resetFields(); setIsModalOpen(true); }}>
-        Add Interest
+      <Button
+        type="primary"
+        onClick={() => {
+          setEditingInterest(null);
+          form.resetFields();
+          setIsModalOpen(true);
+        }}
+      >
+        إضافة اهتمام
       </Button>
 
       <Table
@@ -76,16 +102,27 @@ export default function ManageInterests() {
         loading={isLoading}
         rowKey="id"
         columns={[
-          { title: "Name", dataIndex: "name", key: "name" },
-          { title: "Targeted Gender", dataIndex: "targetedGender", key: "targetedGender" },
-          { title: "Min Age", dataIndex: "minAge", key: "minAge" },
-          { title: "Max Age", dataIndex: "maxAge", key: "maxAge" },
+          { title: "الاسم", dataIndex: "name", key: "name" },
           {
-            title: "Actions",
-            render: (_, record) => (
+            title: "الجنس المستهدف",
+            dataIndex: "targetedGender",
+            key: "targetedGender",
+          },
+          { title: "العمر الأدنى", dataIndex: "minAge", key: "minAge" },
+          { title: "العمر الأقصى", dataIndex: "maxAge", key: "maxAge" },
+          {
+            title: "الإجراءات",
+            render: (_, record: Interest) => (
               <>
-                <Button onClick={() => handleEdit(record)} style={{ marginRight: 8 }}>Edit</Button>
-                <Button onClick={() => handleDelete(record.id)} danger>Delete</Button>
+                <Button
+                  onClick={() => handleEdit(record)}
+                  style={{ marginRight: 8 }}
+                >
+                  تعديل
+                </Button>
+                <Button onClick={() => handleDelete(record.id)} danger>
+                  حذف
+                </Button>
               </>
             ),
           },
@@ -93,25 +130,37 @@ export default function ManageInterests() {
       />
 
       <Modal
-        title={editingInterest ? "Edit Interest" : "Add Interest"}
+        title={editingInterest ? "تعديل الاهتمام" : "إضافة اهتمام"}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         onOk={() => form.submit()}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item name="name" label="Name" rules={[{ required: true, message: "Name is required" }]}> 
+          <Form.Item
+            name="name"
+            label="الاسم"
+            rules={[{ required: true, message: "الاسم مطلوب" }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="targetedGender" label="Targeted Gender"> 
+          <Form.Item name="targetedGender" label="الجنس المستهدف">
             <Select>
-              <Option value="MALE">Male</Option>
-              <Option value="FEMALE">Female</Option>
+              <Option value="MALE">ذكر</Option>
+              <Option value="FEMALE">أنثى</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="minAge" label="Min Age" rules={[{ required: true, message: "Min age is required" }]}> 
+          <Form.Item
+            name="minAge"
+            label="العمر الأدنى"
+            rules={[{ required: true, message: "العمر الأدنى مطلوب" }]}
+          >
             <Input type="number" />
           </Form.Item>
-          <Form.Item name="maxAge" label="Max Age" rules={[{ required: true, message: "Max age is required" }]}> 
+          <Form.Item
+            name="maxAge"
+            label="العمر الأقصى"
+            rules={[{ required: true, message: "العمر الأقصى مطلوب" }]}
+          >
             <Input type="number" />
           </Form.Item>
         </Form>
