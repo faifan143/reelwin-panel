@@ -40,7 +40,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     try {
       // API call using axios
       const response = await axios.post(
-        "http://anycode-sy.com/reel-win/api/auth/signin",
+        "/reel-win/api/auth/signin",
         data
       );
 

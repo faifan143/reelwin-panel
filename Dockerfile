@@ -20,6 +20,11 @@ COPY . .
 # Uncomment the following line to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
+
+# Build the application
+RUN npm install lucide-react
+RUN npm install 
+
 # Build the application
 RUN npm run build
 
