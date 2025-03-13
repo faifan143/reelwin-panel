@@ -18,7 +18,6 @@ interface ContentFormData {
   ownerName: string;
   ownerNumber: string;
   intervalHours: number;
-  intervalHours: number;
   endValidationDate: string;
   interestIds: string[];
   type: "REEL";
@@ -33,17 +32,11 @@ interface Interest {
 export default function AdminPage({ onLogout }: AdminPageProps) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFiles, setVideoFiles] = useState<File[]>([]);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [videoFiles, setVideoFiles] = useState<File[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -76,10 +69,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
       ownerNumber: "",
       type: "REEL",
       intervalHours: 22,
-      intervalHours: 22,
       endValidationDate: formattedDefaultDate,
-      interestIds: [],
-      mediaUrls: [],
       interestIds: [],
       mediaUrls: [],
     },
