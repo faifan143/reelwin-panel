@@ -613,6 +613,13 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
 
             {uploadProgress > 0 && <ProgressBar progress={uploadProgress} />}
 
+            {addingContent && (
+              <div className="mt-4 text-sm text-gray-500">
+                ⏳ يتم الآن معالجة المحتوى، وقد يستغرق ذلك بين بضع ثوانٍ إلى 5
+                دقائق... يرجى الانتظار.
+              </div>
+            )}
+
             {/* Status Messages */}
             {isSuccess && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 flex items-center mt-4">
