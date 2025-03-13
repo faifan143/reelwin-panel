@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import LoginPage from "@/components/LoginPage";
 import AdminPage from "@/components/AdminPage";
+import ManageInterests from "@/components/ManageInterests";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +31,7 @@ export default function Home() {
     <main className="min-h-screen bg-gray-100">
       {isLoggedIn ? (
         <AdminPage onLogout={handleLogout} />
+        <ManageInterests/>
       ) : (
         <LoginPage onLogin={handleLogin} />
       )}
