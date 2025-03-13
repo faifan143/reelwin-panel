@@ -18,6 +18,7 @@ interface ContentFormData {
   ownerName: string;
   ownerNumber: string;
   intervalHours: number;
+  intervalHours: number;
   endValidationDate: string;
   interestIds: string[];
   type: "REEL";
@@ -32,11 +33,17 @@ interface Interest {
 export default function AdminPage({ onLogout }: AdminPageProps) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFiles, setVideoFiles] = useState<File[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [videoFiles, setVideoFiles] = useState<File[]>([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,7 +76,10 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
       ownerNumber: "",
       type: "REEL",
       intervalHours: 22,
+      intervalHours: 22,
       endValidationDate: formattedDefaultDate,
+      interestIds: [],
+      mediaUrls: [],
       interestIds: [],
       mediaUrls: [],
     },
@@ -108,6 +118,13 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
   };
 
   const onSubmit = async (data: ContentFormData) => {
+    if (imageFiles.length === 0 && videoFiles.length === 0) {
+      setShowError(true);
+      setErrorMessage("يجب إضافة صورة أو فيديو واحد على الأقل");
+      return;
+    }
+
+    setIsSubmitting(true);
     if (imageFiles.length === 0 && videoFiles.length === 0) {
       setShowError(true);
       setErrorMessage("يجب إضافة صورة أو فيديو واحد على الأقل");
@@ -159,6 +176,8 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
         reset();
         setImageFiles([]);
         setVideoFiles([]);
+        setImageFiles([]);
+        setVideoFiles([]);
 
         if (formRef.current) {
           formRef.current.reset();
@@ -170,6 +189,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
         }, 3000);
       } else {
         setShowError(true);
+        setErrorMessage("حدث خطأ أثناء إنشاء المحتوى");
         setErrorMessage("حدث خطأ أثناء إنشاء المحتوى");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
