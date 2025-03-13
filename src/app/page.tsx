@@ -30,8 +30,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100">
       {isLoggedIn ? (
-        <AdminPage onLogout={handleLogout} />
-        <ManageInterests/>
+        <>
+          <AdminPage onLogout={handleLogout} />
+          <ManageInterests />
+        </>
       ) : (
         <LoginPage onLogin={handleLogin} />
       )}

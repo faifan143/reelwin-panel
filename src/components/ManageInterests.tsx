@@ -24,7 +24,7 @@ export default function ManageInterests() {
   const addInterestMutation = useMutation({
     mutationFn: (newInterest) => axios.post("/reel-win/api/interests", newInterest),
     onSuccess: () => {
-      queryClient.invalidateQueries(["interests"]);
+      queryClient.invalidateQueries({queryKey:["interests"]});
       message.success("Interest added successfully");
       setIsModalOpen(false);
     },
@@ -33,7 +33,7 @@ export default function ManageInterests() {
   const updateInterestMutation = useMutation({
     mutationFn: ({ id, updatedInterest }) => axios.put(`/reel-win/api/interests/${id}`, updatedInterest),
     onSuccess: () => {
-      queryClient.invalidateQueries(["interests"]);
+      queryClient.invalidateQueries({queryKey:["interests"]});
       message.success("Interest updated successfully");
       setIsModalOpen(false);
     },
@@ -42,7 +42,7 @@ export default function ManageInterests() {
   const deleteInterestMutation = useMutation({
     mutationFn: (id) => axios.delete(`/reel-win/api/interests/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries(["interests"]);
+      queryClient.invalidateQueries({queryKey:["interests"]});
       message.success("Interest deleted successfully");
     },
   });
