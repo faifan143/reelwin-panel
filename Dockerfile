@@ -22,7 +22,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 
 # Build the application
-RUN npm install lucide-react
+RUN npm install react-select @tanstack/react-query-devtools @tanstack/react-query
 RUN npm install 
 
 # Build the application
