@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { XCircle } from "lucide-react";
 import { ChangeEvent, useRef, useState } from "react";
@@ -32,10 +32,6 @@ interface Interest {
 export default function AdminPage({ onLogout }: AdminPageProps) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFiles, setVideoFiles] = useState<File[]>([]);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -56,6 +52,24 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
   );
 
   const {
+    mutateAsync: addContent,
+    isPending: addingContent,
+    isError,
+    error,
+    isSuccess,
+  } = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const token = localStorage.getItem("reelWinToken");
+      await axios.post("/reel-win/api/content", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+  });
+
+  const {
     register,
     handleSubmit,
     control,
@@ -71,7 +85,6 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
       intervalHours: 22,
       endValidationDate: formattedDefaultDate,
       interestIds: [],
-      mediaUrls: [],
     },
   });
 
@@ -108,28 +121,15 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
   };
 
   const onSubmit = async (data: ContentFormData) => {
-    if (imageFiles.length === 0 && videoFiles.length === 0) {
-      setShowError(true);
-      setErrorMessage("يجب إضافة صورة أو فيديو واحد على الأقل");
-      return;
-    }
-
-    setIsSubmitting(true);
-    if (imageFiles.length === 0 && videoFiles.length === 0) {
-      setShowError(true);
-      setErrorMessage("يجب إضافة صورة أو فيديو واحد على الأقل");
-      return;
-    }
-
-    setIsSubmitting(true);
     const formData = new FormData();
 
-    // Append form fields to FormData
+    // Append form fields
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("ownerName", data.ownerName);
     formData.append("ownerNumber", data.ownerNumber);
     formData.append("intervalHours", data.intervalHours.toString());
+    formData.append("type", "REEL");
 
     // Format date
     const date = new Date(data.endValidationDate);
@@ -150,47 +150,19 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
     });
 
     try {
-      const token = localStorage.getItem("reelWinToken");
-      const response = await axios.post("/reel-win/api/content", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await addContent(formData);
 
-      if (response.status === 200 || response.status === 201) {
-        setShowSuccess(true);
-        setShowError(false);
+      // Reset form
+      reset();
+      setImageFiles([]);
+      setVideoFiles([]);
 
-        // Reset form
-        reset();
-        setImageFiles([]);
-        setVideoFiles([]);
-        setImageFiles([]);
-        setVideoFiles([]);
-
-        if (formRef.current) {
-          formRef.current.reset();
-        }
-
-        // Reset success message after 3 seconds
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 3000);
-      } else {
-        setShowError(true);
-        setErrorMessage("حدث خطأ أثناء إنشاء المحتوى");
-        setErrorMessage("حدث خطأ أثناء إنشاء المحتوى");
+      if (formRef.current) {
+        formRef.current.reset();
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Content creation error:", error);
-      setShowError(true);
-      setErrorMessage(
-        error.response?.data?.message || "حدث خطأ أثناء إنشاء المحتوى"
-      );
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -591,14 +563,14 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={addingContent}
               className={`w-full py-3 px-6 ${
-                isSubmitting
+                addingContent
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
               } text-white font-bold rounded-lg transition-colors flex items-center justify-center`}
             >
-              {isSubmitting ? (
+              {addingContent ? (
                 <>
                   <svg
                     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -628,7 +600,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             </button>
 
             {/* Status Messages */}
-            {showSuccess && (
+            {isSuccess && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 flex items-center mt-4">
                 <svg
                   className="h-5 w-5 mr-2"
@@ -645,7 +617,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
               </div>
             )}
 
-            {showError && (
+            {isError && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center mt-4">
                 <svg
                   className="h-5 w-5 mr-2"
@@ -658,7 +630,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     clipRule="evenodd"
                   />
                 </svg>
-                {errorMessage || "حدث خطأ أثناء إنشاء المحتوى."}
+                {error.message || "حدث خطأ أثناء إنشاء المحتوى."}
               </div>
             )}
           </form>
