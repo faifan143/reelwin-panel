@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { XCircle } from "lucide-react";
 import { ChangeEvent, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
+import ProgressBar from "./ProgressBar";
 
 interface AdminPageProps {
   onLogout: () => void;
@@ -35,6 +35,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Set default end validation date
   const defaultDate = new Date();
@@ -65,7 +66,18 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          }
+        },
       });
+
+      // Reset progress when done
+      setUploadProgress(0);
     },
   });
 
@@ -598,6 +610,8 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                 "إنشاء المحتوى"
               )}
             </button>
+
+            {uploadProgress > 0 && <ProgressBar progress={uploadProgress} />}
 
             {/* Status Messages */}
             {isSuccess && (
