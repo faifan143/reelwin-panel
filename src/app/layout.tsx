@@ -1,9 +1,7 @@
 "use client";
 import {
-  DashboardOutlined,
   GiftOutlined,
   PlayCircleOutlined,
-  SettingOutlined,
   TagsOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
@@ -42,11 +40,6 @@ export default function RootLayout() {
 
   const menuItems = [
     {
-      key: "dashboard",
-      icon: <DashboardOutlined />,
-      label: "لوحة التحكم",
-    },
-    {
       key: "content",
       icon: <PlayCircleOutlined />,
       label: "إدارة المحتوى",
@@ -65,11 +58,6 @@ export default function RootLayout() {
       key: "rewards",
       icon: <TrophyOutlined />,
       label: "إدارة المكافآت",
-    },
-    {
-      key: "settings",
-      icon: <SettingOutlined />,
-      label: "الإعدادات",
     },
   ];
 
@@ -175,27 +163,6 @@ export default function RootLayout() {
                 {activeTab === "interests" && <ManageInterests />}
                 {activeTab === "generate-gem" && <GenerateGemPage />}
                 {activeTab === "rewards" && <RewardsManagement />}
-                {activeTab === "dashboard" && (
-                  <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                      لوحة التحكم
-                    </h1>
-                    <p className="text-gray-600">
-                      مرحباً بك في لوحة تحكم ReelWin. اختر أحد الخيارات من
-                      القائمة الجانبية.
-                    </p>
-                  </div>
-                )}
-                {activeTab === "settings" && (
-                  <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                      إعدادات النظام
-                    </h1>
-                    <p className="text-gray-600">
-                      يمكنك تعديل إعدادات النظام من هنا.
-                    </p>
-                  </div>
-                )}
               </Content>
             </Layout>
           </Layout>
