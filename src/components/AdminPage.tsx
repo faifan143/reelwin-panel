@@ -2,7 +2,17 @@
 "use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { XCircle, Upload, Image, Video, Clock, Calendar, Tag, User, Phone } from "lucide-react";
+import {
+  XCircle,
+  Upload,
+  Image,
+  Video,
+  Clock,
+  Calendar,
+  Tag,
+  User,
+  Phone,
+} from "lucide-react";
 import { ChangeEvent, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -160,13 +170,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
       if (formRef.current) {
         formRef.current.reset();
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Content creation error:", error);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 py-8" dir="rtl">
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 py-8"
+      dir="rtl"
+    >
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 px-8 py-6">
@@ -226,8 +240,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             </h3>
             <p className="text-gray-600 mt-3 flex items-center">
               <span className="bg-blue-100 text-blue-800 p-1 rounded-full mr-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </span>
               أدخل تفاصيل المحتوى والوسائط المطلوبة
@@ -243,8 +266,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
               <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
                 <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-blue-600"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
                 المعلومات الأساسية
@@ -268,8 +300,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     />
                     {errors.title && (
                       <p className="text-red-500 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {errors.title.message}
                       </p>
@@ -295,8 +336,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                   />
                   {errors.description && (
                     <p className="text-red-500 text-sm mt-2 flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 ml-1"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       {errors.description.message}
                     </p>
@@ -328,13 +378,24 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                         errors.ownerName ? "border-red-500" : "border-gray-300"
                       } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                       placeholder="أدخل اسم المالك"
-                      {...register("ownerName", { required: "اسم المالك مطلوب" })}
+                      {...register("ownerName", {
+                        required: "اسم المالك مطلوب",
+                      })}
                     />
                     <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     {errors.ownerName && (
                       <p className="text-red-500 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {errors.ownerName.message}
                       </p>
@@ -353,7 +414,9 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     <input
                       id="ownerNumber"
                       className={`w-full px-4 py-3 pr-10 border ${
-                        errors.ownerNumber ? "border-red-500" : "border-gray-300"
+                        errors.ownerNumber
+                          ? "border-red-500"
+                          : "border-gray-300"
                       } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                       placeholder="أدخل رقم المالك (09XXXXXXXX)"
                       {...register("ownerNumber", {
@@ -368,8 +431,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     <Phone className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     {errors.ownerNumber && (
                       <p className="text-red-500 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {errors.ownerNumber.message}
                       </p>
@@ -383,8 +455,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
               <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
                 <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-purple-600"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </div>
                 إعدادات المحتوى
@@ -419,8 +500,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     {errors.intervalHours && (
                       <p className="text-red-500 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {errors.intervalHours.message}
                       </p>
@@ -433,7 +523,8 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     htmlFor="endValidationDate"
                     className="block font-semibold text-gray-700 mb-2 flex items-center"
                   >
-                    <span className="text-red-500 ml-1">*</span> تاريخ انتهاء الصلاحية
+                    <span className="text-red-500 ml-1">*</span> تاريخ انتهاء
+                    الصلاحية
                   </label>
                   <div className="relative">
                     <Controller
@@ -456,8 +547,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     {errors.endValidationDate && (
                       <p className="text-red-500 text-sm mt-2 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 ml-1"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {errors.endValidationDate.message}
                       </p>
@@ -505,38 +605,38 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                             ...theme,
                             colors: {
                               ...theme.colors,
-                              primary: '#2563eb',
-                              primary25: '#dbeafe',
-                              primary50: '#bfdbfe',
+                              primary: "#2563eb",
+                              primary25: "#dbeafe",
+                              primary50: "#bfdbfe",
                             },
                           })}
                           styles={{
                             control: (base) => ({
                               ...base,
-                              borderRadius: '0.5rem',
-                              borderColor: '#e5e7eb',
-                              padding: '2px',
-                              boxShadow: 'none',
-                              '&:hover': {
-                                borderColor: '#93c5fd'
-                              }
+                              borderRadius: "0.5rem",
+                              borderColor: "#e5e7eb",
+                              padding: "2px",
+                              boxShadow: "none",
+                              "&:hover": {
+                                borderColor: "#93c5fd",
+                              },
                             }),
                             multiValue: (base) => ({
                               ...base,
-                              backgroundColor: '#dbeafe',
-                              borderRadius: '0.5rem',
+                              backgroundColor: "#dbeafe",
+                              borderRadius: "0.5rem",
                             }),
                             multiValueLabel: (base) => ({
                               ...base,
-                              color: '#1e40af',
-                              padding: '2px 8px',
+                              color: "#1e40af",
+                              padding: "2px 8px",
                             }),
                             multiValueRemove: (base) => ({
                               ...base,
-                              color: '#3b82f6',
-                              ':hover': {
-                                backgroundColor: '#bfdbfe',
-                                color: '#1e3a8a',
+                              color: "#3b82f6",
+                              ":hover": {
+                                backgroundColor: "#bfdbfe",
+                                color: "#1e3a8a",
                               },
                             }),
                           }}
@@ -545,8 +645,17 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                     }}
                   />
                   <p className="text-gray-500 text-xs mt-2 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 ml-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     اختر الاهتمامات المتعلقة بالمحتوى لتحسين استهداف الجمهور
                   </p>
@@ -566,7 +675,7 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
               {/* Image Upload */}
               <div className="mb-8">
                 <label className="block font-semibold text-gray-700 mb-3 flex items-center">
-<Image className="h-5 w-5 ml-2 text-gray-600" />
+                  <Image className="h-5 w-5 ml-2 text-gray-600" />
                   الصور *
                 </label>
                 <div className="flex flex-col space-y-4">
@@ -575,8 +684,12 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                       <div className="bg-blue-100 rounded-full p-3 mb-3 group-hover:bg-blue-200 transition-colors">
                         <Upload className="h-6 w-6 text-blue-600" />
                       </div>
-                      <span className="text-blue-700 font-semibold mb-1">اضغط أو اسحب لإضافة صور</span>
-                      <span className="text-gray-500 text-sm">PNG, JPG أو JPEG حتى 10MB</span>
+                      <span className="text-blue-700 font-semibold mb-1">
+                        اضغط أو اسحب لإضافة صور
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        PNG, JPG أو JPEG حتى 10MB
+                      </span>
                     </div>
                     <input
                       type="file"
@@ -597,7 +710,10 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {imageFiles.map((file, index) => (
-                          <div key={index} className="relative group rounded-lg overflow-hidden shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                          <div
+                            key={index}
+                            className="relative group rounded-lg overflow-hidden shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105"
+                          >
                             <div className="aspect-square bg-gray-100 overflow-hidden">
                               <img
                                 src={URL.createObjectURL(file)}
@@ -637,8 +753,12 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                       <div className="bg-purple-100 rounded-full p-3 mb-3 group-hover:bg-purple-200 transition-colors">
                         <Upload className="h-6 w-6 text-purple-600" />
                       </div>
-                      <span className="text-purple-700 font-semibold mb-1">اضغط أو اسحب لإضافة فيديوهات</span>
-                      <span className="text-gray-500 text-sm">MP4 أو MOV حتى 100MB</span>
+                      <span className="text-purple-700 font-semibold mb-1">
+                        اضغط أو اسحب لإضافة فيديوهات
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        MP4 أو MOV حتى 100MB
+                      </span>
                     </div>
                     <input
                       type="file"
@@ -659,7 +779,10 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {videoFiles.map((file, index) => (
-                          <div key={index} className="relative group rounded-lg overflow-hidden shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                          <div
+                            key={index}
+                            className="relative group rounded-lg overflow-hidden shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105"
+                          >
                             <div className="aspect-video bg-gray-100 overflow-hidden">
                               <video
                                 src={URL.createObjectURL(file)}
@@ -688,11 +811,21 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
               </div>
 
               <div className="mt-6 p-3 bg-blue-50 rounded-lg text-blue-800 text-sm border border-blue-200 flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 <span>
-                  يجب إضافة صورة أو فيديو واحد على الأقل. يمكنك إضافة عدة صور وفيديوهات معاً.
+                  يجب إضافة صورة أو فيديو واحد على الأقل. يمكنك إضافة عدة صور
+                  وفيديوهات معاً.
                 </span>
               </div>
             </div>
@@ -733,8 +866,19 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
                 </>
               ) : (
                 <span className="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    />
                   </svg>
                   إنشاء المحتوى
                 </span>
@@ -745,13 +889,26 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg shadow-inner">
                 <div className="flex items-center">
                   <div className="bg-blue-100 p-2 rounded-full mr-3">
-                    <svg className="animate-pulse text-blue-600 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    <svg
+                      className="animate-pulse text-blue-600 h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <h4 className="text-blue-800 font-semibold">يتم الآن معالجة المحتوى الخاص بك</h4>
-                    <p className="text-sm text-blue-600 mt-1">قد يستغرق ذلك بين بضع ثوانٍ إلى 5 دقائق... يرجى الانتظار.</p>
+                    <h4 className="text-blue-800 font-semibold">
+                      يتم الآن معالجة المحتوى الخاص بك
+                    </h4>
+                    <p className="text-sm text-blue-600 mt-1">
+                      قد يستغرق ذلك بين بضع ثوانٍ إلى 5 دقائق... يرجى الانتظار.
+                    </p>
                   </div>
                 </div>
                 <div className="w-full bg-blue-200 rounded-full h-2.5 mt-3">
@@ -764,13 +921,25 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             {isSuccess && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg shadow-md text-green-700 flex items-center mt-6 animate-fade-in">
                 <div className="bg-green-100 rounded-full p-2 mr-3">
-                  <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-6 w-6 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </div>
                 <div>
                   <h4 className="font-bold">تم بنجاح!</h4>
-                  <p className="text-sm mt-1">تم إنشاء المحتوى الخاص بك بنجاح وهو الآن جاهز للعرض.</p>
+                  <p className="text-sm mt-1">
+                    تم إنشاء المحتوى الخاص بك بنجاح وهو الآن جاهز للعرض.
+                  </p>
                 </div>
               </div>
             )}
@@ -778,13 +947,26 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
             {isError && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg shadow-md text-red-700 flex items-center mt-6 animate-fade-in">
                 <div className="bg-red-100 rounded-full p-2 mr-3">
-                  <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="h-6 w-6 text-red-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </div>
                 <div>
                   <h4 className="font-bold">حدث خطأ</h4>
-                  <p className="text-sm mt-1">{error?.message || "حدث خطأ أثناء إنشاء المحتوى. يرجى المحاولة مرة أخرى."}</p>
+                  <p className="text-sm mt-1">
+                    {error?.message ||
+                      "حدث خطأ أثناء إنشاء المحتوى. يرجى المحاولة مرة أخرى."}
+                  </p>
                 </div>
               </div>
             )}
@@ -799,4 +981,3 @@ export default function AdminPage({ onLogout }: AdminPageProps) {
     </div>
   );
 }
-
