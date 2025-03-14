@@ -8,6 +8,7 @@ import {
   TagsOutlined,
   UserOutlined,
   GiftOutlined,
+  TrophyOutlined,
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -15,8 +16,9 @@ import { Avatar, Button, Dropdown, Layout, Menu } from "antd";
 import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
 import ManageInterests from "../components/ManageInterests";
+import GenerateGemPage from "../components/GenerateGem";
+import RewardsManagement from "../components/RewardsManagement";
 import "./globals.css";
-import GenerateGemPage from "@/components/GenerateGem";
 
 const { Sider, Content, Header } = Layout;
 
@@ -66,6 +68,11 @@ export default function RootLayout() {
       key: "generate-gem",
       icon: <GiftOutlined />,
       label: "إنشاء جوهرة",
+    },
+    {
+      key: "rewards",
+      icon: <TrophyOutlined />,
+      label: "إدارة المكافآت",
     },
     {
       key: "settings",
@@ -215,6 +222,7 @@ export default function RootLayout() {
                 {activeTab === "content" && <AdminPage />}
                 {activeTab === "interests" && <ManageInterests />}
                 {activeTab === "generate-gem" && <GenerateGemPage />}
+                {activeTab === "rewards" && <RewardsManagement />}
                 {activeTab === "dashboard" && (
                   <div className="bg-white p-6 rounded-xl shadow-md">
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">
