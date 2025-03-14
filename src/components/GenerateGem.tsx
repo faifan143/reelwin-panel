@@ -166,9 +166,6 @@ export default function GenerateGemPage() {
                   <CheckCircleOutlined className="mr-1" /> تم بنجاح
                 </Tag>
               </div>
-              <pre className="bg-gray-50 p-4 rounded-lg border border-gray-200 overflow-auto max-h-80">
-                {JSON.stringify(response, null, 2)}
-              </pre>
             </div>
           ) : (
             <div className="py-12 text-center text-gray-500">
