@@ -180,17 +180,6 @@ export default function GenerateGemPage() {
           )}
         </Card>
       </div>
-
-      <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
-        <div className="text-sm text-gray-500">
-          <div className="flex items-center">
-            <span className="inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded mr-2">
-              POST
-            </span>
-            <code className="text-xs">/reel-win/api/content/generate-gem</code>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
