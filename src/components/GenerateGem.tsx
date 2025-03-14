@@ -1,24 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Input, Card, message, Spin, Tag, Divider, Alert } from "antd";
+import { Button, InputNumber, Card, message, Spin, Tag, Alert } from "antd";
 import {
   CopyOutlined,
   SendOutlined,
-  KeyOutlined,
   CheckCircleOutlined,
   InfoCircleOutlined,
+  LockOutlined,
 } from "@ant-design/icons";
 
 export default function GenerateGemPage() {
-  const [points, setPoints] = useState(9000);
+  const [points, setPoints] = useState<number | null>(9000);
   const [token, setToken] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
+  // Get token from localStorage on component mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem("reelWinToken");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const handleGenerateGem = async () => {
     if (!token) {
-      message.error("الرجاء إدخال رمز الوصول أولا");
+      message.error("رمز الوصول غير متوفر. الرجاء تسجيل الدخول مرة أخرى.");
       return;
     }
 
@@ -26,6 +34,7 @@ export default function GenerateGemPage() {
     setError(null);
 
     try {
+      // Use the exact URL from Postman image
       const response = await axios.post(
         `/reel-win/api/content/generate-gem?points=${points}`,
         {},
@@ -81,50 +90,29 @@ export default function GenerateGemPage() {
           </p>
         </div>
 
-        <Card title="معلومات الطلب" className="mb-6 shadow-md">
-          <div className="mb-4">
-            <div className="font-semibold text-gray-700 mb-2">
-              <KeyOutlined className="mr-2" /> رمز الوصول (Bearer Token)
-            </div>
-            <Input.Password
-              placeholder="أدخل رمز الوصول"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              className="mb-2"
-            />
-            <div className="text-xs text-gray-500">
-              مطلوب للمصادقة على الطلب
-            </div>
-          </div>
-
-          <Divider />
-
+        <Card title="إنشاء جوهرة جديدة" className="mb-6 shadow-md">
           <div className="mb-4">
             <div className="font-semibold text-gray-700 mb-2">النقاط</div>
-            <Input
-              type="number"
-              placeholder="أدخل عدد النقاط"
-              value={points}
-              onChange={(e) => setPoints(parseInt(e.target.value))}
-              className="mb-2"
-              min={1}
-              addonAfter="نقطة"
-            />
+            <div className="flex items-center">
+              <InputNumber
+                placeholder="أدخل عدد النقاط"
+                value={points}
+                onChange={(value) => setPoints(value)}
+                className="mb-2"
+                min={1}
+                style={{ width: "100%" }}
+                size="large"
+              />
+              <span className="mr-2 text-gray-500">نقطة</span>
+            </div>
             <div className="text-xs text-gray-500">قيمة الجوهرة بالنقاط</div>
           </div>
 
-          <div className="mb-4">
-            <div className="font-semibold text-gray-700 mb-2">
-              عنوان الطلب (URL)
+          <div className="flex justify-between items-center mt-6">
+            <div className="flex items-center text-gray-500">
+              <LockOutlined className="mr-2" />
+              <span className="text-sm">تم إستخدام المصادقة التلقائية</span>
             </div>
-            <Input
-              value={`/reel-win/api/content/generate-gem?points=${points}`}
-              readOnly
-              className="text-gray-500"
-            />
-          </div>
-
-          <div className="flex justify-end">
             <Button
               type="primary"
               onClick={handleGenerateGem}
@@ -133,7 +121,7 @@ export default function GenerateGemPage() {
               className="bg-blue-600 hover:bg-blue-700"
               size="large"
             >
-              إرسال الطلب
+              إنشاء الجوهرة
             </Button>
           </div>
         </Card>
@@ -150,14 +138,14 @@ export default function GenerateGemPage() {
 
         <Card
           title={
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <span>نتيجة الاستجابة</span>
               {response && (
                 <Button
                   type="text"
                   icon={<CopyOutlined />}
                   onClick={copyResponseToClipboard}
-                  className="mr-2 text-blue-600"
+                  className="text-blue-600"
                 >
                   نسخ
                 </Button>
@@ -169,7 +157,7 @@ export default function GenerateGemPage() {
           {isSending ? (
             <div className="py-10 flex flex-col items-center justify-center">
               <Spin size="large" />
-              <div className="mt-3 text-gray-500">جاري إرسال الطلب...</div>
+              <div className="mt-3 text-gray-500">جاري إنشاء الجوهرة...</div>
             </div>
           ) : response ? (
             <div>
@@ -184,9 +172,12 @@ export default function GenerateGemPage() {
             </div>
           ) : (
             <div className="py-12 text-center text-gray-500">
-              <div className="mb-3 text-5xl opacity-30">🔍</div>
+              <div className="mb-3 text-5xl opacity-30">💎</div>
               <p>
-                لم يتم إرسال أي طلب بعد. قم بإرسال الطلب للحصول على النتيجة.
+                {`
+                لم يتم إنشاء جوهرة بعد. قم بتحديد عدد النقاط وانقر على زر "إنشاء
+                الجوهرة"
+                `}
               </p>
             </div>
           )}
@@ -195,8 +186,7 @@ export default function GenerateGemPage() {
 
       <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
         <div className="text-sm text-gray-500">
-          <div className="font-semibold">معلومات الواجهة البرمجية</div>
-          <div className="mt-1">
+          <div className="flex items-center">
             <span className="inline-block bg-orange-100 text-orange-800 px-2 py-1 rounded mr-2">
               POST
             </span>
