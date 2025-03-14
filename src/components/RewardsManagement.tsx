@@ -27,15 +27,12 @@ import {
   Spin,
   Switch,
   Table,
-  Tabs,
   Tag,
   Tooltip,
   message,
 } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-const { TabPane } = Tabs;
 
 // Types based on DTOs
 interface Category {
@@ -96,6 +93,9 @@ export default function RewardsManagement() {
   const [rewardModal, setRewardModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingReward, setEditingReward] = useState<Reward | null>(null);
+
+  // Active tab
+  const [activeTab, setActiveTab] = useState("rewards");
 
   // Form instances
   const [categoryForm] = Form.useForm();
@@ -491,16 +491,38 @@ export default function RewardsManagement() {
       </div>
 
       <div className="p-6">
-        <Tabs defaultActiveKey="rewards" size="large" className="custom-tabs">
-          <TabPane
-            tab={
-              <span>
-                <GiftOutlined className="ml-1 p-3" />
-                المكافآت
-              </span>
-            }
-            key="rewards"
+        <div className="mb-6 flex border-b border-gray-200">
+          <div
+            className={`tab-button ${
+              activeTab === "rewards" ? "active-tab" : ""
+            }`}
+            onClick={() => setActiveTab("rewards")}
           >
+            <GiftOutlined className="ml-2" />
+            المكافآت
+          </div>
+          <div
+            className={`tab-button ${
+              activeTab === "categories" ? "active-tab" : ""
+            }`}
+            onClick={() => setActiveTab("categories")}
+          >
+            <TagOutlined className="ml-2" />
+            الفئات
+          </div>
+          <div
+            className={`tab-button ${
+              activeTab === "purchases" ? "active-tab" : ""
+            }`}
+            onClick={() => setActiveTab("purchases")}
+          >
+            <ShoppingOutlined className="ml-2" />
+            طلبات المكافآت
+          </div>
+        </div>
+
+        {activeTab === "rewards" && (
+          <>
             <div className="mb-4 flex justify-between items-center">
               <div className="text-lg font-semibold">قائمة المكافآت</div>
               <Button
@@ -649,17 +671,11 @@ export default function RewardsManagement() {
                 </Form.Item>
               </Form>
             </Modal>
-          </TabPane>
+          </>
+        )}
 
-          <TabPane
-            tab={
-              <span>
-                <TagOutlined className="ml-1 p-3" />
-                الفئات
-              </span>
-            }
-            key="categories"
-          >
+        {activeTab === "categories" && (
+          <>
             <div className="mb-4 flex justify-between items-center">
               <div className="text-lg font-semibold">فئات المكافآت</div>
               <Button
@@ -758,17 +774,11 @@ export default function RewardsManagement() {
                 </Form.Item>
               </Form>
             </Modal>
-          </TabPane>
+          </>
+        )}
 
-          <TabPane
-            tab={
-              <span>
-                <ShoppingOutlined className="ml-1 p-3" />
-                طلبات المكافآت
-              </span>
-            }
-            key="purchases"
-          >
+        {activeTab === "purchases" && (
+          <>
             <div className="mb-4 flex justify-between items-center">
               <div className="text-lg font-semibold">
                 طلبات المستخدمين للمكافآت
@@ -821,8 +831,8 @@ export default function RewardsManagement() {
                 />
               )}
             </Card>
-          </TabPane>
-        </Tabs>
+          </>
+        )}
       </div>
 
       <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
@@ -856,32 +866,35 @@ export default function RewardsManagement() {
       </div>
 
       <style jsx global>{`
+        .tab-button {
+          padding: 12px 30px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #6b7280;
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-bottom: 2px solid transparent;
+          transition: all 0.3s;
+          min-width: 140px;
+        }
+
+        .tab-button:hover {
+          color: #8b5cf6;
+          background-color: rgba(139, 92, 246, 0.05);
+        }
+
+        .tab-button.active-tab {
+          color: #8b5cf6;
+          border-bottom-color: #8b5cf6;
+          background-color: rgba(139, 92, 246, 0.1);
+        }
+
         .rtl-table .ant-table-thead > tr > th,
         .rtl-table .ant-table-tbody > tr > td {
           text-align: right;
-        }
-
-        .custom-tabs .ant-tabs-nav-list {
-          gap: 12px;
-        }
-
-        .custom-tabs .ant-tabs-tab {
-          background-color: rgba(243, 244, 246, 1);
-          border-radius: 8px;
-          padding: 8px 16px;
-          transition: all 0.3s;
-        }
-
-        .custom-tabs .ant-tabs-tab:hover {
-          background-color: rgba(229, 231, 235, 1);
-        }
-
-        .custom-tabs .ant-tabs-tab-active {
-          background-color: rgba(124, 58, 237, 0.1);
-        }
-
-        .custom-tabs .ant-tabs-ink-bar {
-          display: none;
         }
       `}</style>
     </div>
