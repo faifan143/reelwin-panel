@@ -495,7 +495,7 @@ export default function RewardsManagement() {
           <TabPane
             tab={
               <span>
-                <GiftOutlined className="ml-1" />
+                <GiftOutlined className="ml-1 p-3" />
                 المكافآت
               </span>
             }
@@ -654,7 +654,7 @@ export default function RewardsManagement() {
           <TabPane
             tab={
               <span>
-                <TagOutlined className="ml-1" />
+                <TagOutlined className="ml-1 p-3" />
                 الفئات
               </span>
             }
@@ -763,7 +763,7 @@ export default function RewardsManagement() {
           <TabPane
             tab={
               <span>
-                <ShoppingOutlined className="ml-1" />
+                <ShoppingOutlined className="ml-1 p-3" />
                 طلبات المكافآت
               </span>
             }
