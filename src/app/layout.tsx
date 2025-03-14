@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   TagsOutlined,
   UserOutlined,
+  GiftOutlined,
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -15,6 +16,7 @@ import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
 import ManageInterests from "../components/ManageInterests";
 import "./globals.css";
+import GenerateGemPage from "@/components/GenerateGem";
 
 const { Sider, Content, Header } = Layout;
 
@@ -59,6 +61,11 @@ export default function RootLayout() {
       key: "interests",
       icon: <TagsOutlined />,
       label: "إدارة الاهتمامات",
+    },
+    {
+      key: "generate-gem",
+      icon: <GiftOutlined />,
+      label: "إنشاء جوهرة",
     },
     {
       key: "settings",
@@ -207,6 +214,7 @@ export default function RootLayout() {
               <Content className="m-4 sm:m-6 p-4 bg-gray-50 rounded-xl">
                 {activeTab === "content" && <AdminPage />}
                 {activeTab === "interests" && <ManageInterests />}
+                {activeTab === "generate-gem" && <GenerateGemPage />}
                 {activeTab === "dashboard" && (
                   <div className="bg-white p-6 rounded-xl shadow-md">
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">
