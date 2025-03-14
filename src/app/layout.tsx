@@ -205,9 +205,7 @@ export default function RootLayout() {
                 </div>
               </Header>
               <Content className="m-4 sm:m-6 p-4 bg-gray-50 rounded-xl">
-                {activeTab === "content" && (
-                  <AdminPage onLogout={handleLogout} />
-                )}
+                {activeTab === "content" && <AdminPage />}
                 {activeTab === "interests" && <ManageInterests />}
                 {activeTab === "dashboard" && (
                   <div className="bg-white p-6 rounded-xl shadow-md">

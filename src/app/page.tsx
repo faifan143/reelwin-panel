@@ -22,16 +22,11 @@ export default function Home() {
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("reelWinToken");
-    setIsLoggedIn(false);
-  };
-
   return (
     <main className="min-h-screen bg-gray-100">
       {isLoggedIn ? (
         <>
-          <AdminPage onLogout={handleLogout} />
+          <AdminPage />
           <ManageInterests />
         </>
       ) : (
