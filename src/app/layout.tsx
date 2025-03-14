@@ -1,26 +1,24 @@
 "use client";
 import {
   DashboardOutlined,
-  LogoutOutlined,
+  GiftOutlined,
   MenuOutlined,
   PlayCircleOutlined,
   SettingOutlined,
   TagsOutlined,
-  UserOutlined,
-  GiftOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Avatar, Button, Dropdown, Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
-import ManageInterests from "../components/ManageInterests";
 import GenerateGemPage from "../components/GenerateGem";
+import ManageInterests from "../components/ManageInterests";
 import RewardsManagement from "../components/RewardsManagement";
 import "./globals.css";
 
-const { Sider, Content, Header } = Layout;
+const { Sider, Content } = Layout;
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
@@ -42,11 +40,6 @@ export default function RootLayout() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  const handleLogout = () => {
-    // Handle actual logout logic here
-    setIsAuthenticated(false);
-  };
 
   const menuItems = [
     {
@@ -80,26 +73,6 @@ export default function RootLayout() {
       label: "الإعدادات",
     },
   ];
-
-  const userMenu = (
-    <Menu>
-      <Menu.Item key="profile" icon={<UserOutlined />}>
-        الملف الشخصي
-      </Menu.Item>
-      <Menu.Item key="settings" icon={<SettingOutlined />}>
-        الإعدادات
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item
-        key="logout"
-        icon={<LogoutOutlined />}
-        onClick={handleLogout}
-        danger
-      >
-        تسجيل الخروج
-      </Menu.Item>
-    </Menu>
-  );
 
   // If not authenticated, render login page or redirect
   if (!isAuthenticated) {
@@ -176,12 +149,22 @@ export default function RootLayout() {
                   )}
                 </div>
               </div>
+              <div className="px-3 py-4">
+                <Button
+                  type="text"
+                  icon={<MenuOutlined />}
+                  onClick={() => setCollapsed(!collapsed)}
+                  className="mb-4 text-white w-full flex justify-start items-center border border-blue-700 hover:bg-blue-700"
+                >
+                  {!collapsed && <span className="ml-2">القائمة</span>}
+                </Button>
+              </div>
               <Menu
                 theme="dark"
                 mode="inline"
                 selectedKeys={[activeTab]}
                 onClick={({ key }) => setActiveTab(key)}
-                className="bg-transparent border-r-0 mt-2"
+                className="bg-transparent border-r-0"
                 items={menuItems}
                 style={{ backgroundColor: "transparent" }}
               />
@@ -197,27 +180,6 @@ export default function RootLayout() {
                 transition: "margin-right 0.2s",
               }}
             >
-              <Header
-                className="flex justify-between items-center px-4 sm:px-6 bg-white border-b border-gray-200"
-                style={{ padding: 0, height: 64 }}
-              >
-                <Button
-                  type="text"
-                  icon={<MenuOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  className="mr-4 text-gray-600"
-                />
-                <div className="flex items-center">
-                  <Dropdown overlay={userMenu} placement="bottomLeft" arrow>
-                    <div className="flex items-center cursor-pointer hover:bg-gray-100 py-2 px-3 rounded-lg">
-                      <Avatar icon={<UserOutlined />} className="bg-blue-600" />
-                      <span className="hidden md:inline-block ml-3 text-gray-700">
-                        المسؤول
-                      </span>
-                    </div>
-                  </Dropdown>
-                </div>
-              </Header>
               <Content className="m-4 sm:m-6 p-4 bg-gray-50 rounded-xl">
                 {activeTab === "content" && <AdminPage />}
                 {activeTab === "interests" && <ManageInterests />}
