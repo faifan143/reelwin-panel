@@ -2,7 +2,6 @@
 import {
   DashboardOutlined,
   GiftOutlined,
-  MenuOutlined,
   PlayCircleOutlined,
   SettingOutlined,
   TagsOutlined,
@@ -149,16 +148,7 @@ export default function RootLayout() {
                   )}
                 </div>
               </div>
-              <div className="px-3 py-4">
-                <Button
-                  type="text"
-                  icon={<MenuOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  className="mb-4 text-white w-full flex justify-start items-center border border-blue-700 hover:bg-blue-700"
-                >
-                  {!collapsed && <span className="ml-2">القائمة</span>}
-                </Button>
-              </div>
+
               <Menu
                 theme="dark"
                 mode="inline"
