@@ -350,7 +350,10 @@ export default function ManageInterests() {
             <Form.Item
               name="minAge"
               label="العمر الأدنى"
-              rules={[{ required: true }, { type: "number", min: 0, max: 100 }]}
+              rules={[
+                { required: true },
+                { type: "number", min: 13, max: 100 },
+              ]}
               initialValue={0}
               normalize={(value) => (value === "" ? 0 : Number(value))}
             >
