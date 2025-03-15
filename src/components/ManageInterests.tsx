@@ -63,6 +63,13 @@ export default function ManageInterests() {
       setIsModalOpen(false);
       form.resetFields();
     },
+    onError: (error) => {
+      console.error("Error adding interest:", error);
+      message.error({
+        content: "حدث خطأ أثناء إضافة الاهتمام",
+        className: "custom-message-rtl",
+      });
+    },
   });
 
   const updateInterestMutation = useMutation({
@@ -82,6 +89,13 @@ export default function ManageInterests() {
       setIsModalOpen(false);
       form.resetFields();
     },
+    onError: (error) => {
+      console.error("Error updating interest:", error);
+      message.error({
+        content: "حدث خطأ أثناء تحديث الاهتمام",
+        className: "custom-message-rtl",
+      });
+    },
   });
 
   const deleteInterestMutation = useMutation({
@@ -95,20 +109,43 @@ export default function ManageInterests() {
     },
   });
 
-  const handleSubmit = (values: Omit<Interest, "id">) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = (values: any) => {
+    console.log("Form values before processing:", values);
+
+    // Normalize the values to ensure correct types
+    const processedValues = {
+      ...values,
+      minAge:
+        typeof values.minAge === "number"
+          ? values.minAge
+          : parseInt(values.minAge || "0"),
+      maxAge:
+        typeof values.maxAge === "number"
+          ? values.maxAge
+          : parseInt(values.maxAge || "100"),
+    };
+
+    console.log("Processed values:", processedValues);
+
     if (editingInterest) {
       updateInterestMutation.mutate({
         id: editingInterest.id,
-        updatedInterest: values,
+        updatedInterest: processedValues,
       });
     } else {
-      addInterestMutation.mutate(values);
+      addInterestMutation.mutate(processedValues);
     }
   };
 
   const handleEdit = (interest: Interest) => {
     setEditingInterest(interest);
-    form.setFieldsValue(interest);
+    form.setFieldsValue({
+      name: interest.name,
+      targetedGender: interest.targetedGender,
+      minAge: interest.minAge,
+      maxAge: interest.maxAge,
+    });
     setIsModalOpen(true);
   };
 
@@ -263,13 +300,7 @@ export default function ManageInterests() {
         }
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
-        okText={editingInterest ? "تحديث" : "إضافة"}
-        cancelText="إلغاء"
-        okButtonProps={{
-          className: "bg-gradient-to-r from-blue-600 to-indigo-700 border-0",
-          loading:
-            addInterestMutation.isPending || updateInterestMutation.isPending,
-        }}
+        footer={null} // Remove default footer buttons
         style={{ direction: "rtl" }}
         maskClosable={false}
         destroyOnClose
@@ -321,8 +352,21 @@ export default function ManageInterests() {
               label="العمر الأدنى"
               rules={[{ required: true }, { type: "number", min: 0, max: 100 }]}
               initialValue={0}
+              normalize={(value) => (value === "" ? 0 : Number(value))}
             >
-              <InputNumber min={0} max={100} className="w-full py-2" />
+              <InputNumber
+                min={0}
+                max={100}
+                className="w-full"
+                controls={{
+                  upIcon: (
+                    <span className="ant-input-number-handler-up-inner" />
+                  ),
+                  downIcon: (
+                    <span className="ant-input-number-handler-down-inner" />
+                  ),
+                }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -330,10 +374,41 @@ export default function ManageInterests() {
               label="العمر الأقصى"
               rules={[{ required: true }, { type: "number", min: 0, max: 100 }]}
               initialValue={100}
+              normalize={(value) => (value === "" ? 100 : Number(value))}
             >
-              <InputNumber min={0} max={100} className="w-full py-2" />
+              <InputNumber
+                min={0}
+                max={100}
+                className="w-full"
+                controls={{
+                  upIcon: (
+                    <span className="ant-input-number-handler-up-inner" />
+                  ),
+                  downIcon: (
+                    <span className="ant-input-number-handler-down-inner" />
+                  ),
+                }}
+              />
             </Form.Item>
           </div>
+
+          {/* Custom form buttons */}
+          <Form.Item className="mt-6 flex justify-end">
+            <Button className="ml-2" onClick={() => setIsModalOpen(false)}>
+              إلغاء
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="bg-gradient-to-r from-blue-600 to-indigo-700 border-0"
+              loading={
+                addInterestMutation.isPending ||
+                updateInterestMutation.isPending
+              }
+            >
+              {editingInterest ? "تحديث" : "إضافة"}
+            </Button>
+          </Form.Item>
         </Form>
       </Modal>
 
@@ -355,6 +430,15 @@ export default function ManageInterests() {
 
         .ant-form-item-label {
           text-align: right;
+        }
+
+        /* Fix InputNumber in RTL */
+        .ant-input-number {
+          direction: ltr;
+        }
+
+        .ant-input-number-handler-wrap {
+          direction: ltr;
         }
 
         /* Add hover effects to table rows */
