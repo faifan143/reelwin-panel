@@ -13,6 +13,7 @@ import {
   Tooltip,
   Space,
   Popconfirm,
+  InputNumber,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -321,7 +322,7 @@ export default function ManageInterests() {
               rules={[{ required: true }, { type: "number", min: 0, max: 100 }]}
               initialValue={0}
             >
-              <Input type="number" min={0} max={100} className="py-2" />
+              <InputNumber min={0} max={100} className="w-full py-2" />
             </Form.Item>
 
             <Form.Item
@@ -330,7 +331,7 @@ export default function ManageInterests() {
               rules={[{ required: true }, { type: "number", min: 0, max: 100 }]}
               initialValue={100}
             >
-              <Input type="number" min={0} max={100} className="py-2" />
+              <InputNumber min={0} max={100} className="w-full py-2" />
             </Form.Item>
           </div>
         </Form>
