@@ -52,7 +52,7 @@ export default function RootLayout() {
     {
       key: "generate-gem",
       icon: <GiftOutlined />,
-      label: "إنشاء جوهرة",
+      label: "الجواهر و الإصدارات",
     },
     {
       key: "rewards",
