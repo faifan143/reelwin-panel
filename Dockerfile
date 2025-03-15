@@ -22,7 +22,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 
 # Build the application
-RUN npm install react-select @tanstack/react-query-devtools @tanstack/react-query antd
 RUN npm install 
 
 # Build the application
