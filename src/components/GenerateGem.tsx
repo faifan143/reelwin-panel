@@ -175,6 +175,14 @@ export default function GenerateGemPage() {
     }
   };
 
+  // Custom tab styles to make them wider
+  const tabStyles = {
+    minWidth: "180px",
+    textAlign: "center" as const,
+    fontSize: "16px",
+    padding: "12px 24px",
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
       {/* Header */}
@@ -192,13 +200,28 @@ export default function GenerateGemPage() {
       </div>
 
       <div className="p-8">
-        <Tabs defaultActiveKey="gem" className="mb-6">
+        {/* Custom tab bar styling */}
+        <Tabs
+          defaultActiveKey="gem"
+          className="mb-6"
+          type="card"
+          size="large"
+          tabBarStyle={{
+            marginBottom: "20px",
+            borderBottom: "1px solid #e0e0e0",
+            padding: "0 8px",
+          }}
+          tabBarGutter={8}
+        >
           <TabPane
             tab={
-              <span className="flex items-center">
-                <AppstoreAddOutlined className="ml-1" />
-                إنشاء جوهرة
-              </span>
+              <div
+                style={tabStyles}
+                className="flex items-center justify-center"
+              >
+                <AppstoreAddOutlined className="ml-2" />
+                <span>إنشاء جوهرة</span>
+              </div>
             }
             key="gem"
           >
@@ -309,10 +332,13 @@ export default function GenerateGemPage() {
 
           <TabPane
             tab={
-              <span className="flex items-center">
-                <UploadOutlined className="ml-1" />
-                تحديث الإصدار
-              </span>
+              <div
+                style={tabStyles}
+                className="flex items-center justify-center"
+              >
+                <UploadOutlined className="ml-2" />
+                <span>تحديث الإصدار</span>
+              </div>
             }
             key="version"
           >
@@ -450,10 +476,13 @@ export default function GenerateGemPage() {
 
           <TabPane
             tab={
-              <span className="flex items-center">
-                <DeleteOutlined className="ml-1" />
-                مسح التحديثات
-              </span>
+              <div
+                style={tabStyles}
+                className="flex items-center justify-center"
+              >
+                <DeleteOutlined className="ml-2" />
+                <span>مسح التحديثات</span>
+              </div>
             }
             key="clear"
           >
