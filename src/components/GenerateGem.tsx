@@ -104,7 +104,7 @@ export default function GenerateGemPage() {
 
     try {
       const response = await axios.post(
-        `/reel-win/api/admin/add-version-update`,
+        `/reel-win/api/users/add-update`,
         {
           version: values.version,
           isRequired: values.isRequired,
@@ -143,7 +143,7 @@ export default function GenerateGemPage() {
 
     try {
       const response = await axios.post(
-        `/reel-win/api/admin/clear-updates`,
+        `/reel-win/api/users/clear-update`,
         {},
         {
           headers: {
