@@ -11,6 +11,7 @@ import {
   Tabs,
   Input,
   Form,
+  Popconfirm,
 } from "antd";
 import {
   CopyOutlined,
@@ -20,6 +21,8 @@ import {
   LockOutlined,
   UploadOutlined,
   AppstoreAddOutlined,
+  ClearOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
 
 const { TabPane } = Tabs;
@@ -42,6 +45,11 @@ export default function GenerateGemPage() {
   const [isUpdatingVersion, setIsUpdatingVersion] = useState(false);
   const [versionResponse, setVersionResponse] = useState(null);
   const [versionError, setVersionError] = useState(null);
+
+  // Clear Updates States
+  const [isClearing, setIsClearing] = useState(false);
+  const [clearResponse, setClearResponse] = useState(null);
+  const [clearError, setClearError] = useState(null);
 
   // Get token from localStorage on component mount
   useEffect(() => {
@@ -121,6 +129,41 @@ export default function GenerateGemPage() {
       message.error("فشل تحديث الإصدار");
     } finally {
       setIsUpdatingVersion(false);
+    }
+  };
+
+  const handleClearUpdates = async () => {
+    if (!token) {
+      message.error("رمز الوصول غير متوفر. الرجاء تسجيل الدخول مرة أخرى.");
+      return;
+    }
+
+    setIsClearing(true);
+    setClearError(null);
+
+    try {
+      const response = await axios.post(
+        `/reel-win/api/admin/clear-updates`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setClearResponse(response.data);
+      message.success("تم مسح التحديثات بنجاح");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error("Error clearing updates:", err);
+      setClearError(
+        err.response?.data?.message || "حدث خطأ أثناء مسح التحديثات"
+      );
+      message.error("فشل مسح التحديثات");
+    } finally {
+      setIsClearing(false);
     }
   };
 
@@ -398,6 +441,116 @@ export default function GenerateGemPage() {
                   <p>
                     {`
                     لم يتم تحديث الإصدار بعد. قم بإدخال رقم الإصدار وانقر على زر "تحديث الإصدار"
+                    `}
+                  </p>
+                </div>
+              )}
+            </Card>
+          </TabPane>
+
+          <TabPane
+            tab={
+              <span className="flex items-center">
+                <DeleteOutlined className="ml-1" />
+                مسح التحديثات
+              </span>
+            }
+            key="clear"
+          >
+            <div className="mb-6">
+              <p className="text-gray-600 flex items-center">
+                <InfoCircleOutlined className="mr-2 text-red-500" />
+                مسح جميع التحديثات المخزنة للتطبيق
+              </p>
+            </div>
+
+            <Card title="مسح تحديثات التطبيق" className="mb-6 shadow-md">
+              <div className="mb-4">
+                <div className="font-semibold text-gray-700 mb-2">تنبيه</div>
+                <Alert
+                  message="تحذير: هذا الإجراء لا يمكن التراجع عنه"
+                  description="سيؤدي مسح التحديثات إلى إزالة جميع إشعارات التحديث المخزنة من قاعدة البيانات."
+                  type="warning"
+                  showIcon
+                  className="mb-4"
+                />
+              </div>
+
+              <div className="flex justify-end items-center mt-6">
+                <Popconfirm
+                  title="مسح التحديثات"
+                  description="هل أنت متأكد من رغبتك في مسح جميع التحديثات؟"
+                  onConfirm={handleClearUpdates}
+                  okText="نعم، متأكد"
+                  cancelText="إلغاء"
+                  okButtonProps={{
+                    className: "bg-red-600 hover:bg-red-700 border-red-600",
+                  }}
+                >
+                  <Button
+                    danger
+                    loading={isClearing}
+                    icon={<ClearOutlined />}
+                    size="large"
+                  >
+                    مسح جميع التحديثات
+                  </Button>
+                </Popconfirm>
+              </div>
+            </Card>
+
+            {clearError && (
+              <Alert
+                message="خطأ"
+                description={clearError}
+                type="error"
+                showIcon
+                className="mb-6"
+              />
+            )}
+
+            <Card
+              title={
+                <div className="flex items-center justify-between">
+                  <span>نتيجة الاستجابة</span>
+                  {clearResponse && (
+                    <Button
+                      type="text"
+                      icon={<CopyOutlined />}
+                      onClick={() => copyResponseToClipboard(clearResponse)}
+                      className="text-blue-600"
+                    >
+                      نسخ
+                    </Button>
+                  )}
+                </div>
+              }
+              className="shadow-md"
+            >
+              {isClearing ? (
+                <div className="py-10 flex flex-col items-center justify-center">
+                  <Spin size="large" />
+                  <div className="mt-3 text-gray-500">
+                    جاري مسح التحديثات...
+                  </div>
+                </div>
+              ) : clearResponse ? (
+                <div>
+                  <div className="mb-3 flex">
+                    <Tag color="green" className="text-sm">
+                      <CheckCircleOutlined className="mr-1" /> تم بنجاح
+                    </Tag>
+                  </div>
+                  <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
+                    {JSON.stringify(clearResponse, null, 2)}
+                  </pre>
+                </div>
+              ) : (
+                <div className="py-12 text-center text-gray-500">
+                  <div className="mb-3 text-5xl opacity-30">🧹</div>
+                  <p>
+                    {`
+                    لم يتم مسح التحديثات بعد. انقر على زر "مسح جميع التحديثات" للمتابعة
                     `}
                   </p>
                 </div>
