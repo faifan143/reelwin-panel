@@ -150,17 +150,16 @@ export default function RootLayout() {
               <span className="text-white/90 mr-2 text-sm">مدير النظام</span>
             )}
           </div>
-          {!collapsed && (
-            <Tooltip title="تسجيل الخروج" placement="bottom">
-              <Button
-                type="text"
-                icon={<LogoutOutlined />}
-                onClick={() => setIsAuthenticated(false)}
-                className="text-white/80 hover:text-white hover:bg-blue-700"
-                size="small"
-              />
-            </Tooltip>
-          )}
+          {/* Always show logout button regardless of collapsed state */}
+          <Tooltip title="تسجيل الخروج" placement="bottom">
+            <Button
+              type="text"
+              icon={<LogoutOutlined />}
+              onClick={() => setIsAuthenticated(false)}
+              className="text-white/80 hover:text-white hover:bg-blue-700"
+              size="small"
+            />
+          </Tooltip>
         </div>
         <div className="text-white/60 text-center text-xs mt-2">
           {!collapsed && "ReelWin © 2025"}
@@ -241,8 +240,12 @@ export default function RootLayout() {
                     collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
                   }
                   onClick={toggleMenu}
-                  className="fixed z-50 top-4 right-4 bg-white shadow-md border border-gray-200"
-                  style={{ right: collapsed ? "84px" : "254px" }}
+                  className="fixed z-50 right-0 bg-white shadow-md border border-gray-200 rounded-r-none rounded-l-md"
+                  style={{
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    right: collapsed ? "80px" : "250px",
+                  }}
                 />
               )}
 
