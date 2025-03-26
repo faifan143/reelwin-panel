@@ -856,8 +856,8 @@ export default function AdminPage() {
                   </p>
                 </div>
               </div>
-              <div className="w-full bg-blue-200 rounded-full h-2.5 mt-3">
-                <div className="bg-blue-600 h-2.5 rounded-full animate-progress-indeterminate"></div>
+              <div className="progress-bar-container">
+                <div className="progress-bar-indeterminate"></div>
               </div>
             </div>
           )}
