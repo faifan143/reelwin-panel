@@ -1,29 +1,25 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import {
-  Button,
-  InputNumber,
-  Card,
-  message,
-  Spin,
-  Tag,
-  Alert,
-  Tabs,
-  Input,
-  Form,
-  Popconfirm,
-} from "antd";
-import {
-  CopyOutlined,
-  SendOutlined,
-  CheckCircleOutlined,
-  InfoCircleOutlined,
-  LockOutlined,
-  UploadOutlined,
   AppstoreAddOutlined,
   ClearOutlined,
   DeleteOutlined,
+  InfoCircleOutlined,
+  LockOutlined,
+  SendOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
+import {
+  Alert,
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Popconfirm,
+  Tabs,
+} from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const { TabPane } = Tabs;
 
@@ -37,18 +33,15 @@ export default function GenerateGemPage() {
   const [points, setPoints] = useState<number | null>(9000);
   const [token, setToken] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
   // Version Update States
   const [versionForm] = Form.useForm();
   const [isUpdatingVersion, setIsUpdatingVersion] = useState(false);
-  const [versionResponse, setVersionResponse] = useState(null);
   const [versionError, setVersionError] = useState(null);
 
   // Clear Updates States
   const [isClearing, setIsClearing] = useState(false);
-  const [clearResponse, setClearResponse] = useState(null);
   const [clearError, setClearError] = useState(null);
 
   // Get token from localStorage on component mount
@@ -70,7 +63,7 @@ export default function GenerateGemPage() {
 
     try {
       // Use the exact URL from Postman image
-      const response = await axios.post(
+      await axios.post(
         `/reel-win/api/content/generate-gem?points=${points}`,
         {},
         {
@@ -81,7 +74,6 @@ export default function GenerateGemPage() {
         }
       );
 
-      setResponse(response.data);
       message.success("تم إنشاء الجوهرة بنجاح");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -103,7 +95,7 @@ export default function GenerateGemPage() {
     setVersionError(null);
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `/reel-win/api/users/add-update`,
         {
           version: values.version,
@@ -117,7 +109,6 @@ export default function GenerateGemPage() {
         }
       );
 
-      setVersionResponse(response.data);
       message.success("تم تحديث الإصدار بنجاح");
       versionForm.resetFields();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,7 +133,7 @@ export default function GenerateGemPage() {
     setClearError(null);
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `/reel-win/api/users/clear-update`,
         {},
         {
@@ -153,7 +144,6 @@ export default function GenerateGemPage() {
         }
       );
 
-      setClearResponse(response.data);
       message.success("تم مسح التحديثات بنجاح");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -164,14 +154,6 @@ export default function GenerateGemPage() {
       message.error("فشل مسح التحديثات");
     } finally {
       setIsClearing(false);
-    }
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const copyResponseToClipboard = (responseData: any) => {
-    if (responseData) {
-      navigator.clipboard.writeText(JSON.stringify(responseData, null, 2));
-      message.success("تم نسخ الاستجابة إلى الحافظة");
     }
   };
 
@@ -279,55 +261,6 @@ export default function GenerateGemPage() {
                 className="mb-6"
               />
             )}
-
-            <Card
-              title={
-                <div className="flex items-center justify-between">
-                  <span>نتيجة الاستجابة</span>
-                  {response && (
-                    <Button
-                      type="text"
-                      icon={<CopyOutlined />}
-                      onClick={() => copyResponseToClipboard(response)}
-                      className="text-blue-600"
-                    >
-                      نسخ
-                    </Button>
-                  )}
-                </div>
-              }
-              className="shadow-md"
-            >
-              {isSending ? (
-                <div className="py-10 flex flex-col items-center justify-center">
-                  <Spin size="large" />
-                  <div className="mt-3 text-gray-500">
-                    جاري إنشاء الجوهرة...
-                  </div>
-                </div>
-              ) : response ? (
-                <div>
-                  <div className="mb-3 flex">
-                    <Tag color="green" className="text-sm">
-                      <CheckCircleOutlined className="mr-1" /> تم بنجاح
-                    </Tag>
-                  </div>
-                  <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
-                    {JSON.stringify(response, null, 2)}
-                  </pre>
-                </div>
-              ) : (
-                <div className="py-12 text-center text-gray-500">
-                  <div className="mb-3 text-5xl opacity-30">💎</div>
-                  <p>
-                    {`
-                    لم يتم إنشاء جوهرة بعد. قم بتحديد عدد النقاط وانقر على زر "إنشاء
-                    الجوهرة"
-                    `}
-                  </p>
-                </div>
-              )}
-            </Card>
           </TabPane>
 
           <TabPane
@@ -424,54 +357,6 @@ export default function GenerateGemPage() {
                 className="mb-6"
               />
             )}
-
-            <Card
-              title={
-                <div className="flex items-center justify-between">
-                  <span>نتيجة الاستجابة</span>
-                  {versionResponse && (
-                    <Button
-                      type="text"
-                      icon={<CopyOutlined />}
-                      onClick={() => copyResponseToClipboard(versionResponse)}
-                      className="text-blue-600"
-                    >
-                      نسخ
-                    </Button>
-                  )}
-                </div>
-              }
-              className="shadow-md"
-            >
-              {isUpdatingVersion ? (
-                <div className="py-10 flex flex-col items-center justify-center">
-                  <Spin size="large" />
-                  <div className="mt-3 text-gray-500">
-                    جاري تحديث الإصدار...
-                  </div>
-                </div>
-              ) : versionResponse ? (
-                <div>
-                  <div className="mb-3 flex">
-                    <Tag color="green" className="text-sm">
-                      <CheckCircleOutlined className="mr-1" /> تم بنجاح
-                    </Tag>
-                  </div>
-                  <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
-                    {JSON.stringify(versionResponse, null, 2)}
-                  </pre>
-                </div>
-              ) : (
-                <div className="py-12 text-center text-gray-500">
-                  <div className="mb-3 text-5xl opacity-30">🔄</div>
-                  <p>
-                    {`
-                    لم يتم تحديث الإصدار بعد. قم بإدخال رقم الإصدار وانقر على زر "تحديث الإصدار"
-                    `}
-                  </p>
-                </div>
-              )}
-            </Card>
           </TabPane>
 
           <TabPane
@@ -537,54 +422,6 @@ export default function GenerateGemPage() {
                 className="mb-6"
               />
             )}
-
-            <Card
-              title={
-                <div className="flex items-center justify-between">
-                  <span>نتيجة الاستجابة</span>
-                  {clearResponse && (
-                    <Button
-                      type="text"
-                      icon={<CopyOutlined />}
-                      onClick={() => copyResponseToClipboard(clearResponse)}
-                      className="text-blue-600"
-                    >
-                      نسخ
-                    </Button>
-                  )}
-                </div>
-              }
-              className="shadow-md"
-            >
-              {isClearing ? (
-                <div className="py-10 flex flex-col items-center justify-center">
-                  <Spin size="large" />
-                  <div className="mt-3 text-gray-500">
-                    جاري مسح التحديثات...
-                  </div>
-                </div>
-              ) : clearResponse ? (
-                <div>
-                  <div className="mb-3 flex">
-                    <Tag color="green" className="text-sm">
-                      <CheckCircleOutlined className="mr-1" /> تم بنجاح
-                    </Tag>
-                  </div>
-                  <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
-                    {JSON.stringify(clearResponse, null, 2)}
-                  </pre>
-                </div>
-              ) : (
-                <div className="py-12 text-center text-gray-500">
-                  <div className="mb-3 text-5xl opacity-30">🧹</div>
-                  <p>
-                    {`
-                    لم يتم مسح التحديثات بعد. انقر على زر "مسح جميع التحديثات" للمتابعة
-                    `}
-                  </p>
-                </div>
-              )}
-            </Card>
           </TabPane>
         </Tabs>
       </div>

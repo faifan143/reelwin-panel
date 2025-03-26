@@ -1,21 +1,14 @@
 import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
   GiftOutlined,
   InfoCircleOutlined,
   PlusOutlined,
-  ShoppingOutlined,
   TagOutlined,
-  UnorderedListOutlined,
 } from "@ant-design/icons";
 import {
-  Badge,
   Button,
   Card,
-  Divider,
   Empty,
   Form,
   Input,
@@ -51,42 +44,14 @@ interface Reward {
   category?: Category;
 }
 
-interface UserReward {
-  id: string;
-  userId: string;
-  rewardId: string;
-  status: "PENDING" | "DELIVERED" | "CANCELLED";
-  createdAt: string;
-  user: {
-    id: string;
-    username: string;
-    phoneNumber: string;
-  };
-  reward: Reward;
-}
-
-const statusColors = {
-  PENDING: "gold",
-  DELIVERED: "green",
-  CANCELLED: "red",
-};
-
-const statusIcons = {
-  PENDING: <ClockCircleOutlined />,
-  DELIVERED: <CheckCircleOutlined />,
-  CANCELLED: <CloseCircleOutlined />,
-};
-
 export default function RewardsManagement() {
   // States for data
   const [categories, setCategories] = useState<Category[]>([]);
   const [rewards, setRewards] = useState<Reward[]>([]);
-  const [userRewards, setUserRewards] = useState<UserReward[]>([]);
 
   // Loading states
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [loadingRewards, setLoadingRewards] = useState(false);
-  const [loadingPurchases, setLoadingPurchases] = useState(false);
 
   // States for modals
   const [categoryModal, setCategoryModal] = useState(false);
@@ -105,7 +70,6 @@ export default function RewardsManagement() {
   useEffect(() => {
     fetchCategories();
     fetchRewards();
-    fetchUserRewards();
   }, []);
 
   // API calls
@@ -132,19 +96,6 @@ export default function RewardsManagement() {
       message.error("فشل في جلب المكافآت");
     } finally {
       setLoadingRewards(false);
-    }
-  };
-
-  const fetchUserRewards = async () => {
-    setLoadingPurchases(true);
-    try {
-      const response = await axios.get("/reel-win/api/rewards/admin/purchases");
-      setUserRewards(response.data);
-    } catch (error) {
-      console.error("Error fetching user rewards:", error);
-      message.error("فشل في جلب طلبات المكافآت");
-    } finally {
-      setLoadingPurchases(false);
     }
   };
 
@@ -231,25 +182,6 @@ export default function RewardsManagement() {
     } catch (error) {
       console.error("Error deleting reward:", error);
       message.error("فشل في حذف المكافأة");
-    }
-  };
-
-  const handleStatusChange = async (id: string, status: string) => {
-    const token = localStorage.getItem("reelWinToken");
-
-    try {
-      await axios.put(
-        `/reel-win/api/rewards/admin/purchases/${id}/status`,
-        { status },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      message.success("تم تحديث حالة الطلب بنجاح");
-      fetchUserRewards();
-    } catch (error) {
-      console.error("Error updating status:", error);
-      message.error("فشل في تحديث حالة الطلب");
     }
   };
 
@@ -389,95 +321,6 @@ export default function RewardsManagement() {
     },
   ];
 
-  const userRewardColumns = [
-    {
-      title: "المستخدم",
-      dataIndex: "user",
-      key: "user",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (user: any) => (
-        <div>
-          <div className="font-medium">{user.username}</div>
-          <div className="text-xs text-gray-500">{user.phoneNumber}</div>
-        </div>
-      ),
-    },
-    {
-      title: "المكافأة",
-      dataIndex: "reward",
-      key: "reward",
-      render: (reward: Reward) => (
-        <div>
-          <div className="font-medium">{reward.title}</div>
-          <Tag color="blue">{reward.pointsCost} نقطة</Tag>
-        </div>
-      ),
-    },
-    {
-      title: "الحالة",
-      dataIndex: "status",
-      key: "status",
-      render: (status: "PENDING" | "DELIVERED" | "CANCELLED") => (
-        <Tag color={statusColors[status]} icon={statusIcons[status]}>
-          {status === "PENDING"
-            ? "قيد الانتظار"
-            : status === "DELIVERED"
-            ? "تم التسليم"
-            : "ملغي"}
-        </Tag>
-      ),
-    },
-    {
-      title: "التاريخ",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date: string) => new Date(date).toLocaleDateString("ar-EG"),
-    },
-    {
-      title: "الإجراءات",
-      key: "action",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (_: any, record: UserReward) => (
-        <Space size="middle">
-          {record.status === "PENDING" && (
-            <>
-              <Popconfirm
-                title="هل تريد تأكيد تسليم هذه المكافأة؟"
-                onConfirm={() => handleStatusChange(record.id, "DELIVERED")}
-                okText="نعم"
-                cancelText="لا"
-              >
-                <Button
-                  type="primary"
-                  size="small"
-                  className="bg-green-500 border-green-500"
-                  icon={<CheckCircleOutlined />}
-                >
-                  تسليم
-                </Button>
-              </Popconfirm>
-              <Popconfirm
-                title="هل تريد إلغاء هذا الطلب؟"
-                onConfirm={() => handleStatusChange(record.id, "CANCELLED")}
-                okText="نعم"
-                cancelText="لا"
-              >
-                <Button danger size="small" icon={<CloseCircleOutlined />}>
-                  إلغاء
-                </Button>
-              </Popconfirm>
-            </>
-          )}
-          {record.status !== "PENDING" && (
-            <Tag color={record.status === "DELIVERED" ? "green" : "red"}>
-              {record.status === "DELIVERED" ? "تم التسليم" : "تم الإلغاء"}
-            </Tag>
-          )}
-        </Space>
-      ),
-    },
-  ];
-
   return (
     <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
       {/* Header */}
@@ -509,15 +352,6 @@ export default function RewardsManagement() {
           >
             <TagOutlined className="ml-2" />
             الفئات
-          </div>
-          <div
-            className={`tab-button ${
-              activeTab === "purchases" ? "active-tab" : ""
-            }`}
-            onClick={() => setActiveTab("purchases")}
-          >
-            <ShoppingOutlined className="ml-2" />
-            طلبات المكافآت
           </div>
         </div>
 
@@ -776,93 +610,6 @@ export default function RewardsManagement() {
             </Modal>
           </>
         )}
-
-        {activeTab === "purchases" && (
-          <>
-            <div className="mb-4 flex justify-between items-center">
-              <div className="text-lg font-semibold">
-                طلبات المستخدمين للمكافآت
-              </div>
-              <div>
-                <Space>
-                  <Badge
-                    count={
-                      userRewards.filter((r) => r.status === "PENDING").length
-                    }
-                    overflowCount={99}
-                  >
-                    <Tag color="gold" className="px-3 py-1">
-                      <ClockCircleOutlined className="ml-1" /> قيد الانتظار
-                    </Tag>
-                  </Badge>
-                  <Badge
-                    count={
-                      userRewards.filter((r) => r.status === "DELIVERED").length
-                    }
-                    overflowCount={99}
-                  >
-                    <Tag color="green" className="px-3 py-1">
-                      <CheckCircleOutlined className="ml-1" /> تم التسليم
-                    </Tag>
-                  </Badge>
-                </Space>
-              </div>
-            </div>
-
-            <Card className="w-full shadow-sm">
-              {loadingPurchases ? (
-                <div className="flex justify-center items-center py-20">
-                  <Spin size="large" />
-                </div>
-              ) : userRewards.length === 0 ? (
-                <Empty
-                  description="لا توجد طلبات مكافآت"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              ) : (
-                <Table
-                  columns={userRewardColumns}
-                  dataSource={userRewards.map((reward) => ({
-                    ...reward,
-                    key: reward.id,
-                  }))}
-                  pagination={{ pageSize: 10 }}
-                  className="rtl-table"
-                />
-              )}
-            </Card>
-          </>
-        )}
-      </div>
-
-      <div className="bg-gray-50 px-8 py-4 border-t border-gray-200">
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div>
-            <Badge count={rewards.length} overflowCount={999} className="ml-2">
-              <span>المكافآت</span>
-            </Badge>
-            <Divider type="vertical" />
-            <Badge
-              count={categories.length}
-              overflowCount={999}
-              className="ml-2"
-            >
-              <span>الفئات</span>
-            </Badge>
-            <Divider type="vertical" />
-            <Badge
-              count={userRewards.filter((r) => r.status === "PENDING").length}
-              overflowCount={999}
-              className="ml-2"
-            >
-              <span>الطلبات المعلقة</span>
-            </Badge>
-          </div>
-          <div className="flex items-center">
-            <UnorderedListOutlined className="ml-1" />
-            <span>نظام إدارة المكافآت</span>
-          </div>
-        </div>
       </div>
 
       <style jsx global>{`
