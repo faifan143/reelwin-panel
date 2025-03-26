@@ -1,19 +1,17 @@
 "use client";
 import {
   GiftOutlined,
+  LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   PlayCircleOutlined,
   TagsOutlined,
   TrophyOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  LogoutOutlined,
   UserOutlined,
-  AppstoreOutlined,
-  DashboardOutlined,
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Button, Layout, Menu, Drawer, Avatar, Tooltip, Badge } from "antd";
+import { Avatar, Button, Drawer, Layout, Menu, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
 import GenerateGemPage from "../components/GenerateGem";
@@ -223,9 +221,6 @@ export default function RootLayout() {
                   className="text-white text-xl hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg"
                 />
                 <div className="flex items-center mr-4">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center mr-3 shadow-md">
-                    <span className="text-white text-lg font-bold">R</span>
-                  </div>
                   <div className="flex flex-col">
                     <h1 className="text-lg font-bold text-white m-0 leading-tight">
                       ReelWin
@@ -233,26 +228,6 @@ export default function RootLayout() {
                     <span className="text-xs font-normal text-blue-200">
                       لوحة الإدارة
                     </span>
-                  </div>
-
-                  {/* Mobile notification and user avatar */}
-                  <div className="flex-1 flex justify-end">
-                    <Tooltip title="الإشعارات" placement="bottom">
-                      <Badge count={3} className="mr-4">
-                        <Button
-                          type="text"
-                          icon={<AppstoreOutlined />}
-                          className="text-white hover:bg-blue-800/50 rounded-lg"
-                        />
-                      </Badge>
-                    </Tooltip>
-                    <Tooltip title="الملف الشخصي" placement="bottom">
-                      <Avatar
-                        size="small"
-                        className="bg-gradient-to-r from-blue-400 to-indigo-500 mr-2"
-                        icon={<UserOutlined />}
-                      />
-                    </Tooltip>
                   </div>
                 </div>
               </div>
@@ -290,41 +265,6 @@ export default function RootLayout() {
                 background: "#f5f7fa",
               }}
             >
-              {/* Desktop header with breadcrumb and quick actions */}
-              {!isMobile && (
-                <div className="bg-white h-16 shadow-sm px-6 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <DashboardOutlined className="text-blue-800 text-lg" />
-                    <span className="text-gray-800 mr-2 text-lg font-medium">
-                      {activeTab === "content" && "إدارة المحتوى"}
-                      {activeTab === "interests" && "إدارة الاهتمامات"}
-                      {activeTab === "generate-gem" && "الجواهر و الإصدارات"}
-                      {activeTab === "rewards" && "إدارة المكافآت"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <Tooltip title="الإشعارات" placement="bottom">
-                      <Badge count={3} className="ml-4">
-                        <Button
-                          type="text"
-                          icon={<AppstoreOutlined />}
-                          className="text-gray-600 hover:bg-gray-100 rounded-lg"
-                        />
-                      </Badge>
-                    </Tooltip>
-                    <div className="mr-4 flex items-center bg-gray-50 py-1 px-3 rounded-lg">
-                      <Avatar
-                        size="small"
-                        className="bg-gradient-to-r from-blue-600 to-indigo-700 ml-2"
-                        icon={<UserOutlined />}
-                      />
-                      <span className="text-gray-800 text-sm">مدير النظام</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <Content className="m-4 sm:m-6 p-6 bg-white rounded-xl shadow-sm">
                 {activeTab === "content" && <AdminPage />}
                 {activeTab === "interests" && <ManageInterests />}

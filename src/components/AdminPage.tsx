@@ -177,9 +177,6 @@ export default function AdminPage() {
       <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 px-8 py-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
-              <span className="text-white text-xl font-bold">R</span>
-            </div>
             <h2 className="text-2xl font-bold text-white">إضافة محتوى جديد</h2>
           </div>
         </div>
@@ -215,7 +212,7 @@ export default function AdminPage() {
           {/* Basic Information */}
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
             <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
-              <div className="bg-blue-100 p-2 rounded-lg mr-3">
+              <div className="bg-blue-100 p-2 rounded-lg ml-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-blue-600"
@@ -308,7 +305,7 @@ export default function AdminPage() {
           {/* Owner Information */}
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
             <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
-              <div className="bg-green-100 p-2 rounded-lg mr-3">
+              <div className="bg-green-100 p-2 rounded-lg ml-3">
                 <User className="h-5 w-5 text-green-600" />
               </div>
               معلومات المالك
@@ -402,7 +399,7 @@ export default function AdminPage() {
           {/* Content Settings */}
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
             <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
-              <div className="bg-purple-100 p-2 rounded-lg mr-3">
+              <div className="bg-purple-100 p-2 rounded-lg ml-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 text-purple-600"
@@ -614,7 +611,7 @@ export default function AdminPage() {
           {/* Media Upload */}
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:border-blue-300 transition-colors">
             <h4 className="flex items-center text-lg font-bold text-gray-800 mb-4 border-b pb-3">
-              <div className="bg-yellow-100 p-2 rounded-lg mr-3">
+              <div className="bg-yellow-100 p-2 rounded-lg ml-3">
                 <Upload className="h-5 w-5 text-yellow-600" />
               </div>
               الوسائط
@@ -652,7 +649,7 @@ export default function AdminPage() {
                 {imageFiles.length > 0 && (
                   <div className="mt-4">
                     <div className="p-2 bg-blue-50 rounded-lg mb-2 flex items-center">
-                      <span className="text-blue-700 font-semibold mr-2">
+                      <span className="text-blue-700 font-semibold ml-2">
                         {imageFiles.length} صورة مختارة
                       </span>
                     </div>
@@ -721,7 +718,7 @@ export default function AdminPage() {
                 {videoFiles.length > 0 && (
                   <div className="mt-4">
                     <div className="p-2 bg-purple-50 rounded-lg mb-2 flex items-center">
-                      <span className="text-purple-700 font-semibold mr-2">
+                      <span className="text-purple-700 font-semibold ml-2">
                         {videoFiles.length} فيديو مختار
                       </span>
                     </div>

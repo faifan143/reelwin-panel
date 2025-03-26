@@ -104,6 +104,7 @@ const InterestTableView: React.FC<InterestTableViewProps> = ({
         showSizeChanger: true,
         pageSizeOptions: ["10", "20", "50"],
         locale: { items_per_page: "/ صفحة" },
+        
       }}
       locale={{
         emptyText: (
