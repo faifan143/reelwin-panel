@@ -13,17 +13,18 @@ import VersionUpdateTab from "./gems/VersionUpdateTab";
 import ClearUpdatesTab from "./gems/ClearUpdatesTab";
 import ErrorDisplay from "./gems/ErrorDisplay";
 import Footer from "./layout/Footer";
+import useStore from "@/store";
 
 const { TabPane } = Tabs;
 
 const GenerateGemPage: React.FC = () => {
   // States
-  const [token, setToken] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [versionError, setVersionError] = useState<string | null>(null);
   const [clearError, setClearError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("gem");
   const [isMobile, setIsMobile] = useState(false);
+  const token = useStore((state) => state.token);
 
   // Check for mobile view on mount and window resize
   useEffect(() => {
@@ -39,14 +40,6 @@ const GenerateGemPage: React.FC = () => {
 
     // Cleanup
     return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Get token from localStorage on component mount
-  useEffect(() => {
-    const storedToken = localStorage.getItem("reelWinToken");
-    if (storedToken) {
-      setToken(storedToken);
-    }
   }, []);
 
   // Handle error clearing when changing tabs
@@ -103,7 +96,7 @@ const GenerateGemPage: React.FC = () => {
             }
             key="gem"
           >
-            <GemGenerationTab token={token} setError={setError} />
+            <GemGenerationTab token={token!} setError={setError} />
           </TabPane>
 
           <TabPane
@@ -112,7 +105,7 @@ const GenerateGemPage: React.FC = () => {
             }
             key="version"
           >
-            <VersionUpdateTab token={token} setError={setVersionError} />
+            <VersionUpdateTab token={token!} setError={setVersionError} />
           </TabPane>
 
           <TabPane
@@ -121,7 +114,7 @@ const GenerateGemPage: React.FC = () => {
             }
             key="clear"
           >
-            <ClearUpdatesTab token={token} setError={setClearError} />
+            <ClearUpdatesTab token={token!} setError={setClearError} />
           </TabPane>
         </Tabs>
 

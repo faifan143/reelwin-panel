@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import useStore from "@/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
@@ -41,6 +42,9 @@ export default function AdminPage() {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
+  const setIsAddingContent = useStore((state) => state.setIsAddingContent);
+  const token = useStore((state) => state.token);
+
   // Set default end validation date
   const defaultDate = new Date();
   defaultDate.setFullYear(defaultDate.getFullYear() + 1);
@@ -64,7 +68,6 @@ export default function AdminPage() {
     isSuccess,
   } = useMutation({
     mutationFn: async (formData: FormData) => {
-      const token = localStorage.getItem("reelWinToken");
       await axios.post("/reel-win/api/content", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -126,6 +129,7 @@ export default function AdminPage() {
   };
 
   const onSubmit = async (data: ContentFormData) => {
+    setIsAddingContent(true);
     const formData = new FormData();
 
     // Append form fields
@@ -168,6 +172,8 @@ export default function AdminPage() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Content creation error:", error);
+    } finally {
+      setIsAddingContent(false);
     }
   };
 

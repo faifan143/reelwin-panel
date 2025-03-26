@@ -17,6 +17,7 @@ import GlobalStyles from "./rewards/GlobalStyles";
 // Types
 import { Category, Reward } from "./rewards/types";
 import RewardFormModal from "./rewards/RewardFormModal";
+import useStore from "@/store";
 
 const RewardsManagement: React.FC = () => {
   // States for data
@@ -42,6 +43,8 @@ const RewardsManagement: React.FC = () => {
   // Form instances
   const [categoryForm] = Form.useForm();
   const [rewardForm] = Form.useForm();
+
+  const token = useStore((state) => state.token);
 
   // Check if viewport is mobile
   useEffect(() => {
@@ -93,8 +96,6 @@ const RewardsManagement: React.FC = () => {
   };
 
   const handleCategorySubmit = async (values: any) => {
-    const token = localStorage.getItem("reelWinToken");
-
     try {
       if (editingCategory) {
         await axios.put(
