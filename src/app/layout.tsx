@@ -1,9 +1,8 @@
 "use client";
+import useStore from "@/store"; // Import the Zustand store
 import {
   GiftOutlined,
   LogoutOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   PlayCircleOutlined,
   TagsOutlined,
   TrophyOutlined,
@@ -11,14 +10,13 @@ import {
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Avatar, Button, Drawer, Layout, Menu, Tooltip, Modal } from "antd";
+import { Avatar, Button, Drawer, Layout, Menu, Modal, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import useStore from "@/store"; // Import the Zustand store
 import AdminPage from "../components/AdminPage";
 import GenerateGemPage from "../components/GenerateGem";
+import LoginPage from "../components/LoginPage"; // Import the login page component
 import ManageInterests from "../components/ManageInterests";
 import RewardsManagement from "../components/RewardsManagement";
-import LoginPage from "../components/LoginPage"; // Import the login page component
 import "./globals.css";
 
 const { Content } = Layout;
@@ -269,14 +267,25 @@ export default function RootLayout() {
                 <Button
                   type="text"
                   icon={
-                    drawerVisible ? (
-                      <MenuFoldOutlined />
-                    ) : (
-                      <MenuUnfoldOutlined />
-                    )
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-6 h-6"
+                    >
+                      <line x1="4" y1="6" x2="20" y2="6"></line>
+                      <line x1="4" y1="12" x2="20" y2="12"></line>
+                      <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
                   }
                   onClick={toggleMenu}
-                  className={`text-white text-xl hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${
+                  className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${
                     isAddingContent ? "opacity-50" : ""
                   }`}
                   disabled={isAddingContent}
