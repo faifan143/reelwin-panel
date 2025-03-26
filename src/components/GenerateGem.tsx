@@ -23,6 +23,23 @@ const GenerateGemPage: React.FC = () => {
   const [versionError, setVersionError] = useState<string | null>(null);
   const [clearError, setClearError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("gem");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check for mobile view on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Get token from localStorage on component mount
   useEffect(() => {
@@ -65,17 +82,17 @@ const GenerateGemPage: React.FC = () => {
           defaultActiveKey="gem"
           className="mb-4 sm:mb-6"
           type="card"
-          size="large"
+          size={isMobile ? "small" : "large"}
           onChange={handleTabChange}
+          centered={isMobile}
+          tabPosition={isMobile ? "top" : "top"}
           tabBarStyle={{
             marginBottom: "16px",
             borderBottom: "1px solid #e0e0e0",
-            padding: "0 8px",
-            overflowX: "auto",
-            flexWrap: "nowrap",
-            display: "flex",
+            padding: "0 4px",
           }}
-          tabBarGutter={8}
+          tabBarGutter={isMobile ? 2 : 8}
+          moreIcon={<></>} // Use empty fragment to hide more icon
         >
           <TabPane
             tab={

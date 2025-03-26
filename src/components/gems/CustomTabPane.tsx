@@ -7,15 +7,10 @@ interface CustomTabPaneProps {
 }
 
 const CustomTabPane: React.FC<CustomTabPaneProps> = ({ icon, label }) => {
-  const tabStyles = {
-    fontSize: "16px",
-    padding: "12px 16px",
-  };
-
   return (
-    <div style={tabStyles} className="flex items-center justify-center">
-      {icon && <span className="ml-2">{icon}</span>}
-      <span className="text-sm sm:text-base">{label}</span>
+    <div className="flex items-center justify-center w-full">
+      {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
+      <span className="text-xs sm:text-sm">{label}</span>
     </div>
   );
 };
