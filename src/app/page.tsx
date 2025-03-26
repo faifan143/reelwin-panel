@@ -9,7 +9,7 @@ const RootLayout = dynamic(() => import("./layout"), { ssr: false });
 
 export default function Home() {
   // Use Zustand store instead of local state
-  const { isAuthenticated } = useStore();
+  useStore();
 
   // This is now handled by the store with persistence
   // so we don't need the local login/logout handling
