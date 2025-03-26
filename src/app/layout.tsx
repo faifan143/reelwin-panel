@@ -11,12 +11,14 @@ import {
 } from "@ant-design/icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Avatar, Button, Drawer, Layout, Menu, Tooltip } from "antd";
+import { Avatar, Button, Drawer, Layout, Menu, Tooltip, Modal } from "antd";
 import { useEffect, useState } from "react";
+import useStore from "@/store"; // Import the Zustand store
 import AdminPage from "../components/AdminPage";
 import GenerateGemPage from "../components/GenerateGem";
 import ManageInterests from "../components/ManageInterests";
 import RewardsManagement from "../components/RewardsManagement";
+import LoginPage from "../components/LoginPage"; // Import the login page component
 import "./globals.css";
 
 const { Content } = Layout;
@@ -24,10 +26,21 @@ const { Content } = Layout;
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
   const [collapsed, setCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState("content");
   const [isMobile, setIsMobile] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(true); // Default to true for demo
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [attemptedNavigation, setAttemptedNavigation] = useState<string | null>(
+    null
+  );
+
+  // Get state and actions from the Zustand store
+  const {
+    isAuthenticated,
+    logout,
+    isAddingContent,
+    setIsAddingContent,
+    activeTab,
+    setActiveTab,
+  } = useStore();
 
   // Check if viewport is mobile size
   useEffect(() => {
@@ -49,6 +62,15 @@ export default function RootLayout() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, [drawerVisible]);
+
+  // Reset the loading state on component mount (if it was left in a loading state)
+  useEffect(() => {
+    return () => {
+      if (isAddingContent) {
+        setIsAddingContent(false);
+      }
+    };
+  }, [isAddingContent, setIsAddingContent]);
 
   const menuItems = [
     {
@@ -81,36 +103,31 @@ export default function RootLayout() {
   };
 
   const handleMenuClick = (key: string) => {
+    // If adding content, show warning and prevent navigation
+    if (isAddingContent && key !== activeTab) {
+      setAttemptedNavigation(key);
+      return;
+    }
+
     setActiveTab(key);
     if (isMobile) {
       setDrawerVisible(false);
     }
   };
 
-  // If not authenticated, render login page or redirect
+  const handleLogout = () => {
+    if (!isAddingContent) {
+      logout();
+    }
+  };
+
+  // If not authenticated, render login page
   if (!isAuthenticated) {
     return (
       <html lang="ar" dir="rtl">
         <body>
           <QueryClientProvider client={queryClient}>
-            <div className="h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-indigo-100">
-              <div className="bg-white p-8 rounded-xl shadow-lg text-center w-full max-w-md">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-white text-2xl font-bold">R</span>
-                </div>
-                <h1 className="text-2xl font-bold mb-4 text-gray-800">
-                  تم تسجيل الخروج بنجاح
-                </h1>
-                <Button
-                  type="primary"
-                  onClick={() => setIsAuthenticated(true)}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-700 border-0 h-10 px-6 shadow-md hover:shadow-lg transition-all"
-                  size="large"
-                >
-                  تسجيل الدخول مرة أخرى
-                </Button>
-              </div>
-            </div>
+            <LoginPage />
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </body>
@@ -150,7 +167,11 @@ export default function RootLayout() {
         className="bg-transparent border-r-0 flex-1 py-4"
         items={menuItems.map((item) => ({
           ...item,
-          className: "my-1 mx-2 rounded-lg transition-all !text-base",
+          className: `my-1 mx-2 rounded-lg transition-all !text-base ${
+            isAddingContent && item.key !== activeTab
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`,
           style: {
             backgroundColor:
               activeTab === item.key
@@ -158,6 +179,7 @@ export default function RootLayout() {
                 : "transparent",
             margin: "4px 8px",
           },
+          disabled: isAddingContent && item.key !== activeTab,
         }))}
         style={{
           backgroundColor: "transparent",
@@ -183,13 +205,23 @@ export default function RootLayout() {
             )}
           </div>
           {/* Always show logout button regardless of collapsed state */}
-          <Tooltip title="تسجيل الخروج" placement="bottom">
+          <Tooltip
+            title={
+              isAddingContent
+                ? "لا يمكن تسجيل الخروج أثناء إضافة المحتوى"
+                : "تسجيل الخروج"
+            }
+            placement="bottom"
+          >
             <Button
               type="text"
               icon={<LogoutOutlined />}
-              onClick={() => setIsAuthenticated(false)}
-              className="text-white/80 hover:text-white hover:bg-blue-700/50 rounded-lg"
+              onClick={handleLogout}
+              className={`text-white/80 hover:text-white hover:bg-blue-700/50 rounded-lg ${
+                isAddingContent ? "opacity-50 cursor-not-allowed" : ""
+              }`}
               size="middle"
+              disabled={isAddingContent}
             />
           </Tooltip>
         </div>
@@ -205,6 +237,32 @@ export default function RootLayout() {
       <body className="bg-gray-100">
         <QueryClientProvider client={queryClient}>
           <Layout className="min-h-screen">
+            {/* Modal for navigation warning */}
+            <Modal
+              title={
+                <div className="text-right font-bold text-red-600">تحذير</div>
+              }
+              open={!!attemptedNavigation}
+              onCancel={() => setAttemptedNavigation(null)}
+              footer={[
+                <Button
+                  key="back"
+                  onClick={() => setAttemptedNavigation(null)}
+                  className="bg-gray-200 hover:bg-gray-300"
+                >
+                  البقاء هنا
+                </Button>,
+              ]}
+              centered
+            >
+              <div className="text-right">
+                <p className="text-lg">جاري إضافة المحتوى...</p>
+                <p className="text-gray-600">
+                  لا يمكنك الانتقال إلى صفحة أخرى حتى يتم الانتهاء من العملية.
+                </p>
+              </div>
+            </Modal>
+
             {/* Mobile Top Navbar */}
             {isMobile && (
               <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-blue-900 to-indigo-950 h-16 flex items-center px-4 shadow-lg">
@@ -218,7 +276,10 @@ export default function RootLayout() {
                     )
                   }
                   onClick={toggleMenu}
-                  className="text-white text-xl hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg"
+                  className={`text-white text-xl hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${
+                    isAddingContent ? "opacity-50" : ""
+                  }`}
+                  disabled={isAddingContent}
                 />
                 <div className="flex items-center mr-4">
                   <div className="flex flex-col">
@@ -230,6 +291,16 @@ export default function RootLayout() {
                     </span>
                   </div>
                 </div>
+
+                {/* Show a loading indicator in the mobile header when content is being added */}
+                {isAddingContent && (
+                  <div className="mr-auto flex items-center">
+                    <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mr-2"></div>
+                    <span className="text-yellow-200 text-xs">
+                      جاري الإضافة...
+                    </span>
+                  </div>
+                )}
               </div>
             )}
 
@@ -237,12 +308,17 @@ export default function RootLayout() {
             {isMobile ? (
               <Drawer
                 placement="right"
-                onClose={() => setDrawerVisible(false)}
+                onClose={() => {
+                  if (!isAddingContent) {
+                    setDrawerVisible(false);
+                  }
+                }}
                 open={drawerVisible}
                 width={280}
                 bodyStyle={{ padding: 0 }}
                 headerStyle={{ display: "none" }}
                 className="sidebar-drawer"
+                maskClosable={!isAddingContent}
               >
                 <Sidebar />
               </Drawer>
@@ -274,27 +350,45 @@ export default function RootLayout() {
             </Layout>
           </Layout>
           <ReactQueryDevtools initialIsOpen={false} />
-
-          {/* Global styles for better animations */}
-          <style jsx global>{`
-            .sidebar-drawer .ant-drawer-content-wrapper {
-              box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-            }
-
-            .ant-menu-item:hover {
-              background-color: rgba(59, 130, 246, 0.1) !important;
-            }
-
-            .ant-menu-item-selected {
-              background: linear-gradient(
-                90deg,
-                rgba(59, 130, 246, 0.2),
-                rgba(79, 70, 229, 0.15)
-              ) !important;
-              border-right: 3px solid #3b82f6 !important;
-            }
-          `}</style>
         </QueryClientProvider>
+        {/* Global styles for better animations */}
+        <style jsx global>{`
+          .sidebar-drawer .ant-drawer-content-wrapper {
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+          }
+
+          .ant-menu-item:hover {
+            background-color: rgba(59, 130, 246, 0.1) !important;
+          }
+
+          .ant-menu-item-selected {
+            background: linear-gradient(
+              90deg,
+              rgba(59, 130, 246, 0.2),
+              rgba(79, 70, 229, 0.15)
+            ) !important;
+            border-right: 3px solid #3b82f6 !important;
+          }
+
+          .ant-menu-item.opacity-50:hover {
+            background-color: transparent !important;
+            cursor: not-allowed;
+          }
+
+          @keyframes pulse-width {
+            0%,
+            100% {
+              width: 15%;
+            }
+            50% {
+              width: 85%;
+            }
+          }
+
+          .animate-pulse-width {
+            animation: pulse-width 2s ease-in-out infinite;
+          }
+        `}</style>
       </body>
     </html>
   );

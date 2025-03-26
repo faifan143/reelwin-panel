@@ -1,37 +1,22 @@
 // File: app/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import LoginPage from "@/components/LoginPage";
-import AdminPage from "@/components/AdminPage";
-import ManageInterests from "@/components/ManageInterests";
+import useStore from "@/store";
+import dynamic from "next/dynamic";
+
+// Use dynamic import to prevent hydration errors with localStorage
+const RootLayout = dynamic(() => import("./layout"), { ssr: false });
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Use Zustand store instead of local state
+  const { isAuthenticated } = useStore();
 
-  useEffect(() => {
-    // Check if user is logged in
-    const token = localStorage.getItem("reelWinToken");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogin = (token: string) => {
-    localStorage.setItem("reelWinToken", token);
-    setIsLoggedIn(true);
-  };
+  // This is now handled by the store with persistence
+  // so we don't need the local login/logout handling
 
   return (
     <main className="min-h-screen bg-gray-100">
-      {isLoggedIn ? (
-        <>
-          <AdminPage />
-          <ManageInterests />
-        </>
-      ) : (
-        <LoginPage onLogin={handleLogin} />
-      )}
+      <RootLayout />
     </main>
   );
 }
