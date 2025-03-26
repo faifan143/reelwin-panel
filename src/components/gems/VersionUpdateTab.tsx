@@ -1,5 +1,5 @@
 // VersionUpdateTab.tsx
-import { CommonProps, VersionUpdateForm } from "@/types";
+import { CommonProps, VersionUpdateForm } from "@/components/gems/types";
 import {
   InfoCircleOutlined,
   LockOutlined,

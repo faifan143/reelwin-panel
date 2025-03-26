@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Alert, Button, Card, Popconfirm, message } from "antd";
 import { InfoCircleOutlined, ClearOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { CommonProps } from "@/types";
+import { CommonProps } from "@/components/gems/types";
 
 type ClearUpdatesTabProps = CommonProps;
 
@@ -35,7 +35,7 @@ const ClearUpdatesTab: React.FC<ClearUpdatesTabProps> = ({
       );
 
       message.success("تم مسح التحديثات بنجاح");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Error clearing updates:", err);
       setError(err.response?.data?.message || "حدث خطأ أثناء مسح التحديثات");

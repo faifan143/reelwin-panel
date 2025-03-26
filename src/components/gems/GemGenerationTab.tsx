@@ -1,5 +1,5 @@
 // GemGenerationTab.tsx
-import { CommonProps } from "@/types";
+import { CommonProps } from "@/components/gems/types";
 import {
   InfoCircleOutlined,
   LockOutlined,
