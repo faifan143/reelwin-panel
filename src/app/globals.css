@@ -63,3 +63,77 @@ body {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
+
+/* Add these styles to your globals.css file */
+
+/* Progress animation for indeterminate progress bars */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-progress-indeterminate {
+  animation: progress-indeterminate 1.5s infinite linear;
+  width: 50%;
+}
+
+/* Custom fade-in animation for status messages */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Specific fixes for content processing view */
+.processing-container {
+  position: relative;
+}
+
+.processing-status {
+  background-color: #eff6ff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #dbeafe;
+  overflow: hidden;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: #dbeafe;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #2563eb;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-indeterminate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #2563eb;
+  border-radius: 9999px;
+  animation: progress-indeterminate 1.5s infinite linear;
+  width: 50%;
+}

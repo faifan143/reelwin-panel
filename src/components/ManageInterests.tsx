@@ -36,7 +36,7 @@ interface Interest {
 }
 
 const fetchInterests = async (): Promise<Interest[]> => {
-  const response = await axios.get("/reel-win/api/interests/list");
+  const response = await axios.get("/reel-win/api/interests");
   return response.data;
 };
 
