@@ -33,7 +33,13 @@ export default function RootLayout() {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (mobile && !drawerVisible) {
+      
+      // For desktop - always expanded
+      if (!mobile) {
+        setCollapsed(false);
+      } 
+      // For mobile - collapsed when not in drawer mode
+      else if (mobile && !drawerVisible) {
         setCollapsed(true);
       }
     };
@@ -67,14 +73,13 @@ export default function RootLayout() {
   ];
 
   const toggleMenu = () => {
+    // Only for mobile - toggle drawer visibility
     if (isMobile) {
       setDrawerVisible(!drawerVisible);
-    } else {
-      setCollapsed(!collapsed);
     }
   };
 
-  const handleMenuClick = (key: string) => {
+  const handleMenuClick = (key:string) => {
     setActiveTab(key);
     if (isMobile) {
       setDrawerVisible(false);
@@ -143,23 +148,19 @@ export default function RootLayout() {
       <div className="p-4 border-t border-blue-700">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Avatar size="small" className="bg-blue-400">
-              U
-            </Avatar>
-            {!collapsed && (
-              <span className="text-white/90 mr-2 text-sm">مدير النظام</span>
-            )}
+            <Avatar size="small" className="bg-blue-400">U</Avatar>
+            {!collapsed && <span className="text-white/90 mr-2 text-sm">مدير النظام</span>}
           </div>
           {/* Always show logout button regardless of collapsed state */}
-          <Tooltip title="تسجيل الخروج" placement="bottom">
-            <Button
-              type="text"
-              icon={<LogoutOutlined />}
-              onClick={() => setIsAuthenticated(false)}
-              className="text-white/80 hover:text-white hover:bg-blue-700"
-              size="small"
-            />
-          </Tooltip>
+            <Tooltip title="تسجيل الخروج" placement="bottom">
+              <Button 
+                type="text" 
+                icon={<LogoutOutlined />} 
+                onClick={() => setIsAuthenticated(false)}
+                className="text-white/80 hover:text-white hover:bg-blue-700"
+                size="small"
+              />
+            </Tooltip>
         </div>
         <div className="text-white/60 text-center text-xs mt-2">
           {!collapsed && "ReelWin © 2025"}
@@ -178,13 +179,7 @@ export default function RootLayout() {
               <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-blue-800 to-indigo-900 h-16 flex items-center px-4 shadow-md">
                 <Button
                   type="text"
-                  icon={
-                    drawerVisible ? (
-                      <MenuFoldOutlined />
-                    ) : (
-                      <MenuUnfoldOutlined />
-                    )
-                  }
+                  icon={drawerVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
                   onClick={toggleMenu}
                   className="text-white text-xl"
                 />
@@ -218,7 +213,7 @@ export default function RootLayout() {
               /* Desktop Sidebar */
               <div
                 className="fixed right-0 top-0 h-full transition-all duration-300 ease-in-out z-40"
-                style={{ width: collapsed ? "80px" : "250px" }}
+                style={{ width: "250px" }} // Always use full width for desktop
               >
                 <Sidebar />
               </div>
@@ -227,27 +222,12 @@ export default function RootLayout() {
             {/* Main Content */}
             <Layout
               style={{
-                marginRight: isMobile ? 0 : collapsed ? 80 : 250,
+                marginRight: isMobile ? 0 : 250, // Always use full sidebar width for desktop
                 marginTop: isMobile ? 64 : 0,
                 transition: "margin 0.2s",
               }}
             >
-              {/* Toggle Button for Desktop */}
-              {!isMobile && (
-                <Button
-                  type="text"
-                  icon={
-                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                  }
-                  onClick={toggleMenu}
-                  className="fixed z-50 right-0 bg-white shadow-md border border-gray-200 rounded-r-none rounded-l-md"
-                  style={{
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    right: collapsed ? "80px" : "250px",
-                  }}
-                />
-              )}
+              {/* Toggle Button only for Mobile */}
 
               <Content className="m-4 sm:m-6 p-4 bg-gray-50 rounded-xl">
                 {activeTab === "content" && <AdminPage />}
