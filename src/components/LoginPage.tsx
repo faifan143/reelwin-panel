@@ -6,7 +6,7 @@ import useStore from "@/store"; // Import the Zustand store
 import axios from "axios";
 
 interface LoginFormData {
-  username: string;
+  phone: string;
   password: string;
 }
 
@@ -21,7 +21,7 @@ const LoginPage = () => {
       // Make an API call to authenticate the user
       // Replace with your actual authentication API endpoint
       const response = await axios.post("/reel-win/api/auth/signin", {
-        username: values.username,
+        phone: values.phone,
         password: values.password,
       });
 
@@ -79,14 +79,14 @@ const LoginPage = () => {
             className="login-form"
           >
             <Form.Item
-              name="username"
-              rules={[{ required: true, message: "الرجاء إدخال اسم المستخدم" }]}
+              name="phone"
+              rules={[{ required: true, message: "الرجاء إدخال رقم الهاتف" }]}
             >
               <Input
                 prefix={
                   <UserOutlined className="site-form-item-icon text-gray-400" />
                 }
-                placeholder="اسم المستخدم"
+                placeholder="رقم الهاتف"
                 size="large"
                 className="rounded-lg"
               />
