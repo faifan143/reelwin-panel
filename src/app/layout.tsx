@@ -1,6 +1,7 @@
 "use client";
 import useStore from "@/store"; // Import the Zustand store
 import {
+  DatabaseOutlined,
   GiftOutlined,
   LogoutOutlined,
   PlayCircleOutlined,
@@ -18,6 +19,7 @@ import LoginPage from "../components/LoginPage"; // Import the login page compon
 import ManageInterests from "../components/ManageInterests";
 import RewardsManagement from "../components/RewardsManagement";
 import "./globals.css";
+import ContentManagementPage from "@/components/content/ContentManagementPage";
 
 const { Content } = Layout;
 
@@ -74,6 +76,11 @@ export default function RootLayout() {
     {
       key: "content",
       icon: <PlayCircleOutlined />,
+      label: "إضافة محتوى",
+    },
+    {
+      key: "content-management", // New key for content management
+      icon: <DatabaseOutlined />,
       label: "إدارة المحتوى",
     },
     {
@@ -352,6 +359,10 @@ export default function RootLayout() {
             >
               <Content className="m-4 sm:m-6 p-6 bg-white rounded-xl shadow-sm">
                 {activeTab === "content" && <AdminPage />}
+                {activeTab === "content-management" && (
+                  <ContentManagementPage />
+                )}{" "}
+                {/* New content management tab */}
                 {activeTab === "interests" && <ManageInterests />}
                 {activeTab === "generate-gem" && <GenerateGemPage />}
                 {activeTab === "rewards" && <RewardsManagement />}
