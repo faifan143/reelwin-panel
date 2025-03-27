@@ -14,3 +14,5 @@ echo "Container status:"
 docker ps | grep reelwin
 
 echo "Deployment completed"
+
+docker-compose logs -f 
