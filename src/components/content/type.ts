@@ -1,5 +1,5 @@
 // Types
-interface ContentFormData {
+export interface ContentFormData {
   title: string;
   description: string;
   ownerName: string;
@@ -11,32 +11,33 @@ interface ContentFormData {
   mediaUrls: string[];
 }
 
-interface Interest {
+export interface Interest {
   id: string;
   name: string;
 }
 
-interface FormSectionProps {
+export interface FormSectionProps {
   title: string;
   icon: React.ReactNode;
   bgColor: string;
   children: React.ReactNode;
 }
 
-interface MediaPreviewProps {
+export interface MediaPreviewProps {
   files: File[];
   removeFile: (index: number) => void;
   isVideo?: boolean;
 }
 
-interface StatusMessageProps {
-  type: 'success' | 'error' | 'loading';
+export interface StatusMessageProps {
+  type: "success" | "error" | "loading";
   title: string;
   message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any;
 }
 
-interface MediaUploaderProps {
+export interface MediaUploaderProps {
   label: string;
   icon: React.ReactNode;
   fileType: string;

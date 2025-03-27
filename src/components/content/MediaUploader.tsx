@@ -1,12 +1,15 @@
+import { ChangeEvent, useRef } from "react";
+import { MediaUploaderProps } from "./type";
+import { Upload } from "lucide-react";
 
-const MediaUploader = ({ 
-  label, 
-  icon, 
-  fileType, 
-  accept, 
-  colorScheme, 
-  files, 
-  onFilesChange 
+export const MediaUploader = ({
+  label,
+  icon,
+  fileType,
+  accept,
+  colorScheme,
+  files,
+  onFilesChange,
 }: MediaUploaderProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -29,9 +32,13 @@ const MediaUploader = ({
         {label} *
       </label>
       <div className="flex flex-col space-y-4">
-        <label className={`flex items-center justify-center p-6 ${colorScheme.gradient} border-2 border-dashed ${colorScheme.border} rounded-xl cursor-pointer ${colorScheme.hover} group transition-all duration-300`}>
+        <label
+          className={`flex items-center justify-center p-6 ${colorScheme.gradient} border-2 border-dashed ${colorScheme.border} rounded-xl cursor-pointer ${colorScheme.hover} group transition-all duration-300`}
+        >
           <div className="flex flex-col items-center text-center">
-            <div className={`${colorScheme.bg} rounded-full p-3 mb-3 group-hover:bg-${colorScheme.hover} transition-colors`}>
+            <div
+              className={`${colorScheme.bg} rounded-full p-3 mb-3 group-hover:bg-${colorScheme.hover} transition-colors`}
+            >
               <Upload className={`h-6 w-6 ${colorScheme.text}`} />
             </div>
             <span className={`${colorScheme.text} font-semibold mb-1`}>

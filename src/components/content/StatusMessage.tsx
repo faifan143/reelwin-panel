@@ -1,26 +1,33 @@
-export const StatusMessage = ({ type, title, message, error }: StatusMessageProps) => {
+import { StatusMessageProps } from "./type";
+
+export const StatusMessage = ({
+  type,
+  title,
+  message,
+  error,
+}: StatusMessageProps) => {
   const colors = {
     success: {
       bg: "bg-green-50",
       border: "border-green-200",
       text: "text-green-700",
       iconBg: "bg-green-100",
-      iconText: "text-green-600"
+      iconText: "text-green-600",
     },
     error: {
       bg: "bg-red-50",
       border: "border-red-200",
       text: "text-red-700",
       iconBg: "bg-red-100",
-      iconText: "text-red-600"
+      iconText: "text-red-600",
     },
     loading: {
       bg: "bg-blue-50",
       border: "border-blue-200",
       text: "text-blue-800",
       iconBg: "bg-blue-100",
-      iconText: "text-blue-600"
-    }
+      iconText: "text-blue-600",
+    },
   };
 
   const icons = {
@@ -67,21 +74,27 @@ export const StatusMessage = ({ type, title, message, error }: StatusMessageProp
           clipRule="evenodd"
         />
       </svg>
-    )
+    ),
   };
 
   return (
-    <div className={`p-4 ${colors[type].bg} border ${colors[type].border} rounded-lg shadow-md ${colors[type].text} flex items-center mt-6 ${type !== 'loading' ? 'animate-fade-in' : ''}`}>
+    <div
+      className={`p-4 ${colors[type].bg} border ${
+        colors[type].border
+      } rounded-lg shadow-md ${colors[type].text} flex items-center mt-6 ${
+        type !== "loading" ? "animate-fade-in" : ""
+      }`}
+    >
       <div className={`${colors[type].iconBg} rounded-full p-2 mr-3`}>
         {icons[type]}
       </div>
       <div>
         <h4 className="font-bold">{title}</h4>
         <p className="text-sm mt-1">
-          {type === 'error' && error?.message ? error.message : message}
+          {type === "error" && error?.message ? error.message : message}
         </p>
       </div>
-      {type === 'loading' && (
+      {type === "loading" && (
         <div className="progress-bar-container">
           <div className="progress-bar-indeterminate"></div>
         </div>

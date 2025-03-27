@@ -12,12 +12,15 @@ import {
   Upload,
   User,
   Video,
-  XCircle,
 } from "lucide-react";
-import { ChangeEvent, useRef, useState, FormEvent } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-
+import { FormSection } from "./content/FormSection";
+import { MediaPreview } from "./content/MediaPreview";
+import { MediaUploader } from "./content/MediaUploader";
+import { StatusMessage } from "./content/StatusMessage";
+import { ContentFormData, Interest } from "./content/type";
 
 // Page Component
 export default function AdminPage() {
@@ -138,8 +141,8 @@ export default function AdminPage() {
 
   // Conditional rendering for form sections
   const renderBasicInfoSection = () => (
-    <FormSection 
-      title="المعلومات الأساسية" 
+    <FormSection
+      title="المعلومات الأساسية"
       icon={
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -153,7 +156,7 @@ export default function AdminPage() {
             clipRule="evenodd"
           />
         </svg>
-      } 
+      }
       bgColor="bg-blue-100"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -232,9 +235,9 @@ export default function AdminPage() {
   );
 
   const renderOwnerInfoSection = () => (
-    <FormSection 
-      title="معلومات المالك" 
-      icon={<User className="h-5 w-5 text-green-600" />} 
+    <FormSection
+      title="معلومات المالك"
+      icon={<User className="h-5 w-5 text-green-600" />}
       bgColor="bg-green-100"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -295,8 +298,7 @@ export default function AdminPage() {
                 required: "رقم المالك مطلوب",
                 pattern: {
                   value: /^09\d{8}$/,
-                  message:
-                    "يجب أن يكون الرقم بالتنسيق السوري (09XXXXXXXX)",
+                  message: "يجب أن يكون الرقم بالتنسيق السوري (09XXXXXXXX)",
                 },
               })}
             />
@@ -325,10 +327,8 @@ export default function AdminPage() {
   );
 
   const renderContentSettingsSection = () => (
-
-
-    <FormSection 
-      title="إعدادات المحتوى" 
+    <FormSection
+      title="إعدادات المحتوى"
       icon={
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -342,7 +342,7 @@ export default function AdminPage() {
             clipRule="evenodd"
           />
         </svg>
-      } 
+      }
       bgColor="bg-purple-100"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -358,9 +358,7 @@ export default function AdminPage() {
               type="number"
               id="intervalHours"
               className={`w-full px-4 py-3 pl-10 border ${
-                errors.intervalHours
-                  ? "border-red-500"
-                  : "border-gray-300"
+                errors.intervalHours ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
               placeholder="أدخل عدد ساعات الفاصل"
               min={1}
@@ -398,8 +396,7 @@ export default function AdminPage() {
             htmlFor="endValidationDate"
             className="block font-semibold text-gray-700 mb-2 flex items-center"
           >
-            <span className="text-red-500 ml-1">*</span> تاريخ انتهاء
-            الصلاحية
+            <span className="text-red-500 ml-1">*</span> تاريخ انتهاء الصلاحية
           </label>
           <div className="relative">
             <Controller
@@ -441,7 +438,6 @@ export default function AdminPage() {
         </div>
 
         <div className="md:col-span-2">
-
           <label
             htmlFor="interestIds"
             className="block font-semibold text-gray-700 mb-2 flex items-center"
@@ -520,17 +516,232 @@ export default function AdminPage() {
               );
             }}
           />
+          <p className="text-gray-500 text-xs mt-2 flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 ml-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
+            اختر الاهتمامات المتعلقة بالمحتوى لتحسين استهداف الجمهور
+          </p>
+        </div>
+      </div>
+    </FormSection>
+  );
 
+  const renderMediaSection = () => (
+    <FormSection
+      title="الوسائط"
+      icon={<Upload className="h-5 w-5 text-yellow-600" />}
+      bgColor="bg-yellow-100"
+    >
+      {/* Image Upload */}
+      <MediaUploader
+        label="الصور"
+        icon={<Image className="h-5 w-5 ml-2 text-gray-600" />}
+        fileType="صور"
+        accept="PNG, JPG أو JPEG"
+        colorScheme={{
+          gradient: "bg-gradient-to-br from-blue-50 to-blue-100",
+          border: "border-blue-300",
+          bg: "bg-blue-100",
+          hover: "hover:bg-blue-50",
+          text: "text-blue-600",
+        }}
+        files={imageFiles}
+        onFilesChange={setImageFiles}
+      />
 
+      {imageFiles.length > 0 && (
+        <MediaPreview files={imageFiles} removeFile={removeImageFile} />
+      )}
+
+      {/* Video Upload */}
+      <MediaUploader
+        label="الفيديوهات"
+        icon={<Video className="h-5 w-5 ml-2 text-gray-600" />}
+        fileType="فيديوهات"
+        accept="MP4 أو MOV"
+        colorScheme={{
+          gradient: "bg-gradient-to-br from-purple-50 to-purple-100",
+          border: "border-purple-300",
+          bg: "bg-purple-100",
+          hover: "hover:bg-purple-50",
+          text: "text-purple-600",
+        }}
+        files={videoFiles}
+        onFilesChange={setVideoFiles}
+      />
+
+      {videoFiles.length > 0 && (
+        <MediaPreview
+          files={videoFiles}
+          removeFile={removeVideoFile}
+          isVideo={true}
+        />
+      )}
+
+      <div className="mt-6 p-3 bg-blue-50 rounded-lg text-blue-800 text-sm border border-blue-200 flex items-start">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fillRule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span>
+          يجب إضافة صورة أو فيديو واحد على الأقل. يمكنك إضافة عدة صور وفيديوهات
+          معاً.
+        </span>
+      </div>
+    </FormSection>
+  );
+
+  const renderSubmitButton = () => (
+    <button
+      type="submit"
+      disabled={addingContent}
+      className={`w-full py-4 px-6 rounded-xl shadow-lg font-bold text-lg transition-all duration-300 transform hover:translate-y-0 flex items-center justify-center ${
+        addingContent
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:from-blue-700 hover:to-indigo-800 hover:shadow-xl"
+      }`}
+    >
+      {addingContent ? (
+        <>
+          <svg
+            className="animate-spin -ml-1 mr-3 h-6 w-6 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          جاري إنشاء المحتوى...
+        </>
+      ) : (
+        <span className="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+          إنشاء المحتوى
+        </span>
+      )}
+    </button>
+  );
+
+  // Main component render
+  return (
+    <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 px-8 py-6">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-2xl font-bold text-white">إضافة محتوى جديد</h2>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Form */}
+      <div className="p-8">
+        <div className="mb-8">
+          <p className="text-gray-600 mt-3 flex items-center">
+            <span className="bg-blue-100 text-blue-800 p-1 rounded-full mr-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </span>
+            أدخل تفاصيل المحتوى والوسائط المطلوبة
+          </p>
         </div>
 
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-8"
+        >
+          {renderBasicInfoSection()}
+          {renderOwnerInfoSection()}
+          {renderContentSettingsSection()}
+          {renderMediaSection()}
+
+          {renderSubmitButton()}
+
+          {addingContent && (
+            <StatusMessage
+              type="loading"
+              title="يتم الآن معالجة المحتوى الخاص بك"
+              message="قد يستغرق ذلك بين بضع ثوانٍ إلى 5 دقائق... يرجى الانتظار."
+            />
+          )}
+
+          {isSuccess && (
+            <StatusMessage
+              type="success"
+              title="تم بنجاح!"
+              message="تم إنشاء المحتوى الخاص بك بنجاح وهو الآن جاهز للعرض."
+            />
+          )}
+
+          {isError && (
+            <StatusMessage
+              type="error"
+              title="حدث خطأ"
+              message="حدث خطأ أثناء إنشاء المحتوى. يرجى المحاولة مرة أخرى."
+              error={error}
+            />
+          )}
+        </form>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-gray-50 px-8 py-4 border-t text-center text-gray-500 text-sm">
+        جميع الحقوق محفوظة © 2025 ReelWin
+      </div>
     </div>
-
-    </FormSection>
-
-          )
-
-
-
-          return <></>
-        }
+  );
+}
