@@ -511,7 +511,7 @@ export default function ContentManagementPage() {
                               <Calendar className="h-4 w-4 ml-1 text-gray-400" />
                               {new Date(
                                 content.endValidationDate
-                              ).toLocaleDateString("ar-SA")}
+                              ).toLocaleDateString("ar")}
                             </div>
                           </div>
                         </td>
@@ -675,7 +675,7 @@ export default function ContentManagementPage() {
                       <div className="text-sm text-gray-600 flex items-center">
                         <Calendar className="h-4 w-4 ml-1 text-gray-400" />
                         {new Date(content.endValidationDate).toLocaleDateString(
-                          "ar-SA"
+                          "ar"
                         )}
                       </div>
                     </div>
