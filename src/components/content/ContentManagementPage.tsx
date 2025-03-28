@@ -195,8 +195,11 @@ export default function ContentManagementPage() {
       points: number;
     }) => {
       return axios.post(
-        `/reel-win/api/content/generate-gem?contentId=${contentId}&points=${points}`,
-        {},
+        `/reel-win/api/content/generate-gem`,
+        {
+          contentId,
+          points,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
