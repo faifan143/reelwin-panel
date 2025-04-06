@@ -1,6 +1,5 @@
-enum ContentOwnerType {
-  INDIVIDUAL,STORE
-}
+export type ContentOwnerType  = "INDIVIDUAL"| "STORE"
+
 // Types
 export interface ContentFormData {
   title: string;

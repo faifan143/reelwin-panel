@@ -19,7 +19,7 @@ import { FormSection } from "./content/FormSection";
 import { MediaPreview } from "./content/MediaPreview";
 import { MediaUploader } from "./content/MediaUploader";
 import { StatusMessage } from "./content/StatusMessage";
-import { ContentFormData, Interest } from "./content/type";
+import { ContentFormData, ContentOwnerType, Interest } from "./content/type";
 
 interface Store {
   "id": string,
@@ -32,9 +32,6 @@ interface Store {
   "latitude": number,
 }
 
-enum ContentOwnerType {
-  INDIVIDUAL, STORE
-}
 export default function AdminPage() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFiles, setVideoFiles] = useState<File[]>([]);
@@ -49,7 +46,7 @@ export default function AdminPage() {
   const formattedDefaultDate = defaultDate.toISOString().slice(0, 16);
 
   // Owner type state
-  const [ownerType, setOwnerType] = useState<ContentOwnerType>(ContentOwnerType.INDIVIDUAL);
+  const [ownerType, setOwnerType] = useState<ContentOwnerType>("INDIVIDUAL");
 
   // Queries
   const { data: interests, isLoading: interestsLoading } = useQuery<Interest[]>({
@@ -97,7 +94,7 @@ export default function AdminPage() {
     defaultValues: {
       title: "",
       description: "",
-      ownerType: ContentOwnerType.INDIVIDUAL,
+      ownerType: "INDIVIDUAL",
       ownerName: "",
       ownerNumber: "",
       storeId: "",
@@ -130,7 +127,7 @@ export default function AdminPage() {
     formData.append("intervalHours", data.intervalHours.toString());
 
     // Handle owner-specific data
-    if (ownerType === ContentOwnerType.INDIVIDUAL) {
+    if (ownerType === "INDIVIDUAL") {
       formData.append("ownerName", data.ownerName || "");
       formData.append("ownerNumber", data.ownerNumber || "");
     } else {
@@ -162,7 +159,7 @@ export default function AdminPage() {
       reset();
       setImageFiles([]);
       setVideoFiles([]);
-      setOwnerType(ContentOwnerType.INDIVIDUAL);
+      setOwnerType("INDIVIDUAL");
 
       if (formRef.current) {
         formRef.current.reset();
@@ -191,9 +188,9 @@ export default function AdminPage() {
             <label className="inline-flex items-center">
               <input
                 type="radio"
-                value={ContentOwnerType.INDIVIDUAL}
-                checked={ownerType === ContentOwnerType.INDIVIDUAL}
-                onChange={() => setOwnerType(ContentOwnerType.INDIVIDUAL)}
+                value={"INDIVIDUAL"}
+                checked={ownerType === "INDIVIDUAL"}
+                onChange={() => setOwnerType("INDIVIDUAL")}
                 className="form-radio"
               />
               <span className="mr-2">فردي</span>
@@ -201,9 +198,9 @@ export default function AdminPage() {
             <label className="inline-flex items-center">
               <input
                 type="radio"
-                value={ContentOwnerType.STORE}
-                checked={ownerType === ContentOwnerType.STORE}
-                onChange={() => setOwnerType(ContentOwnerType.STORE)}
+                value={"STORE"}
+                checked={ownerType === "STORE"}
+                onChange={() => setOwnerType("STORE")}
                 className="form-radio"
               />
               <span className="mr-2">متجر</span>
@@ -211,7 +208,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {ownerType === ContentOwnerType.INDIVIDUAL ? (
+        {ownerType === "INDIVIDUAL" ? (
           <>
             <div>
               <label htmlFor="ownerName" className="block font-semibold text-gray-700 mb-2">
@@ -219,7 +216,7 @@ export default function AdminPage() {
               </label>
               <input
                 {...register("ownerName", {
-                  required: ownerType === ContentOwnerType.INDIVIDUAL
+                  required: ownerType === "INDIVIDUAL"
                 })}
                 className="w-full px-4 py-3 border rounded-lg"
                 placeholder="أدخل اسم المالك"
@@ -234,7 +231,7 @@ export default function AdminPage() {
               </label>
               <input
                 {...register("ownerNumber", {
-                  required: ownerType === ContentOwnerType.INDIVIDUAL,
+                  required: ownerType === "INDIVIDUAL",
                   pattern: /^09\d{8}$/
                 })}
                 className="w-full px-4 py-3 border rounded-lg"
@@ -254,7 +251,7 @@ export default function AdminPage() {
               name="storeId"
               control={control}
               rules={{
-                required: ownerType === ContentOwnerType.STORE
+                required: ownerType === "STORE"
               }}
               render={({ field }) => {
                 const storeOptions = stores?.map(store => ({
