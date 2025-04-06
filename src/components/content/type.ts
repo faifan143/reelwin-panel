@@ -1,14 +1,19 @@
+enum ContentOwnerType {
+  INDIVIDUAL,STORE
+}
 // Types
 export interface ContentFormData {
   title: string;
   description: string;
-  ownerName: string;
-  ownerNumber: string;
+  ownerType: ContentOwnerType;
+  ownerName?: string;
+  ownerNumber?: string;
+  storeId?: string;
+  type: "REEL";
   intervalHours: number;
   endValidationDate: string;
-  interestIds: string[];
-  type: "REEL";
-  mediaUrls: string[];
+  interestIds?: string[];
+  mediaUrls?: string[];
 }
 
 export interface Interest {
