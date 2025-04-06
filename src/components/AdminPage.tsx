@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import Select, { ActionMeta, SingleValue } from "react-select";
+import Select, { SingleValue } from "react-select";
 import { FormSection } from "./content/FormSection";
 import { MediaPreview } from "./content/MediaPreview";
 import { MediaUploader } from "./content/MediaUploader";
@@ -275,7 +275,6 @@ export default function AdminPage() {
                     }
                     onChange={(
                       newValue: SingleValue<{ value: string; label: string }>,
-                      actionMeta: ActionMeta<{ value: string; label: string }>
                     ) => {
                       field.onChange(newValue ? newValue.value : '');
                     }}
