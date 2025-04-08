@@ -50,14 +50,14 @@ export default function OfferManagementPage() {
     queryKey: ["offers", filters],
     queryFn: async () => {
       const params = new URLSearchParams();
-      
+
       // Add all filters to params
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== "") {
           params.append(key, value.toString());
         }
       });
-      
+
       const response = await axios.get(
         `/reel-win/api/offers?${params.toString()}`,
         {
@@ -106,7 +106,7 @@ export default function OfferManagementPage() {
       files: File[];
     }) => {
       const formData = new FormData();
-      
+
       // Append form fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined) {
@@ -117,12 +117,12 @@ export default function OfferManagementPage() {
           }
         }
       });
-      
+
       // Append files
       files.forEach((file) => {
         formData.append("images", file);
       });
-      
+
       return axios.post("/reel-win/api/offers", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -153,7 +153,7 @@ export default function OfferManagementPage() {
       files: File[];
     }) => {
       const formData = new FormData();
-      
+
       // Append form fields
       Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && key !== "existingImages") {
@@ -164,17 +164,17 @@ export default function OfferManagementPage() {
           }
         }
       });
-      
+
       // Append existing images if available
       if (data.existingImages) {
         formData.append("images", JSON.stringify(data.existingImages));
       }
-      
+
       // Append new files
       files.forEach((file) => {
         formData.append("images", file);
       });
-      
+
       return axios.put(`/reel-win/api/offers/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -270,14 +270,14 @@ export default function OfferManagementPage() {
   };
 
   // Extract pagination data
-  const { 
-    data: offers = [], 
-    meta = { 
-      currentPage: 1, 
-      totalPages: 1, 
+  const {
+    data: offers = [],
+    meta = {
+      currentPage: 1,
+      totalPages: 1,
       totalItems: 0,
       itemsPerPage: 10
-    } 
+    }
   } = offersResponse || { data: [], meta: {} };
 
   // Calculate pagination indices
@@ -289,11 +289,7 @@ export default function OfferManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Header */}
-      <PageHeader 
-        title="إدارة العروض"
-        subtitle="عرض وتعديل وحذف العروض في النظام"
-      />
+
 
       {/* Filters and Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -340,7 +336,7 @@ export default function OfferManagementPage() {
         ) : offers && offers.length > 0 ? (
           <>
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
-              <OffersList 
+              <OffersList
                 offers={offers}
                 onEdit={handleEditClick}
                 onDelete={handleDeleteClick}
@@ -361,7 +357,7 @@ export default function OfferManagementPage() {
             )}
           </>
         ) : (
-          <EmptyState 
+          <EmptyState
             title="لا توجد عروض"
             message="لم يتم العثور على أي عروض تطابق معايير البحث."
           />
@@ -381,7 +377,7 @@ export default function OfferManagementPage() {
           isPending={createOfferMutation.isPending || updateOfferMutation.isPending}
           submitLabel={selectedOffer ? "تحديث العرض" : "إضافة العرض"}
         >
-          <OfferForm 
+          <OfferForm
             initialData={selectedOffer || undefined}
             categories={categories}
             stores={stores}

@@ -182,11 +182,6 @@ export default function CategoryManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Header */}
-      <PageHeader
-        title="إدارة فئات العروض"
-        subtitle="عرض وتعديل وحذف فئات العروض في النظام"
-      />
 
       {/* Filters and Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
