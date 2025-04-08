@@ -72,7 +72,7 @@ const RewardsManagement: React.FC = () => {
   const fetchCategories = async () => {
     setLoadingCategories(true);
     try {
-      const response = await axios.get("/reel-win/api/rewards/categories");
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/rewards/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -85,7 +85,7 @@ const RewardsManagement: React.FC = () => {
   const fetchRewards = async () => {
     setLoadingRewards(true);
     try {
-      const response = await axios.get("/reel-win/api/rewards");
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/rewards");
       setRewards(response.data);
     } catch (error) {
       console.error("Error fetching rewards:", error);
@@ -99,7 +99,7 @@ const RewardsManagement: React.FC = () => {
     try {
       if (editingCategory) {
         await axios.put(
-          `/reel-win/api/rewards/categories/${editingCategory.id}`,
+          `https://anycode-sy.com/reel-win/api/rewards/categories/${editingCategory.id}`,
           values,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -107,7 +107,7 @@ const RewardsManagement: React.FC = () => {
         );
         message.success("تم تحديث الفئة بنجاح");
       } else {
-        await axios.post("/reel-win/api/rewards/categories", values, {
+        await axios.post("https://anycode-sy.com/reel-win/api/rewards/categories", values, {
           headers: { Authorization: `Bearer ${token}` },
         });
         message.success("تم إنشاء الفئة بنجاح");
@@ -127,12 +127,12 @@ const RewardsManagement: React.FC = () => {
 
     try {
       if (editingReward) {
-        await axios.put(`/reel-win/api/rewards/${editingReward.id}`, values, {
+        await axios.put(`https://anycode-sy.com/reel-win/api/rewards/${editingReward.id}`, values, {
           headers: { Authorization: `Bearer ${token}` },
         });
         message.success("تم تحديث المكافأة بنجاح");
       } else {
-        await axios.post("/reel-win/api/rewards", values, {
+        await axios.post("https://anycode-sy.com/reel-win/api/rewards", values, {
           headers: { Authorization: `Bearer ${token}` },
         });
         message.success("تم إنشاء المكافأة بنجاح");
@@ -151,7 +151,7 @@ const RewardsManagement: React.FC = () => {
     const token = localStorage.getItem("reelWinToken");
 
     try {
-      await axios.delete(`/reel-win/api/rewards/categories/${id}`, {
+      await axios.delete(`https://anycode-sy.com/reel-win/api/rewards/categories/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       message.success("تم حذف الفئة بنجاح");
@@ -166,7 +166,7 @@ const RewardsManagement: React.FC = () => {
     const token = localStorage.getItem("reelWinToken");
 
     try {
-      await axios.delete(`/reel-win/api/rewards/${id}`, {
+      await axios.delete(`https://anycode-sy.com/reel-win/api/rewards/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       message.success("تم حذف المكافأة بنجاح");

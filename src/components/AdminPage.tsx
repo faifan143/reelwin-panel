@@ -52,7 +52,7 @@ export default function AdminPage() {
   const { data: interests, isLoading: interestsLoading } = useQuery<Interest[]>({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("/reel-win/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/interests/list");
       return response.data;
     },
   });
@@ -60,7 +60,7 @@ export default function AdminPage() {
   const { data: stores, isLoading: storesLoading } = useQuery<Store[]>({
     queryKey: ["stores"],
     queryFn: async () => {
-      const response = await axios.get("/reel-win/api/stores");
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/stores");
       return response.data;
     },
   });
@@ -74,7 +74,7 @@ export default function AdminPage() {
     isSuccess,
   } = useMutation({
     mutationFn: async (formData: FormData) => {
-      await axios.post("/reel-win/api/content", formData, {
+      await axios.post("https://anycode-sy.com/reel-win/api/content", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

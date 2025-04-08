@@ -29,7 +29,7 @@ const GemGenerationTab: React.FC<GemGenerationTabProps> = ({
 
     try {
       await axios.post(
-        `/reel-win/api/content/generate-gem?points=${points}`,
+        `https://anycode-sy.com/reel-win/api/content/generate-gem?points=${points}`,
         {},
         {
           headers: {

@@ -179,11 +179,10 @@ export default function RootLayout() {
         className="bg-transparent border-r-0 flex-1 py-4"
         items={menuItems.map((item) => ({
           ...item,
-          className: `my-1 mx-2 rounded-lg transition-all !text-base ${
-            isAddingContent && item.key !== activeTab
-              ? "opacity-50 cursor-not-allowed"
-              : ""
-          }`,
+          className: `my-1 mx-2 rounded-lg transition-all !text-base ${isAddingContent && item.key !== activeTab
+            ? "opacity-50 cursor-not-allowed"
+            : ""
+            }`,
           style: {
             backgroundColor:
               activeTab === item.key
@@ -229,9 +228,8 @@ export default function RootLayout() {
               type="text"
               icon={<LogoutOutlined />}
               onClick={handleLogout}
-              className={`text-white/80 hover:text-white hover:bg-blue-700/50 rounded-lg ${
-                isAddingContent ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`text-white/80 hover:text-white hover:bg-blue-700/50 rounded-lg ${isAddingContent ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               size="middle"
               disabled={isAddingContent}
             />
@@ -299,9 +297,8 @@ export default function RootLayout() {
                     </svg>
                   }
                   onClick={toggleMenu}
-                  className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${
-                    isAddingContent ? "opacity-50" : ""
-                  }`}
+                  className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${isAddingContent ? "opacity-50" : ""
+                    }`}
                   disabled={isAddingContent}
                 />
                 <div className="flex items-center mr-4">
@@ -338,9 +335,10 @@ export default function RootLayout() {
                 }}
                 open={drawerVisible}
                 width={280}
-                bodyStyle={{ padding: 0 }}
-                headerStyle={{ display: "none" }}
-                className="sidebar-drawer"
+                styles={{
+                  body: { padding: 0 },
+                  header: { display: "none" }
+                }} className="sidebar-drawer"
                 maskClosable={!isAddingContent}
               >
                 <Sidebar />

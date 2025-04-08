@@ -20,7 +20,7 @@ const LoginPage = () => {
     try {
       // Make an API call to authenticate the user
       // Replace with your actual authentication API endpoint
-      const response = await axios.post("/reel-win/api/auth/signin", {
+      const response = await axios.post("https://anycode-sy.com/reel-win/api/auth/signin", {
         phone: values.phone,
         password: values.password,
       });

@@ -125,7 +125,7 @@ export default function ContentManagementPage() {
       if (filters.interestId) params.append("interestId", filters.interestId);
 
       const response = await axios.get(
-        "/reel-win/api/content?" + params.toString(),
+        "https://anycode-sy.com/reel-win/api/content?" + params.toString(),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export default function ContentManagementPage() {
   const { data: interests } = useQuery({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("/reel-win/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/interests/list");
       return response.data as Interest[];
     },
   });
@@ -148,7 +148,7 @@ export default function ContentManagementPage() {
   // Update content mutation
   const updateMutation = useMutation({
     mutationFn: async (data: ContentFormData) => {
-      return axios.patch(`/reel-win/api/content/${selectedContent?.id}`, data, {
+      return axios.patch(`https://anycode-sy.com/reel-win/api/content/${selectedContent?.id}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -168,7 +168,7 @@ export default function ContentManagementPage() {
   // Delete content mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return axios.delete(`/reel-win/api/content/${id}`, {
+      return axios.delete(`https://anycode-sy.com/reel-win/api/content/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -195,7 +195,7 @@ export default function ContentManagementPage() {
       points: number;
     }) => {
       return axios.post(
-        `/reel-win/api/content/generate-gem`,
+        `https://anycode-sy.com/reel-win/api/content/generate-gem`,
         {
           contentId,
           points,
@@ -474,11 +474,10 @@ export default function ContentManagementPage() {
                               <button
                                 key={index}
                                 onClick={() => handleMediaClick(media)}
-                                className={`p-1 rounded-md ${
-                                  media.type === "IMAGE"
+                                className={`p-1 rounded-md ${media.type === "IMAGE"
                                     ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
                                     : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                                }`}
+                                  }`}
                               >
                                 {media.type === "IMAGE" ? (
                                   <Image className="h-5 w-5" />
@@ -629,11 +628,10 @@ export default function ContentManagementPage() {
                           <button
                             key={index}
                             onClick={() => handleMediaClick(media)}
-                            className={`p-1 rounded-md ${
-                              media.type === "IMAGE"
+                            className={`p-1 rounded-md ${media.type === "IMAGE"
                                 ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
                                 : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-                            }`}
+                              }`}
                           >
                             {media.type === "IMAGE" ? (
                               <Image className="h-5 w-5" />
@@ -718,11 +716,10 @@ export default function ContentManagementPage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                    currentPage === 1
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   السابق
                 </button>
@@ -732,11 +729,10 @@ export default function ContentManagementPage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages || totalPages === 0}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                    currentPage === totalPages || totalPages === 0
+                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === totalPages || totalPages === 0
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-gray-700 hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   التالي
                 </button>
@@ -762,11 +758,10 @@ export default function ContentManagementPage() {
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                        currentPage === 1
+                      className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1
                           ? "text-gray-300 cursor-not-allowed"
                           : "text-gray-500 hover:bg-gray-50"
-                      }`}
+                        }`}
                     >
                       <span className="sr-only">السابق</span>
                       <ChevronRight className="h-5 w-5" />
@@ -786,11 +781,10 @@ export default function ContentManagementPage() {
                         <button
                           key={pageNumber}
                           onClick={() => goToPage(pageNumber)}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                            currentPage === pageNumber
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNumber
                               ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
                               : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                          }`}
+                            }`}
                         >
                           {pageNumber}
                         </button>
@@ -799,11 +793,10 @@ export default function ContentManagementPage() {
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages || totalPages === 0}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                        currentPage === totalPages || totalPages === 0
+                      className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === totalPages || totalPages === 0
                           ? "text-gray-300 cursor-not-allowed"
                           : "text-gray-500 hover:bg-gray-50"
-                      }`}
+                        }`}
                     >
                       <span className="sr-only">التالي</span>
                       <ChevronLeft className="h-5 w-5" />
@@ -889,9 +882,8 @@ export default function ContentManagementPage() {
                             <input
                               type="text"
                               id="title"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.title ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.title ? "border-red-500" : ""
+                                }`}
                               {...register("title", {
                                 required: "العنوان مطلوب",
                               })}
@@ -913,9 +905,8 @@ export default function ContentManagementPage() {
                             <textarea
                               id="description"
                               rows={3}
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.description ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.description ? "border-red-500" : ""
+                                }`}
                               {...register("description", {
                                 required: "الوصف مطلوب",
                               })}
@@ -937,9 +928,8 @@ export default function ContentManagementPage() {
                             <input
                               type="text"
                               id="ownerName"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.ownerName ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerName ? "border-red-500" : ""
+                                }`}
                               {...register("ownerName", {
                                 required: "اسم المالك مطلوب",
                               })}
@@ -961,9 +951,8 @@ export default function ContentManagementPage() {
                             <input
                               type="text"
                               id="ownerNumber"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.ownerNumber ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerNumber ? "border-red-500" : ""
+                                }`}
                               {...register("ownerNumber", {
                                 required: "رقم الهاتف مطلوب",
                                 pattern: {
@@ -991,9 +980,8 @@ export default function ContentManagementPage() {
                               type="number"
                               id="intervalHours"
                               min={1}
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.intervalHours ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.intervalHours ? "border-red-500" : ""
+                                }`}
                               {...register("intervalHours", {
                                 required: "ساعات الفاصل مطلوبة",
                                 min: {
@@ -1019,9 +1007,8 @@ export default function ContentManagementPage() {
                             <input
                               type="datetime-local"
                               id="endValidationDate"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-                                errors.endValidationDate ? "border-red-500" : ""
-                              }`}
+                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.endValidationDate ? "border-red-500" : ""
+                                }`}
                               {...register("endValidationDate", {
                                 required: "تاريخ انتهاء الصلاحية مطلوب",
                               })}
@@ -1046,9 +1033,9 @@ export default function ContentManagementPage() {
                               render={({ field }) => {
                                 const options = interests
                                   ? interests.map((interest) => ({
-                                      value: interest.id,
-                                      label: interest.name,
-                                    }))
+                                    value: interest.id,
+                                    label: interest.name,
+                                  }))
                                   : [];
                                 return (
                                   <Select

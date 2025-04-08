@@ -29,7 +29,7 @@ const VersionUpdateTab: React.FC<VersionUpdateTabProps> = ({
 
     try {
       await axios.post(
-        `/reel-win/api/users/add-update`,
+        `https://anycode-sy.com/reel-win/api/users/add-update`,
         {
           version: values.version,
           isRequired: values.isRequired,

@@ -24,7 +24,7 @@ const ClearUpdatesTab: React.FC<ClearUpdatesTabProps> = ({
 
     try {
       await axios.post(
-        `/reel-win/api/users/clear-update`,
+        `https://anycode-sy.com/reel-win/api/users/clear-update`,
         {},
         {
           headers: {
