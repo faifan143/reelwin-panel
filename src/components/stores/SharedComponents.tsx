@@ -215,11 +215,10 @@ export const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => goToPage(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-            currentPage === 1
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          }`}
+          className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === 1
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            : "bg-white text-gray-700 hover:bg-gray-50"
+            }`}
         >
           السابق
         </button>
@@ -229,11 +228,10 @@ export const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => goToPage(currentPage + 1)}
           disabled={currentPage === totalPages || totalPages === 0}
-          className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-            currentPage === totalPages || totalPages === 0
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-white text-gray-700 hover:bg-gray-50"
-          }`}
+          className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === totalPages || totalPages === 0
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            : "bg-white text-gray-700 hover:bg-gray-50"
+            }`}
         >
           التالي
         </button>
@@ -256,11 +254,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                currentPage === 1
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-500 hover:bg-gray-50"
-              }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-500 hover:bg-gray-50"
+                }`}
             >
               <span className="sr-only">السابق</span>
               <ChevronRight className="h-5 w-5" />
@@ -280,11 +277,10 @@ export const Pagination: React.FC<PaginationProps> = ({
                 <button
                   key={pageNumber}
                   onClick={() => goToPage(pageNumber)}
-                  className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                    currentPage === pageNumber
-                      ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
-                      : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
-                  }`}
+                  className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNumber
+                    ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
+                    : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                    }`}
                 >
                   {pageNumber}
                 </button>
@@ -293,11 +289,10 @@ export const Pagination: React.FC<PaginationProps> = ({
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages || totalPages === 0}
-              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                currentPage === totalPages || totalPages === 0
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-500 hover:bg-gray-50"
-              }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === totalPages || totalPages === 0
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-500 hover:bg-gray-50"
+                }`}
             >
               <span className="sr-only">التالي</span>
               <ChevronLeft className="h-5 w-5" />
@@ -312,6 +307,8 @@ export const Pagination: React.FC<PaginationProps> = ({
 // components/shared/FormModal.tsx
 import { X } from "lucide-react";
 import { ReactNode } from "react";
+
+// Improved FormModal component with better form submission handling
 
 interface FormModalProps {
   isOpen: boolean;
@@ -334,9 +331,16 @@ export const FormModal: React.FC<FormModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  // Handle form submission - calls the onSubmit prop directly
+  const handleSubmitClick = () => {
+    console.log("Submit button clicked in modal");
+    onSubmit();
+  };
+
   return (
     <div className="fixed z-50 inset-0 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        {/* Background overlay */}
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
@@ -368,7 +372,7 @@ export const FormModal: React.FC<FormModalProps> = ({
             <button
               type="button"
               className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-              onClick={onSubmit}
+              onClick={handleSubmitClick}
               disabled={isPending}
             >
               {isPending ? (
@@ -412,7 +416,6 @@ export const FormModal: React.FC<FormModalProps> = ({
     </div>
   );
 };
-
 // components/shared/ImagePreview.tsx
 
 interface ImagePreviewProps {
@@ -421,16 +424,16 @@ interface ImagePreviewProps {
   className?: string;
 }
 
-export const ImagePreview: React.FC<ImagePreviewProps> = ({ 
-  src, 
-  alt = "صورة", 
-  className = "w-16 h-16 object-cover rounded" 
+export const ImagePreview: React.FC<ImagePreviewProps> = ({
+  src,
+  alt = "صورة",
+  className = "w-16 h-16 object-cover rounded"
 }) => {
   return (
-    <img 
-      src={src} 
-      alt={alt} 
-      className={className} 
+    <img
+      src={src}
+      alt={alt}
+      className={className}
       onError={(e) => {
         (e.target as HTMLImageElement).src = "/api/placeholder/400/400";
       }}

@@ -163,9 +163,9 @@ export const OffersList: React.FC<OffersListProps> = ({
                 <div className="flex items-start">
                   {offer.images && offer.images.length > 0 && (
                     <div className="flex-shrink-0 h-10 w-10 ml-3">
-                      <ImagePreview 
-                        src={offer.images[0]} 
-                        alt={offer.title} 
+                      <ImagePreview
+                        src={offer.images[0]}
+                        alt={offer.title}
                         className="h-10 w-10 rounded-md object-cover"
                       />
                     </div>
@@ -211,11 +211,10 @@ export const OffersList: React.FC<OffersListProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    offer.isActive
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
+                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${offer.isActive
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                    }`}
                 >
                   {offer.isActive ? "نشط" : "غير نشط"}
                 </span>
@@ -251,8 +250,11 @@ import { Calendar, Clock, Edit, Percent, StoreIcon, Tag, Trash2, Upload, X } fro
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
+// Updated OfferForm component with improved file handling
+import { useEffect } from "react";
 
 interface OfferFormProps {
+  formId?: string;
   initialData?: Offer;
   categories: OfferCategory[];
   stores: Store[];
@@ -260,6 +262,7 @@ interface OfferFormProps {
 }
 
 export const OfferForm: React.FC<OfferFormProps> = ({
+  formId = "offerForm",
   initialData,
   categories,
   stores,
@@ -267,12 +270,14 @@ export const OfferForm: React.FC<OfferFormProps> = ({
 }) => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<string[]>(initialData?.images || []);
-  
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<OfferFormData>({
     defaultValues: {
       title: initialData?.title || "",
@@ -287,9 +292,17 @@ export const OfferForm: React.FC<OfferFormProps> = ({
     },
   });
 
+  // Debugging - log form values as they change
+  const formValues = watch();
+
+  useEffect(() => {
+    console.log("Form values updated:", formValues);
+  }, [formValues]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
+      console.log("New files selected:", newFiles);
       setImageFiles((prev) => [...prev, ...newFiles]);
     }
   };
@@ -303,17 +316,23 @@ export const OfferForm: React.FC<OfferFormProps> = ({
   };
 
   const onFormSubmit = (data: OfferFormData) => {
+    // Log form submission
+    console.log("Form submit triggered with data:", data);
+    console.log("Image files:", imageFiles);
+    console.log("Existing images:", existingImages);
+
     // Combine form data with existing images
     const formData = {
       ...data,
       existingImages,
     };
-    
+
+    // Call the parent component's onSubmit function
     onSubmit(formData, imageFiles);
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)}>
+    <form id={formId} onSubmit={handleSubmit(onFormSubmit)}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Title */}
         <div className="md:col-span-2">
@@ -323,9 +342,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           <input
             id="title"
             {...register("title", { required: "العنوان مطلوب" })}
-            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-              errors.title ? "border-red-500" : ""
-            }`}
+            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.title ? "border-red-500" : ""
+              }`}
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
@@ -341,9 +359,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({
             id="description"
             rows={3}
             {...register("description", { required: "الوصف مطلوب" })}
-            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${
-              errors.description ? "border-red-500" : ""
-            }`}
+            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.description ? "border-red-500" : ""
+              }`}
           ></textarea>
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
@@ -368,9 +385,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({
                 required: "السعر مطلوب",
                 min: { value: 0, message: "يجب أن يكون السعر أكبر من 0" },
               })}
-              className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-12 pr-4 sm:text-sm border-gray-300 rounded-md ${
-                errors.price ? "border-red-500" : ""
-              }`}
+              className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-12 pr-4 sm:text-sm border-gray-300 rounded-md ${errors.price ? "border-red-500" : ""
+                }`}
             />
           </div>
           {errors.price && (
@@ -396,9 +412,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({
                 min: { value: 0, message: "يجب أن يكون الخصم بين 0 و 100" },
                 max: { value: 100, message: "يجب أن يكون الخصم بين 0 و 100" },
               })}
-              className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-4 sm:text-sm border-gray-300 rounded-md ${
-                errors.discount ? "border-red-500" : ""
-              }`}
+              className={`focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-4 sm:text-sm border-gray-300 rounded-md ${errors.discount ? "border-red-500" : ""
+                }`}
             />
           </div>
           {errors.discount && (
@@ -423,7 +438,10 @@ export const OfferForm: React.FC<OfferFormProps> = ({
                   label: category.name,
                 }))}
                 placeholder="اختر الفئة"
-                onChange={(option) => field.onChange(option?.value)}
+                onChange={(option) => {
+                  console.log("Category selected:", option);
+                  field.onChange(option?.value);
+                }}
                 value={categories
                   .map((category) => ({
                     value: category.id,
@@ -457,7 +475,10 @@ export const OfferForm: React.FC<OfferFormProps> = ({
                   label: `${store.name} (${store.city})`,
                 }))}
                 placeholder="اختر المتجر"
-                onChange={(option) => field.onChange(option?.value)}
+                onChange={(option) => {
+                  console.log("Store selected:", option);
+                  field.onChange(option?.value);
+                }}
                 value={stores
                   .map((store) => ({
                     value: store.id,
@@ -556,7 +577,14 @@ export const OfferForm: React.FC<OfferFormProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {existingImages.map((imageUrl, index) => (
                 <div key={index} className="relative group">
-                  <ImagePreview src={imageUrl} className="w-full h-24 object-cover rounded-md" />
+                  <img
+                    src={imageUrl}
+                    alt={`صورة ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-md"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/api/placeholder/400/400";
+                    }}
+                  />
                   <button
                     type="button"
                     onClick={() => removeExistingImage(index)}
@@ -597,6 +625,9 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           </div>
         )}
       </div>
+
+      {/* Hidden submit button to allow form submission */}
+      <button type="submit" className="hidden">Submit</button>
     </form>
   );
 };
@@ -604,7 +635,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({
 // components/offers/OfferFilters.tsx
 import { Search } from "lucide-react";
 import { ImagePreview } from "./SharedComponents";
-import { Offer, OfferCategory, Store, OfferFormData, OfferFilterData } from "./store.type";
+import { Offer, OfferCategory, OfferFilterData, OfferFormData, Store } from "./store.type";
 
 interface OfferFiltersProps {
   filters: OfferFilterData;
@@ -627,7 +658,7 @@ export const OfferFilters: React.FC<OfferFiltersProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
-    
+
     if (type === "checkbox") {
       const checkbox = e.target as HTMLInputElement;
       onFilterChange({ ...filters, [name]: checkbox.checked });

@@ -1,5 +1,5 @@
-"use client";
-import React, { useEffect, useState } from "react";
+// Fix for OfferManagementPage.tsx
+import React, { useEffect, useState, useRef } from "react"; // Added useRef
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useStore from "@/store";
@@ -12,6 +12,7 @@ import { OfferFilters, OfferForm, OffersList } from "./OfferManagmentComponents"
 export default function OfferManagementPage() {
   const token = useStore((state) => state.token);
   const queryClient = useQueryClient();
+  const formRef = useRef(null); // Add form reference
 
   // State
   const [showFilters, setShowFilters] = useState(false);
@@ -23,6 +24,8 @@ export default function OfferManagementPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [formData, setFormData] = useState<OfferFormData | null>(null);
+  const [formFiles, setFormFiles] = useState<File[]>([]);
 
   // Check if viewport is mobile
   useEffect(() => {
@@ -105,6 +108,9 @@ export default function OfferManagementPage() {
       data: OfferFormData;
       files: File[];
     }) => {
+      console.log("Creating offer with data:", data);
+      console.log("Files to upload:", files);
+
       const formData = new FormData();
 
       // Append form fields
@@ -122,6 +128,11 @@ export default function OfferManagementPage() {
       files.forEach((file) => {
         formData.append("images", file);
       });
+
+      // Log the form data for debugging
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
       return axios.post("/reel-win/api/offers", formData, {
         headers: {
@@ -152,6 +163,9 @@ export default function OfferManagementPage() {
       data: OfferFormData & { existingImages?: string[] };
       files: File[];
     }) => {
+      console.log("Updating offer with data:", data);
+      console.log("Files to upload:", files);
+
       const formData = new FormData();
 
       // Append form fields
@@ -174,6 +188,11 @@ export default function OfferManagementPage() {
       files.forEach((file) => {
         formData.append("images", file);
       });
+
+      // Log the form data for debugging
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
 
       return axios.put(`/reel-win/api/offers/${id}`, formData, {
         headers: {
@@ -213,8 +232,42 @@ export default function OfferManagementPage() {
     },
   });
 
-  // Handle form submission
+  // Direct form submission handler - no longer relies on dispatching events
+  const handleDirectFormSubmit = () => {
+    console.log("Direct form submit triggered");
+    if (formData && formFiles) {
+      console.log("Form data available, submitting...");
+      if (selectedOffer) {
+        // Update existing offer
+        updateOfferMutation.mutate({
+          id: selectedOffer.id,
+          data: formData as OfferFormData & { existingImages?: string[] },
+          files: formFiles,
+        });
+      } else {
+        // Create new offer
+        createOfferMutation.mutate({
+          data: formData,
+          files: formFiles
+        });
+      }
+    } else {
+      console.error("Form data or files missing");
+      alert("بيانات النموذج غير مكتملة");
+    }
+  };
+
+  // Handle form submission from OfferForm
   const handleFormSubmit = (data: OfferFormData, files: File[]) => {
+    console.log("Form submitted with data:", data);
+    console.log("Files:", files);
+
+    // Store the form data and files for direct submission
+    setFormData(data);
+    setFormFiles(files);
+
+    // If modal's submit button was clicked, this would already have executed the mutation
+    // If the form's submit event was triggered directly, execute the mutation now
     if (selectedOffer) {
       // Update existing offer
       updateOfferMutation.mutate({
@@ -243,6 +296,8 @@ export default function OfferManagementPage() {
   // Handle add new offer
   const handleAddNew = () => {
     setSelectedOffer(null);
+    setFormData(null); // Reset form data
+    setFormFiles([]); // Reset form files
     setIsFormModalOpen(true);
   };
 
@@ -289,7 +344,6 @@ export default function OfferManagementPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-
 
       {/* Filters and Content */}
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -364,20 +418,18 @@ export default function OfferManagementPage() {
         )}
       </div>
 
-      {/* Offer Form Modal */}
+      {/* Offer Form Modal - Updated to use direct form submission */}
       {(categories && stores) && (
         <FormModal
           isOpen={isFormModalOpen}
           title={selectedOffer ? "تعديل عرض" : "إضافة عرض جديد"}
           onClose={() => setIsFormModalOpen(false)}
-          onSubmit={() => {
-            const form = document.querySelector("form");
-            if (form) form.dispatchEvent(new Event("submit", { cancelable: true }));
-          }}
+          onSubmit={handleDirectFormSubmit} // Use direct submission instead of form event dispatch
           isPending={createOfferMutation.isPending || updateOfferMutation.isPending}
           submitLabel={selectedOffer ? "تحديث العرض" : "إضافة العرض"}
         >
           <OfferForm
+            formId="offerForm" // Add unique ID to form
             initialData={selectedOffer || undefined}
             categories={categories}
             stores={stores}
