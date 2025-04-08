@@ -20,6 +20,8 @@ import ManageInterests from "../components/ManageInterests";
 import RewardsManagement from "../components/RewardsManagement";
 import "./globals.css";
 import ContentManagementPage from "@/components/content/ContentManagementPage";
+import { StoreIcon } from "lucide-react";
+import StoresAndOffersPage from "@/components/StoresAndOffersPage";
 
 const { Content } = Layout;
 
@@ -97,6 +99,11 @@ export default function RootLayout() {
       key: "rewards",
       icon: <TrophyOutlined />,
       label: "إدارة المكافآت",
+    },
+    {
+      key: "stores",
+      icon: <StoreIcon />,
+      label: "إدارة المحلات",
     },
   ];
 
@@ -361,11 +368,12 @@ export default function RootLayout() {
                 {activeTab === "content" && <AdminPage />}
                 {activeTab === "content-management" && (
                   <ContentManagementPage />
-                )}{" "}
+                )}
                 {/* New content management tab */}
                 {activeTab === "interests" && <ManageInterests />}
                 {activeTab === "generate-gem" && <GenerateGemPage />}
                 {activeTab === "rewards" && <RewardsManagement />}
+                {activeTab === "stores" && <StoresAndOffersPage />}
               </Content>
             </Layout>
           </Layout>
