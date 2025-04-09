@@ -1,4 +1,8 @@
 "use client";
+import ContentManagementPage from "@/components/content/ContentManagementPage";
+import GemsVersionsPage from "@/components/pages/GemsVersionsPage";
+import RewardsManagementPage from "@/components/pages/RewardsAndCategoriesPage";
+import StoresAndOffersPage from "@/components/pages/StoresAndOffersPage";
 import useStore from "@/store"; // Import the Zustand store
 import {
   DatabaseOutlined,
@@ -12,16 +16,12 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Avatar, Button, Drawer, Layout, Menu, Modal, Tooltip } from "antd";
+import { StoreIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
-import GenerateGemPage from "../components/GenerateGem";
 import LoginPage from "../components/LoginPage"; // Import the login page component
 import ManageInterests from "../components/ManageInterests";
-import RewardsManagement from "../components/RewardsManagement";
 import "./globals.css";
-import ContentManagementPage from "@/components/content/ContentManagementPage";
-import { StoreIcon } from "lucide-react";
-import StoresAndOffersPage from "@/components/StoresAndOffersPage";
 
 const { Content } = Layout;
 
@@ -103,7 +103,7 @@ export default function RootLayout() {
     {
       key: "stores",
       icon: <StoreIcon />,
-      label: "إدارة المحلات",
+      label: "إدارة المحلات و العروض",
     },
   ];
 
@@ -157,7 +157,7 @@ export default function RootLayout() {
           </div>
         ) : (
           <div className="flex items-center w-full">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg ml-3">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg mx-3">
               <span className="text-white text-xl font-bold">R</span>
             </div>
             <div className="flex flex-col">
@@ -207,7 +207,7 @@ export default function RootLayout() {
               icon={<UserOutlined />}
             />
             {!collapsed && (
-              <div className="flex flex-col mr-3">
+              <div className="flex flex-col mx-3">
                 <span className="text-white text-sm font-medium">
                   مدير النظام
                 </span>
@@ -301,7 +301,7 @@ export default function RootLayout() {
                     }`}
                   disabled={isAddingContent}
                 />
-                <div className="flex items-center mr-4">
+                <div className="flex items-center mx-4">
                   <div className="flex flex-col">
                     <h1 className="text-lg font-bold text-white m-0 leading-tight">
                       ReelWin
@@ -314,8 +314,8 @@ export default function RootLayout() {
 
                 {/* Show a loading indicator in the mobile header when content is being added */}
                 {isAddingContent && (
-                  <div className="mr-auto flex items-center">
-                    <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mr-2"></div>
+                  <div className="mx-auto flex items-center">
+                    <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mx-2"></div>
                     <span className="text-yellow-200 text-xs">
                       جاري الإضافة...
                     </span>
@@ -369,8 +369,8 @@ export default function RootLayout() {
                 )}
                 {/* New content management tab */}
                 {activeTab === "interests" && <ManageInterests />}
-                {activeTab === "generate-gem" && <GenerateGemPage />}
-                {activeTab === "rewards" && <RewardsManagement />}
+                {activeTab === "generate-gem" && <GemsVersionsPage />}
+                {activeTab === "rewards" && <RewardsManagementPage />}
                 {activeTab === "stores" && <StoresAndOffersPage />}
               </Content>
             </Layout>

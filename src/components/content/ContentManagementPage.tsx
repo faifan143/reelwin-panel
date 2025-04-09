@@ -311,7 +311,7 @@ export default function ContentManagementPage() {
               onClick={() => setShowFilters(!showFilters)}
               className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <Filter className="h-4 w-4 ml-2" />
+              <Filter className="h-4 w-4 mx-2" />
               {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
             </button>
           </div>
@@ -368,7 +368,7 @@ export default function ContentManagementPage() {
                 </select>
               </div>
 
-              <div className="flex items-end space-x-2 space-x-reverse">
+              <div className="flex items-end gap-2 gap-reverse">
                 <button
                   onClick={() => {
                     refetch();
@@ -376,14 +376,14 @@ export default function ContentManagementPage() {
                   }}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  <Search className="h-4 w-4 ml-2" />
+                  <Search className="h-4 w-4 mx-2" />
                   بحث
                 </button>
                 <button
                   onClick={resetFilters}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  <X className="h-4 w-4 ml-2" />
+                  <X className="h-4 w-4 mx-2" />
                   مسح
                 </button>
               </div>
@@ -407,6 +407,12 @@ export default function ContentManagementPage() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        معرف المحتوى
+                      </th>
                       <th
                         scope="col"
                         className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -449,6 +455,9 @@ export default function ContentManagementPage() {
                     {currentItems.map((content) => (
                       <tr key={content.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500 font-mono">{content.id}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <div className="text-sm font-medium text-gray-900">
                               {content.title}
@@ -469,14 +478,14 @@ export default function ContentManagementPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex space-x-1 space-x-reverse">
+                          <div className="flex gap-1 gap-reverse">
                             {content.mediaUrls.map((media, index) => (
                               <button
                                 key={index}
                                 onClick={() => handleMediaClick(media)}
                                 className={`p-1 rounded-md ${media.type === "IMAGE"
-                                    ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                                    : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                                  ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                                  : "bg-purple-100 text-purple-600 hover:bg-purple-200"
                                   }`}
                               >
                                 {media.type === "IMAGE" ? (
@@ -491,11 +500,11 @@ export default function ContentManagementPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <div className="text-sm font-medium text-gray-900 flex items-center">
-                              <User className="h-4 w-4 ml-1 text-gray-400" />
+                              <User className="h-4 w-4 mx-1 text-gray-400" />
                               {content.ownerName}
                             </div>
                             <div className="text-sm text-gray-500 flex items-center">
-                              <Phone className="h-4 w-4 ml-1 text-gray-400" />
+                              <Phone className="h-4 w-4 mx-1 text-gray-400" />
                               {content.ownerNumber}
                             </div>
                           </div>
@@ -503,11 +512,11 @@ export default function ContentManagementPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <div className="text-sm text-gray-500 flex items-center">
-                              <Clock className="h-4 w-4 ml-1 text-gray-400" />
+                              <Clock className="h-4 w-4 mx-1 text-gray-400" />
                               {content.intervalHours} ساعة
                             </div>
                             <div className="text-sm text-gray-500 flex items-center">
-                              <Calendar className="h-4 w-4 ml-1 text-gray-400" />
+                              <Calendar className="h-4 w-4 mx-1 text-gray-400" />
                               {new Date(
                                 content.endValidationDate
                               ).toLocaleDateString("ar")}
@@ -517,21 +526,21 @@ export default function ContentManagementPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <div className="text-sm text-gray-600 flex items-center">
-                              <Eye className="h-4 w-4 ml-1 text-gray-400" />
+                              <Eye className="h-4 w-4 mx-1 text-gray-400" />
                               {content._count?.viewedBy || 0} مشاهدة
                             </div>
                             <div className="text-sm text-gray-600 flex items-center">
-                              <ThumbsUp className="h-4 w-4 ml-1 text-gray-400" />
+                              <ThumbsUp className="h-4 w-4 mx-1 text-gray-400" />
                               {content._count?.likedBy || 0} إعجاب
                             </div>
                             <div className="text-sm text-gray-600 flex items-center">
-                              <MessageCircle className="h-4 w-4 ml-1 text-gray-400" />
+                              <MessageCircle className="h-4 w-4 mx-1 text-gray-400" />
                               {content._count?.whatsappedBy || 0} تواصل
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2 space-x-reverse">
+                          <div className="flex gap-2 gap-reverse">
                             <button
                               onClick={() => handleGemClick(content)}
                               className="text-yellow-600 hover:text-yellow-900"
@@ -570,11 +579,14 @@ export default function ContentManagementPage() {
                   className="bg-white rounded-lg shadow-sm p-4"
                 >
                   {/* Card Header */}
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex justify-between flex-wrap items-start mb-3">
                     <h3 className="text-lg font-medium text-gray-900">
                       {content.title}
                     </h3>
-                    <div className="flex space-x-1 space-x-reverse">
+                    <div className="text-xs text-gray-500 font-mono mt-1 w-full">
+                      معرف: {content.id}
+                    </div>
+                    <div className="flex gap-1 gap-reverse">
                       <button
                         onClick={() => handleGemClick(content)}
                         className="text-yellow-600 hover:text-yellow-900 p-1"
@@ -623,14 +635,14 @@ export default function ContentManagementPage() {
                       <div className="text-xs font-medium text-gray-500 mb-1">
                         الوسائط
                       </div>
-                      <div className="flex space-x-1 space-x-reverse">
+                      <div className="flex gap-1 gap-reverse">
                         {content.mediaUrls.map((media, index) => (
                           <button
                             key={index}
                             onClick={() => handleMediaClick(media)}
                             className={`p-1 rounded-md ${media.type === "IMAGE"
-                                ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                                : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                              ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
+                              : "bg-purple-100 text-purple-600 hover:bg-purple-200"
                               }`}
                           >
                             {media.type === "IMAGE" ? (
@@ -649,11 +661,11 @@ export default function ContentManagementPage() {
                         المالك
                       </div>
                       <div className="text-sm font-medium text-gray-900 flex items-center">
-                        <User className="h-4 w-4 ml-1 text-gray-400" />
+                        <User className="h-4 w-4 mx-1 text-gray-400" />
                         {content.ownerName}
                       </div>
                       <div className="text-sm text-gray-500 flex items-center">
-                        <Phone className="h-4 w-4 ml-1 text-gray-400" />
+                        <Phone className="h-4 w-4 mx-1 text-gray-400" />
                         {content.ownerNumber}
                       </div>
                     </div>
@@ -667,11 +679,11 @@ export default function ContentManagementPage() {
                         الإعدادات
                       </div>
                       <div className="text-sm text-gray-600 flex items-center">
-                        <Clock className="h-4 w-4 ml-1 text-gray-400" />
+                        <Clock className="h-4 w-4 mx-1 text-gray-400" />
                         {content.intervalHours} ساعة
                       </div>
                       <div className="text-sm text-gray-600 flex items-center">
-                        <Calendar className="h-4 w-4 ml-1 text-gray-400" />
+                        <Calendar className="h-4 w-4 mx-1 text-gray-400" />
                         {new Date(content.endValidationDate).toLocaleDateString(
                           "ar"
                         )}
@@ -717,8 +729,8 @@ export default function ContentManagementPage() {
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
                   className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                 >
                   السابق
@@ -730,8 +742,8 @@ export default function ContentManagementPage() {
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages || totalPages === 0}
                   className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === totalPages || totalPages === 0
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
                     }`}
                 >
                   التالي
@@ -752,15 +764,15 @@ export default function ContentManagementPage() {
                 </div>
                 <div>
                   <nav
-                    className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                    className="relative z-0 inline-flex rounded-md shadow-sm -gap-px"
                     aria-label="Pagination"
                   >
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
                       className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1
-                          ? "text-gray-300 cursor-not-allowed"
-                          : "text-gray-500 hover:bg-gray-50"
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "text-gray-500 hover:bg-gray-50"
                         }`}
                     >
                       <span className="sr-only">السابق</span>
@@ -782,8 +794,8 @@ export default function ContentManagementPage() {
                           key={pageNumber}
                           onClick={() => goToPage(pageNumber)}
                           className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNumber
-                              ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
-                              : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                            ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
+                            : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
                             }`}
                         >
                           {pageNumber}
@@ -794,8 +806,8 @@ export default function ContentManagementPage() {
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages || totalPages === 0}
                       className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === totalPages || totalPages === 0
-                          ? "text-gray-300 cursor-not-allowed"
-                          : "text-gray-500 hover:bg-gray-50"
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "text-gray-500 hover:bg-gray-50"
                         }`}
                     >
                       <span className="sr-only">التالي</span>
@@ -1082,7 +1094,7 @@ export default function ContentManagementPage() {
                             {updateMutation.isPending ? (
                               <>
                                 <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                  className="animate-spin -mx-1 mx-3 h-5 w-5 text-white"
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
                                   viewBox="0 0 24 24"
@@ -1166,7 +1178,7 @@ export default function ContentManagementPage() {
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mx-3 sm:w-auto sm:text-sm"
                   onClick={() => {
                     if (selectedContent) {
                       deleteMutation.mutate(selectedContent.id);
@@ -1177,7 +1189,7 @@ export default function ContentManagementPage() {
                   {deleteMutation.isPending ? (
                     <>
                       <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        className="animate-spin -mx-1 mx-3 h-5 w-5 text-white"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -1204,7 +1216,7 @@ export default function ContentManagementPage() {
                 </button>
                 <button
                   type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:mx-3 sm:w-auto sm:text-sm"
                   onClick={() => setIsDeleteModalOpen(false)}
                 >
                   إلغاء
@@ -1341,7 +1353,7 @@ export default function ContentManagementPage() {
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:mx-3 sm:w-auto sm:text-sm"
                   onClick={() => {
                     if (selectedContent && gemPoints > 0) {
                       generateGemMutation.mutate({
@@ -1355,7 +1367,7 @@ export default function ContentManagementPage() {
                   {generateGemMutation.isPending ? (
                     <>
                       <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        className="animate-spin -mx-1 mx-3 h-5 w-5 text-white"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -1382,7 +1394,7 @@ export default function ContentManagementPage() {
                 </button>
                 <button
                   type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:mx-3 sm:w-auto sm:text-sm"
                   onClick={() => setIsGemModalOpen(false)}
                 >
                   إلغاء

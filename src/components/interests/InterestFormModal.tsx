@@ -140,7 +140,7 @@ const InterestFormModal: React.FC<InterestFormModalProps> = ({
         {/* Custom form buttons */}
         <Form.Item className="mt-6 flex flex-col sm:flex-row sm:justify-end">
           <Button
-            className="mb-2 sm:mb-0 sm:ml-2 w-full sm:w-auto"
+            className="mb-2 sm:mb-0 sm:mx-2 w-full sm:w-auto"
             onClick={onCancel}
             size={isMobile ? "middle" : "large"}
           >

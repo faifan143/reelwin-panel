@@ -49,7 +49,7 @@ const InterestCardView: React.FC<InterestCardViewProps> = ({
         <Card
           key={interest.id}
           className="w-full shadow-sm border-gray-200 hover:border-blue-300 transition-colors"
-          bodyStyle={{ padding: "16px" }}
+          styles={{ body: { padding: "16px" } }}
         >
           <div className="flex justify-between items-start">
             <div className="flex-1">
@@ -60,7 +60,7 @@ const InterestCardView: React.FC<InterestCardViewProps> = ({
               <div className="flex items-center mb-2">
                 <Tag
                   color={getGenderTagColor(interest.targetedGender)}
-                  className="ml-3"
+                  className="mx-3"
                 >
                   {getGenderDisplayText(interest.targetedGender)}
                 </Tag>

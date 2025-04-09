@@ -8,14 +8,12 @@ export const MediaPreview = ({
 }: MediaPreviewProps) => (
   <div className="mt-4">
     <div
-      className={`p-2 ${
-        isVideo ? "bg-purple-50" : "bg-blue-50"
-      } rounded-lg mb-2 flex items-center`}
+      className={`p-2 ${isVideo ? "bg-purple-50" : "bg-blue-50"
+        } rounded-lg mb-2 flex items-center`}
     >
       <span
-        className={`${
-          isVideo ? "text-purple-700" : "text-blue-700"
-        } font-semibold ml-2`}
+        className={`${isVideo ? "text-purple-700" : "text-blue-700"
+          } font-semibold mx-2`}
       >
         {files.length} {isVideo ? "فيديو" : "صورة"} مختار{isVideo ? "" : "ة"}
       </span>
@@ -27,9 +25,8 @@ export const MediaPreview = ({
           className="relative group rounded-lg overflow-hidden shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105"
         >
           <div
-            className={`${
-              isVideo ? "aspect-video" : "aspect-square"
-            } bg-gray-100 overflow-hidden`}
+            className={`${isVideo ? "aspect-video" : "aspect-square"
+              } bg-gray-100 overflow-hidden`}
           >
             {isVideo ? (
               <video
@@ -55,9 +52,8 @@ export const MediaPreview = ({
             <button
               type="button"
               onClick={() => removeFile(index)}
-              className={`${
-                isVideo ? "" : "self-end"
-              } bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors`}
+              className={`${isVideo ? "" : "self-end"
+                } bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors`}
             >
               <XCircle size={18} />
             </button>

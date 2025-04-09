@@ -184,7 +184,7 @@ export default function AdminPage() {
           <label className="block font-semibold text-gray-700 mb-2">
             نوع المالك
           </label>
-          <div className="flex space-x-4">
+          <div className="flex gap-4">
             <label className="inline-flex items-center">
               <input
                 type="radio"
@@ -193,7 +193,7 @@ export default function AdminPage() {
                 onChange={() => setOwnerType("INDIVIDUAL")}
                 className="form-radio"
               />
-              <span className="mr-2">فردي</span>
+              <span className="mx-2">فردي</span>
             </label>
             <label className="inline-flex items-center">
               <input
@@ -203,7 +203,7 @@ export default function AdminPage() {
                 onChange={() => setOwnerType("STORE")}
                 className="form-radio"
               />
-              <span className="mr-2">متجر</span>
+              <span className="mx-2">متجر</span>
             </label>
           </div>
         </div>
@@ -332,7 +332,7 @@ export default function AdminPage() {
                   htmlFor="title"
                   className="block font-semibold text-gray-700 mb-2 flex items-center"
                 >
-                  <span className="text-red-500 ml-1">*</span> العنوان
+                  <span className="text-red-500 mx-1">*</span> العنوان
                 </label>
                 <div className="relative">
                   <input
@@ -346,7 +346,7 @@ export default function AdminPage() {
                     <p className="text-red-500 text-sm mt-2 flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-1"
+                        className="h-4 w-4 mx-1"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -367,7 +367,7 @@ export default function AdminPage() {
                   htmlFor="description"
                   className="block font-semibold text-gray-700 mb-2 flex items-center"
                 >
-                  <span className="text-red-500 ml-1">*</span> الوصف
+                  <span className="text-red-500 mx-1">*</span> الوصف
                 </label>
                 <textarea
                   id="description"
@@ -381,7 +381,7 @@ export default function AdminPage() {
                   <p className="text-red-500 text-sm mt-2 flex items-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 ml-1"
+                      className="h-4 w-4 mx-1"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -428,7 +428,7 @@ export default function AdminPage() {
                   htmlFor="intervalHours"
                   className="block font-semibold text-gray-700 mb-2 flex items-center"
                 >
-                  <span className="text-red-500 ml-1">*</span> ساعات الفاصل
+                  <span className="text-red-500 mx-1">*</span> ساعات الفاصل
                 </label>
                 <div className="relative">
                   <input
@@ -451,7 +451,7 @@ export default function AdminPage() {
                     <p className="text-red-500 text-sm mt-2 flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-1"
+                        className="h-4 w-4 mx-1"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -472,7 +472,7 @@ export default function AdminPage() {
                   htmlFor="endValidationDate"
                   className="block font-semibold text-gray-700 mb-2 flex items-center"
                 >
-                  <span className="text-red-500 ml-1">*</span> تاريخ انتهاء الصلاحية
+                  <span className="text-red-500 mx-1">*</span> تاريخ انتهاء الصلاحية
                 </label>
                 <div className="relative">
                   <Controller
@@ -496,7 +496,7 @@ export default function AdminPage() {
                     <p className="text-red-500 text-sm mt-2 flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 ml-1"
+                        className="h-4 w-4 mx-1"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -517,7 +517,7 @@ export default function AdminPage() {
                   htmlFor="interestIds"
                   className="block font-semibold text-gray-700 mb-2 flex items-center"
                 >
-                  <Tag className="h-5 w-5 ml-2 text-gray-500" />
+                  <Tag className="h-5 w-5 mx-2 text-gray-500" />
                   الاهتمامات (اختياري)
                 </label>
                 <Controller
@@ -594,7 +594,7 @@ export default function AdminPage() {
                 <p className="text-gray-500 text-xs mt-2 flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 ml-1"
+                    className="h-4 w-4 mx-1"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -619,7 +619,7 @@ export default function AdminPage() {
             {/* Image Upload */}
             <MediaUploader
               label="الصور"
-              icon={<Image className="h-5 w-5 ml-2 text-gray-600" />}
+              icon={<Image className="h-5 w-5 mx-2 text-gray-600" />}
               fileType="صور"
               accept="PNG, JPG أو JPEG"
               colorScheme={{
@@ -640,7 +640,7 @@ export default function AdminPage() {
             {/* Video Upload */}
             <MediaUploader
               label="الفيديوهات"
-              icon={<Video className="h-5 w-5 ml-2 text-gray-600" />}
+              icon={<Video className="h-5 w-5 mx-2 text-gray-600" />}
               fileType="فيديوهات"
               accept="MP4 أو MOV"
               colorScheme={{
@@ -665,7 +665,7 @@ export default function AdminPage() {
             <div className="mt-6 p-3 bg-blue-50 rounded-lg text-blue-800 text-sm border border-blue-200 flex items-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+                className="h-5 w-5 mx-2 mt-0.5 flex-shrink-0"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -719,7 +719,7 @@ export default function AdminPage() {
               <span className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mr-2"
+                  className="h-6 w-6 mx-2"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

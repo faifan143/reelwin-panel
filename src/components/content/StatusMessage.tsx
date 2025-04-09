@@ -79,13 +79,11 @@ export const StatusMessage = ({
 
   return (
     <div
-      className={`p-4 ${colors[type].bg} border ${
-        colors[type].border
-      } rounded-lg shadow-md ${colors[type].text} flex items-center mt-6 ${
-        type !== "loading" ? "animate-fade-in" : ""
-      }`}
+      className={`p-4 ${colors[type].bg} border ${colors[type].border
+        } rounded-lg shadow-md ${colors[type].text} flex items-center mt-6 ${type !== "loading" ? "animate-fade-in" : ""
+        }`}
     >
-      <div className={`${colors[type].iconBg} rounded-full p-2 mr-3`}>
+      <div className={`${colors[type].iconBg} rounded-full p-2 mx-3`}>
         {icons[type]}
       </div>
       <div>
