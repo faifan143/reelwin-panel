@@ -216,7 +216,7 @@ export const OfferEditForm: React.FC<{
 
         // Add existing images that weren't removed
         existingImages.forEach((imageUrl, index) => {
-            submitData.append(`existingImages[${index}]`, imageUrl);
+            submitData.append(`images[${index}]`, imageUrl);
         });
 
         // Add new images
