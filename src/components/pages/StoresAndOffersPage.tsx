@@ -6,12 +6,12 @@ import {
   Tag
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import CategoriesTab from '../rewards-managment/tabs/CategoriesTab';
 import { Button } from '../stores-offers/Button';
 import { Tab } from '../stores-offers/Tab';
 import { OffersTab } from '../stores-offers/tabs/OffersTab';
 import { StoresTab } from '../stores-offers/tabs/StoresTab';
 import { translations } from '../stores-offers/translations';
+import { CategoriesTab } from '../stores-offers/tabs/CategoriesTab';
 
 // Main Dashboard Page
 const StoresAndOffersPage: React.FC = () => {
