@@ -25,6 +25,7 @@ import {
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
+import { generateGem } from "../gems-versions/api";
 
 // Types
 interface Content {
@@ -194,21 +195,13 @@ export default function ContentManagementPage() {
       contentId: string;
       points: number;
     }) => {
-      return axios.post(
-        `https://anycode-sy.com/reel-win/api/content/generate-gem`,
-        {
-          contentId,
-          points,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      return generateGem({
+        points,
+        contentId
+      })
     },
     onSuccess: (data) => {
-      alert(`تم إنشاء جائزة بقيمة ${data.data.gem.points} نقطة`);
+      alert(`تم إنشاء جائزة بقيمة ${data.gem.points} نقطة`);
       setIsGemModalOpen(false);
     },
     onError: (error) => {
