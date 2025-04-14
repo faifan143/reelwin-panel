@@ -16,6 +16,7 @@ import {
   MessageCircle,
   Phone,
   Search,
+  Store,
   ThumbsUp,
   Trash2,
   User,
@@ -32,8 +33,14 @@ interface Content {
   id: string;
   title: string;
   description: string;
-  ownerName: string;
-  ownerNumber: string;
+  ownerName: string | null;
+  ownerNumber: string | null;
+  ownerType: "INDIVIDUAL" | "STORE";
+  storeId: string | null;
+  store?: {
+    id: string;
+    name: string;
+  };
   type: "REEL";
   intervalHours: number;
   endValidationDate: string;
@@ -57,8 +64,10 @@ interface Content {
 interface ContentFormData {
   title: string;
   description: string;
+  ownerType: "INDIVIDUAL" | "STORE";
   ownerName: string;
   ownerNumber: string;
+  storeId: string;
   intervalHours: number;
   endValidationDate: string;
   interestIds: string[];
@@ -98,6 +107,30 @@ export default function ContentManagementPage() {
   const [isGemModalOpen, setIsGemModalOpen] = useState(false);
   const [gemPoints, setGemPoints] = useState<number>(50);
 
+
+  interface Store {
+    id: string;
+    name: string;
+    phone: string;
+    city: string;
+    address: string;
+    image: string;
+    longitude: number;
+    latitude: number;
+  }
+
+  // Add to state declarations
+  const [ownerType, setOwnerType] = useState<"INDIVIDUAL" | "STORE">("INDIVIDUAL");
+
+  const { data: stores } = useQuery({
+    queryKey: ["stores"],
+    queryFn: async () => {
+      const response = await axios.get("https://anycode-sy.com/reel-win/api/stores");
+      return response.data as Store[];
+    },
+  });
+
+
   // React Hook Form
   const {
     register,
@@ -105,7 +138,17 @@ export default function ContentManagementPage() {
     control,
     reset,
     formState: { errors },
+    watch,
+    setValue
   } = useForm<ContentFormData>();
+
+  const watchedOwnerType = watch("ownerType");
+
+  // Add this function to handle owner type changes
+  const handleOwnerTypeChange = (type: "INDIVIDUAL" | "STORE") => {
+    setValue("ownerType", type);
+    setOwnerType(type);
+  };
 
   // Fetch content
   const {
@@ -149,12 +192,30 @@ export default function ContentManagementPage() {
   // Update content mutation
   const updateMutation = useMutation({
     mutationFn: async (data: ContentFormData) => {
-      return axios.patch(`https://anycode-sy.com/reel-win/api/content/${selectedContent?.id}`, data, {
+      // Prepare the data based on the owner type
+      const { ownerType, ownerName, ownerNumber, storeId, ...otherData } = data;
+
+      const updateData: any = {
+        ...otherData,
+        ownerType
+      };
+
+      if (ownerType === "INDIVIDUAL") {
+        updateData.ownerName = ownerName;
+        updateData.ownerNumber = ownerNumber;
+        // Don't include storeId when owner type is INDIVIDUAL
+      } else if (ownerType === "STORE") {
+        updateData.storeId = storeId;
+        // Don't include ownerName and ownerNumber when owner type is STORE
+      }
+
+      return axios.patch(`https://anycode-sy.com/reel-win/api/content/${selectedContent?.id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["content"] });
       setIsEditModalOpen(false);
@@ -210,9 +271,9 @@ export default function ContentManagementPage() {
     },
   });
 
-  // Handle edit button click
   const handleEditClick = (content: Content) => {
     setSelectedContent(content);
+    setOwnerType(content.ownerType);
 
     // Format date for datetime-local input
     const date = new Date(content.endValidationDate);
@@ -222,8 +283,10 @@ export default function ContentManagementPage() {
     reset({
       title: content.title,
       description: content.description,
-      ownerName: content.ownerName,
-      ownerNumber: content.ownerNumber,
+      ownerType: content.ownerType,  // Set the owner type correctly
+      ownerName: content.ownerName || "",
+      ownerNumber: content.ownerNumber || "",
+      storeId: content.storeId || "",
       intervalHours: content.intervalHours,
       endValidationDate: formattedDate,
       interestIds: content.interests.map((interest) => interest.id),
@@ -232,7 +295,6 @@ export default function ContentManagementPage() {
 
     setIsEditModalOpen(true);
   };
-
   // Handle delete button click
   const handleDeleteClick = (content: Content) => {
     setSelectedContent(content);
@@ -490,18 +552,37 @@ export default function ContentManagementPage() {
                             ))}
                           </div>
                         </td>
+
+
+
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <div className="text-sm font-medium text-gray-900 flex items-center">
-                              <User className="h-4 w-4 mx-1 text-gray-400" />
-                              {content.ownerName}
-                            </div>
-                            <div className="text-sm text-gray-500 flex items-center">
-                              <Phone className="h-4 w-4 mx-1 text-gray-400" />
-                              {content.ownerNumber}
+                            {content.ownerType === "INDIVIDUAL" ? (
+                              <>
+                                <div className="text-sm font-medium text-gray-900 flex items-center">
+                                  <User className="h-4 w-4 mx-1 text-gray-400" />
+                                  {content.ownerName}
+                                </div>
+                                <div className="text-sm text-gray-500 flex items-center">
+                                  <Phone className="h-4 w-4 mx-1 text-gray-400" />
+                                  {content.ownerNumber}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="text-sm font-medium text-gray-900 flex items-center">
+                                <Store className="h-4 w-4 mx-1 text-gray-400" />
+                                {content.store?.name || "متجر"}
+                              </div>
+                            )}
+                            <div className="text-xs mt-1 px-2 py-1 bg-gray-100 rounded text-gray-600 inline-block w-fit">
+                              {content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"}
                             </div>
                           </div>
                         </td>
+
+
+
+
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <div className="text-sm text-gray-500 flex items-center">
@@ -651,16 +732,25 @@ export default function ContentManagementPage() {
                     {/* Owner */}
                     <div className="bg-gray-50 p-2 rounded">
                       <div className="text-xs font-medium text-gray-500 mb-1">
-                        المالك
+                        المالك ({content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"})
                       </div>
-                      <div className="text-sm font-medium text-gray-900 flex items-center">
-                        <User className="h-4 w-4 mx-1 text-gray-400" />
-                        {content.ownerName}
-                      </div>
-                      <div className="text-sm text-gray-500 flex items-center">
-                        <Phone className="h-4 w-4 mx-1 text-gray-400" />
-                        {content.ownerNumber}
-                      </div>
+                      {content.ownerType === "INDIVIDUAL" ? (
+                        <>
+                          <div className="text-sm font-medium text-gray-900 flex items-center">
+                            <User className="h-4 w-4 mx-1 text-gray-400" />
+                            {content.ownerName}
+                          </div>
+                          <div className="text-sm text-gray-500 flex items-center">
+                            <Phone className="h-4 w-4 mx-1 text-gray-400" />
+                            {content.ownerNumber}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-sm font-medium text-gray-900 flex items-center">
+                          <Store className="h-4 w-4 mx-1 text-gray-400" />
+                          {content.store?.name || "متجر"}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -923,57 +1013,133 @@ export default function ContentManagementPage() {
                             )}
                           </div>
 
-                          <div>
-                            <label
-                              htmlFor="ownerName"
-                              className="block text-sm font-medium text-gray-700 mb-1"
-                            >
-                              اسم المالك
+                          <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              نوع المالك
                             </label>
-                            <input
-                              type="text"
-                              id="ownerName"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerName ? "border-red-500" : ""
-                                }`}
-                              {...register("ownerName", {
-                                required: "اسم المالك مطلوب",
-                              })}
-                            />
-                            {errors.ownerName && (
-                              <p className="mt-1 text-sm text-red-600">
-                                {errors.ownerName.message}
-                              </p>
-                            )}
+                            <div className="flex gap-4">
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  value="INDIVIDUAL"
+                                  checked={watchedOwnerType === "INDIVIDUAL"}
+                                  onChange={() => handleOwnerTypeChange("INDIVIDUAL")}
+                                  className="form-radio"
+                                />
+                                <span className="mx-2">فردي</span>
+                              </label>
+                              <label className="inline-flex items-center">
+                                <input
+                                  type="radio"
+                                  value="STORE"
+                                  checked={watchedOwnerType === "STORE"}
+                                  onChange={() => handleOwnerTypeChange("STORE")}
+                                  className="form-radio"
+                                />
+                                <span className="mx-2">متجر</span>
+                              </label>
+                            </div>
                           </div>
 
-                          <div>
-                            <label
-                              htmlFor="ownerNumber"
-                              className="block text-sm font-medium text-gray-700 mb-1"
-                            >
-                              رقم الهاتف
-                            </label>
-                            <input
-                              type="text"
-                              id="ownerNumber"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerNumber ? "border-red-500" : ""
-                                }`}
-                              {...register("ownerNumber", {
-                                required: "رقم الهاتف مطلوب",
-                                pattern: {
-                                  value: /^09\d{8}$/,
-                                  message:
-                                    "يجب أن يكون الرقم بالتنسيق السوري (09XXXXXXXX)",
-                                },
-                              })}
-                            />
-                            {errors.ownerNumber && (
-                              <p className="mt-1 text-sm text-red-600">
-                                {errors.ownerNumber.message}
-                              </p>
-                            )}
-                          </div>
+                          {watchedOwnerType === "STORE" && (
+                            <div className="md:col-span-2">
+                              <label
+                                htmlFor="storeId"
+                                className="block text-sm font-medium text-gray-700 mb-1"
+                              >
+                                اختر المتجر
+                              </label>
+                              <Controller
+                                name="storeId"
+                                control={control}
+                                rules={{
+                                  required: watchedOwnerType === "STORE" ? "يجب اختيار متجر" : false,
+                                }}
+                                render={({ field }) => {
+                                  const storeOptions = stores?.map(store => ({
+                                    value: store.id,
+                                    label: store.name
+                                  })) || [];
 
+                                  return (
+                                    <Select
+                                      {...field}
+                                      options={storeOptions}
+                                      placeholder="اختر المتجر"
+                                      isLoading={!stores}
+                                      value={
+                                        field.value
+                                          ? storeOptions.find(option => option.value === field.value)
+                                          : null
+                                      }
+                                      onChange={(
+                                        newValue: { value: string; label: string } | null,
+                                      ) => {
+                                        field.onChange(newValue ? newValue.value : '');
+                                      }}
+                                    // theme styling...
+                                    />
+                                  );
+                                }}
+                              />
+                              {errors.storeId && (
+                                <p className="mt-1 text-sm text-red-600">
+                                  {errors.storeId.message}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                          {watchedOwnerType === "INDIVIDUAL" && (
+                            <>
+                              <div>
+                                <label
+                                  htmlFor="ownerName"
+                                  className="block text-sm font-medium text-gray-700 mb-1"
+                                >
+                                  اسم المالك
+                                </label>
+                                <input
+                                  type="text"
+                                  id="ownerName"
+                                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerName ? "border-red-500" : ""}`}
+                                  {...register("ownerName", {
+                                    required: watchedOwnerType === "INDIVIDUAL" ? "اسم المالك مطلوب" : false,
+                                  })}
+                                />
+                                {errors.ownerName && (
+                                  <p className="mt-1 text-sm text-red-600">
+                                    {errors.ownerName.message}
+                                  </p>
+                                )}
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor="ownerNumber"
+                                  className="block text-sm font-medium text-gray-700 mb-1"
+                                >
+                                  رقم الهاتف
+                                </label>
+                                <input
+                                  type="text"
+                                  id="ownerNumber"
+                                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerNumber ? "border-red-500" : ""}`}
+                                  {...register("ownerNumber", {
+                                    required: watchedOwnerType === "INDIVIDUAL" ? "رقم الهاتف مطلوب" : false,
+                                    pattern: {
+                                      value: /^09\d{8}$/,
+                                      message: "يجب أن يكون الرقم بالتنسيق السوري (09XXXXXXXX)",
+                                    },
+                                  })}
+                                />
+                                {errors.ownerNumber && (
+                                  <p className="mt-1 text-sm text-red-600">
+                                    {errors.ownerNumber.message}
+                                  </p>
+                                )}
+                              </div>
+                            </>
+                          )}
                           <div>
                             <label
                               htmlFor="intervalHours"
