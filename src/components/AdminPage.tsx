@@ -52,7 +52,7 @@ export default function AdminPage() {
   const { data: interests, isLoading: interestsLoading } = useQuery<Interest[]>({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/reel-win/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list");
       return response.data;
     },
   });
@@ -60,7 +60,7 @@ export default function AdminPage() {
   const { data: stores, isLoading: storesLoading } = useQuery<Store[]>({
     queryKey: ["stores"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/reel-win/api/stores");
+      const response = await axios.get("https://anycode-sy.com/radar/api/stores");
       return response.data;
     },
   });
@@ -74,7 +74,7 @@ export default function AdminPage() {
     isSuccess,
   } = useMutation({
     mutationFn: async (formData: FormData) => {
-      await axios.post("https://anycode-sy.com/reel-win/api/content", formData, {
+      await axios.post("https://anycode-sy.com/radar/api/content", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -138,10 +138,8 @@ export default function AdminPage() {
     const date = new Date(data.endValidationDate);
     formData.append("endValidationDate", date.toISOString());
 
-    // Handle interest IDs
-    if (Array.isArray(data.interestIds)) {
-      data.interestIds.forEach((id) => formData.append("interestIds[]", id));
-    }
+    formData.append("interestIds", JSON.stringify(data.interestIds));
+
 
     // Append files
     imageFiles.forEach((file) => {
@@ -330,7 +328,7 @@ export default function AdminPage() {
               <div>
                 <label
                   htmlFor="title"
-                  className="block font-semibold text-gray-700 mb-2 flex items-center"
+                  className=" font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <span className="text-red-500 mx-1">*</span> العنوان
                 </label>
@@ -365,7 +363,7 @@ export default function AdminPage() {
               <div className="md:col-span-2">
                 <label
                   htmlFor="description"
-                  className="block font-semibold text-gray-700 mb-2 flex items-center"
+                  className=" font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <span className="text-red-500 mx-1">*</span> الوصف
                 </label>
@@ -426,7 +424,7 @@ export default function AdminPage() {
               <div>
                 <label
                   htmlFor="intervalHours"
-                  className="block font-semibold text-gray-700 mb-2 flex items-center"
+                  className=" font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <span className="text-red-500 mx-1">*</span> ساعات الفاصل
                 </label>
@@ -470,7 +468,7 @@ export default function AdminPage() {
               <div>
                 <label
                   htmlFor="endValidationDate"
-                  className="block font-semibold text-gray-700 mb-2 flex items-center"
+                  className=" font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <span className="text-red-500 mx-1">*</span> تاريخ انتهاء الصلاحية
                 </label>
@@ -515,7 +513,7 @@ export default function AdminPage() {
               <div className="md:col-span-2">
                 <label
                   htmlFor="interestIds"
-                  className="block font-semibold text-gray-700 mb-2 flex items-center"
+                  className=" font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <Tag className="h-5 w-5 mx-2 text-gray-500" />
                   الاهتمامات (اختياري)
@@ -766,7 +764,7 @@ export default function AdminPage() {
 
       {/* Footer */}
       <div className="bg-gray-50 px-8 py-4 border-t text-center text-gray-500 text-sm">
-        جميع الحقوق محفوظة © 2025 ReelWin
+        جميع الحقوق محفوظة © 2025 Radar
       </div>
     </div>
   );

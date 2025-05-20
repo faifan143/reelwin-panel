@@ -161,7 +161,7 @@ export default function RootLayout() {
               <span className="text-white text-xl font-bold">R</span>
             </div>
             <div className="flex flex-col">
-              <h1 className="text-xl font-bold text-white m-0">ReelWin</h1>
+              <h1 className="text-xl font-bold text-white m-0">Radar</h1>
               <span className="text-sm font-normal text-blue-200 opacity-90">
                 لوحة الإدارة
               </span>
@@ -236,7 +236,7 @@ export default function RootLayout() {
           </Tooltip>
         </div>
         <div className="text-blue-300/80 text-center text-xs mt-3">
-          {!collapsed && "ReelWin © 2025"}
+          {!collapsed && "Radar © 2025"}
         </div>
       </div>
     </div>
@@ -304,7 +304,7 @@ export default function RootLayout() {
                 <div className="flex items-center mx-4">
                   <div className="flex flex-col">
                     <h1 className="text-lg font-bold text-white m-0 leading-tight">
-                      ReelWin
+                      Radar
                     </h1>
                     <span className="text-xs font-normal text-blue-200">
                       لوحة الإدارة

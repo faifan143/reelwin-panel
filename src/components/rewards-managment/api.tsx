@@ -4,7 +4,7 @@ import useStore from '@/store';
 import axios from 'axios';
 import { Category, CreateCategoryDto, CreateRewardDto, PurchaseRewardDto, Reward, UpdateCategoryDto, UpdateRewardDto, UpdateUserRewardStatusDto, UserReward } from './types';
 
-const API_URL = 'https://anycode-sy.com/reel-win/api';
+const API_URL = 'https://anycode-sy.com/radar/api';
 const { token } = useStore.getState();
 const api = axios.create({
     baseURL: API_URL,

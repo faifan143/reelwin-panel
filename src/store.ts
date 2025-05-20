@@ -57,7 +57,7 @@ const useStore = create<StoreState>()(
         }),
     }),
     {
-      name: "reel-win-storage", // name of the item in storage
+      name: "radar-storage", // name of the item in storage
       storage: createJSONStorage(() => localStorage), // use localStorage
       partialize: (state) => ({
         // Only persist these fields

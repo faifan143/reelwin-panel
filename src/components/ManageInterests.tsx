@@ -17,7 +17,7 @@ import { Interest } from "./interests/types";
 
 // API functions
 const fetchInterests = async (): Promise<Interest[]> => {
-  const response = await axios.get("https://anycode-sy.com/reel-win/api/interests");
+  const response = await axios.get("https://anycode-sy.com/radar/api/interests");
   return response.data;
 };
 
@@ -51,7 +51,7 @@ const ManageInterests: React.FC = () => {
 
   const addInterestMutation = useMutation({
     mutationFn: (newInterest: Omit<Interest, "id">) =>
-      axios.post("https://anycode-sy.com/reel-win/api/interests", newInterest),
+      axios.post("https://anycode-sy.com/radar/api/interests", newInterest),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
@@ -77,7 +77,7 @@ const ManageInterests: React.FC = () => {
     }: {
       id: string;
       updatedInterest: Partial<Interest>;
-    }) => axios.put(`https://anycode-sy.com/reel-win/api/interests/${id}`, updatedInterest),
+    }) => axios.put(`https://anycode-sy.com/radar/api/interests/${id}`, updatedInterest),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
@@ -97,7 +97,7 @@ const ManageInterests: React.FC = () => {
   });
 
   const deleteInterestMutation = useMutation({
-    mutationFn: (id: string) => axios.delete(`https://anycode-sy.com/reel-win/api/interests/${id}`),
+    mutationFn: (id: string) => axios.delete(`https://anycode-sy.com/radar/api/interests/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
