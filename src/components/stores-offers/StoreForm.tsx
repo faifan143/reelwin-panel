@@ -26,7 +26,7 @@ const providenceTranslations = {
     SUWAYDA: "السويداء",
     QUNEITRA: "القنيطرة",
     RAQQAH: "الرقة"
-  };
+};
 
 // StoreForm component
 export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
@@ -224,27 +224,27 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     onChange={handleChange}
                     required
                 />
-         <div className="w-full">
-  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
-    {translations.city} <span className="text-red-500">*</span>
-  </label>
-  <select
-    id="city"
-    name="city"
-    value={formData.city}
-    onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
-    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    required
-    dir="rtl"
-  >
-    <option value="" disabled>اختر المدينة</option>
-    {Object.entries(providenceTranslations).map(([value, label]) => (
-      <option key={value} value={value}>
-        {label}
-      </option>
-    ))}
-  </select>
-</div>
+                <div className="w-full">
+                    <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                        {translations.city} <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
+                        dir="rtl"
+                    >
+                        <option value="" disabled>اختر المدينة</option>
+                        {Object.entries(providenceTranslations).map(([value, label]) => (
+                            <option key={value} value={value}>
+                                {label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <Input
                     label={translations.address}
                     name="address"
