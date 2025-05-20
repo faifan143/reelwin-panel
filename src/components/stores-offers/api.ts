@@ -1,7 +1,7 @@
 import useStore from "@/store";
 import axios from "axios";
 
-const API_BASE_URL = `https://anycode-sy.com/reel-win/api`;
+const API_BASE_URL = `https://anycode-sy.com/radar/api`;
 
 // API functions
 export const api = {

@@ -125,7 +125,7 @@ export default function ContentManagementPage() {
   const { data: stores } = useQuery({
     queryKey: ["stores"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/reel-win/api/stores");
+      const response = await axios.get("https://anycode-sy.com/radar/api/stores");
       return response.data as Store[];
     },
   });
@@ -169,7 +169,7 @@ export default function ContentManagementPage() {
       if (filters.interestId) params.append("interestId", filters.interestId);
 
       const response = await axios.get(
-        "https://anycode-sy.com/reel-win/api/content?" + params.toString(),
+        "https://anycode-sy.com/radar/api/content?" + params.toString(),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -184,7 +184,7 @@ export default function ContentManagementPage() {
   const { data: interests } = useQuery({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/reel-win/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list");
       return response.data as Interest[];
     },
   });
@@ -209,7 +209,7 @@ export default function ContentManagementPage() {
         // Don't include ownerName and ownerNumber when owner type is STORE
       }
 
-      return axios.patch(`https://anycode-sy.com/reel-win/api/content/${selectedContent?.id}`, updateData, {
+      return axios.patch(`https://anycode-sy.com/radar/api/content/${selectedContent?.id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -230,7 +230,7 @@ export default function ContentManagementPage() {
   // Delete content mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return axios.delete(`https://anycode-sy.com/reel-win/api/content/${id}`, {
+      return axios.delete(`https://anycode-sy.com/radar/api/content/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

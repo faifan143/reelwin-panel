@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: 'standalone',
   reactStrictMode: true,
-  basePath: '/reel-win/admin',
-  assetPrefix: '/reel-win/admin',
+  basePath: '/radar/admin',
+  assetPrefix: '/radar/admin',
 };
 
 export default nextConfig;

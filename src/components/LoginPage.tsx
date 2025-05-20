@@ -20,7 +20,7 @@ const LoginPage = () => {
     try {
       // Make an API call to authenticate the user
       // Replace with your actual authentication API endpoint
-      const response = await axios.post("https://anycode-sy.com/reel-win/api/auth/signin", {
+      const response = await axios.post("https://anycode-sy.com/radar/api/auth/signin", {
         phone: values.phone,
         password: values.password,
       });
@@ -61,7 +61,7 @@ const LoginPage = () => {
             <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full mx-auto mb-4 flex items-center justify-center">
               <span className="text-white text-3xl font-bold">R</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">ReelWin</h1>
+            <h1 className="text-2xl font-bold text-white">Radar</h1>
             <p className="text-blue-200 mt-2">لوحة الإدارة</p>
           </div>
         }
@@ -120,7 +120,7 @@ const LoginPage = () => {
 
           <div className="text-center mt-4">
             <p className="text-gray-500 text-sm">
-              © ReelWin 2025 - جميع الحقوق محفوظة
+              © Radar 2025 - جميع الحقوق محفوظة
             </p>
           </div>
         </div>

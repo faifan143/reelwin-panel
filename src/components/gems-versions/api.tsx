@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ContentGem, CreateVersionDto, GenerateGemDto, GemResponse, Version } from './types';
 import useStore from '@/store';
 
-const API_URL = 'https://anycode-sy.com/reel-win/api';
+const API_URL = 'https://anycode-sy.com/radar/api';
 const { token } = useStore.getState()
 export const api = axios.create({
     baseURL: API_URL,
