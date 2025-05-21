@@ -173,7 +173,7 @@ const QrCodeTab: React.FC = () => {
       <div className="w-full p-8 bg-red-50 rounded-lg border border-red-200 text-red-700">
         <h3 className="text-lg font-bold mb-2">حدث خطأ</h3>
         <p>{error instanceof Error ? error.message : 'حدث خطأ أثناء تحميل رموز QR'}</p>
-        <button 
+        <button
           className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200"
           onClick={() => queryClient.invalidateQueries({ queryKey: ['qrCodes'] })}
         >
@@ -219,7 +219,7 @@ const QrCodeTab: React.FC = () => {
               <Filter size={16} className="ml-2" />
               فلترة
             </button>
-            <button 
+            <button
               className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center"
               onClick={() => queryClient.invalidateQueries({ queryKey: ['qrCodes'] })}
             >
@@ -341,7 +341,7 @@ const QrCodeTab: React.FC = () => {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         {data && data.pagination.pages > 1 && (
           <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
@@ -361,35 +361,32 @@ const QrCodeTab: React.FC = () => {
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                      currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
-                    }`}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
+                      }`}
                   >
                     <span className="sr-only">Previous</span>
                     السابق
                   </button>
-                  
+
                   {/* Page numbers */}
                   {[...Array(data.pagination.pages)].map((_, index) => (
                     <button
                       key={index}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
-                        currentPage === index + 1
-                          ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                          : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${currentPage === index + 1
+                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                        : 'text-gray-500 hover:bg-gray-50'
+                        }`}
                     >
                       {index + 1}
                     </button>
                   ))}
-                  
+
                   <button
                     onClick={() => handlePageChange(Math.min(data.pagination.pages, currentPage + 1))}
                     disabled={currentPage === data.pagination.pages}
-                    className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                      currentPage === data.pagination.pages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
-                    }`}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === data.pagination.pages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
+                      }`}
                   >
                     <span className="sr-only">Next</span>
                     التالي
@@ -403,7 +400,7 @@ const QrCodeTab: React.FC = () => {
 
       {/* Create QR Code Modal */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
@@ -423,7 +420,7 @@ const QrCodeTab: React.FC = () => {
 
       {/* QR Code Details Modal */}
       {isDetailsModalOpen && selectedQrCode && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
