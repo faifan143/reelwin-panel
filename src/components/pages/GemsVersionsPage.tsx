@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Settings, Gem, Download } from 'lucide-react';
+import { Settings, Gem, Download, QrCode } from 'lucide-react';
 import GemsTab from '../gems-versions/tabs/GemsTab';
 import VersionsTab from '../gems-versions/tabs/VersionsTab';
+import QrCodeTab from '../gems-versions/tabs/QrCodeTab';
 import { TabContent, Tabs } from '../rewards-managment/Tab';
 
 // Create a client
@@ -20,6 +21,15 @@ const GemsVersionsPage: NextPage = () => {
                 <div className="flex items-center">
                     <Gem size={18} />
                     <span className="mr-1 rtl:mr-0 rtl:ml-1">إدارة الجواهر</span>
+                </div>
+            )
+        },
+        {
+            id: 'qrcodes',
+            label: (
+                <div className="flex items-center">
+                    <QrCode size={18} />
+                    <span className="mr-1 rtl:mr-0 rtl:ml-1">رموز QR</span>
                 </div>
             )
         },
@@ -61,6 +71,10 @@ const GemsVersionsPage: NextPage = () => {
                             {/* Tab Contents */}
                             <TabContent id="gems" activeTab={activeTab}>
                                 <GemsTab />
+                            </TabContent>
+
+                            <TabContent id="qrcodes" activeTab={activeTab}>
+                                <QrCodeTab />
                             </TabContent>
 
                             <TabContent id="versions" activeTab={activeTab}>

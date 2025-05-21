@@ -1,6 +1,6 @@
 // api.ts
 import axios from 'axios';
-import { ContentGem, CreateVersionDto, GenerateGemDto, GemResponse, Version } from './types';
+import { ContentGem, CreateVersionDto, GenerateGemDto, GemResponse, Version, QrCode, CreateQrCodeDto, UpdateQrCodeDto, QrCodeWithScans, PaginatedQrCodesResponse } from './types';
 import useStore from '@/store';
 
 const API_URL = 'https://anycode-sy.com/radar/api';
@@ -63,5 +63,52 @@ export const clearVersions = async (): Promise<void> => {
 
 export const getLatestVersion = async (): Promise<Version> => {
     const response = await api.get('/users/check-update');
+    return response.data;
+};
+
+// QR Code APIs
+export const getAllQrCodes = async (page: number = 1, limit: number = 10): Promise<PaginatedQrCodesResponse> => {
+    const response = await api.get(`/qr/admin?page=${page}&limit=${limit}`);
+    return response.data;
+};
+
+export const getQrCodeById = async (id: string): Promise<QrCodeWithScans> => {
+    const response = await api.get(`/qr/admin/${id}`);
+    return response.data;
+};
+
+export const createQrCode = async (data: CreateQrCodeDto): Promise<QrCode> => {
+    const response = await api.post('/qr', data);
+    return response.data;
+};
+
+export const updateQrCode = async (id: string, data: UpdateQrCodeDto): Promise<QrCode> => {
+    const response = await api.patch(`/qr/${id}`, data);
+    return response.data;
+};
+
+export const activateQrCode = async (id: string): Promise<QrCode> => {
+    const response = await api.patch(`/qr/${id}/status/activate`, {});
+    return response.data;
+};
+
+export const deactivateQrCode = async (id: string): Promise<QrCode> => {
+    const response = await api.patch(`/qr/${id}/status/deactivate`, {});
+    return response.data;
+};
+
+export const deleteQrCode = async (id: string): Promise<void> => {
+    await api.delete(`/qr/${id}`);
+};
+
+export const selectRandomWinner = async (id: string): Promise<{ winner: any }> => {
+    const response = await api.get(`/qr/${id}/lottery`);
+    return response.data;
+};
+
+export const generateQrCodePdf = async (id: string): Promise<Blob> => {
+    const response = await api.get(`/qr/${id}/pdf`, {
+        responseType: 'blob'
+    });
     return response.data;
 };
