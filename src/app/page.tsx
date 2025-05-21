@@ -1,22 +1,37 @@
-// File: app/page.tsx
-"use client";
+'use client';
 
-import useStore from "@/store";
-import dynamic from "next/dynamic";
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import useStore from '@/store';
+import LoginPage from '@/components/pages/LoginPage';
+import ContentManagementPage from '@/components/pages/ContentManagementPage';
 
-// Use dynamic import to prevent hydration errors with localStorage
-const RootLayout = dynamic(() => import("./layout"), { ssr: false });
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function Home() {
-  // Use Zustand store instead of local state
-  useStore();
-
-  // This is now handled by the store with persistence
-  // so we don't need the local login/logout handling
-
+  const isAuthenticated = useStore((state) => state.isAuthenticated);
+  const activeTab = useStore((state) => state.activeTab);
+  
   return (
-    <main className="min-h-screen bg-gray-100">
-      <RootLayout />
-    </main>
+    <QueryClientProvider client={queryClient}>
+      {!isAuthenticated ? (
+        <LoginPage />
+      ) : (
+        <div>
+          {activeTab === 'content' && <ContentManagementPage />}
+          {/* Add other tabs here as they are refactored */}
+        </div>
+      )}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
