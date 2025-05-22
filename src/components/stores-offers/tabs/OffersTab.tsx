@@ -10,13 +10,17 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { Modal } from "../Modal";
 import { OfferEditForm } from "../OfferEditForm";
 import { OfferForm } from "../OfferForm";
+import { PriceTypeFilter } from "../PriceTypeFilter";
+import { PriceTypeStatistics } from "../PriceTypeStatistics";
 import { translations } from "../translations";
-import { Category, Offer } from "../types";
+import { Category, Offer, CURRENCY_SYMBOLS } from "../types";
 
 // Enhanced OffersTab component
 export const OffersTab: React.FC = () => {
     const [showForm, setShowForm] = useState(false);
     const [categoryFilter, setCategoryFilter] = useState<string>('');
+    const [priceTypeFilter, setPriceTypeFilter] = useState<string>(''); // Add price type filter
+    const [showStats, setShowStats] = useState(false); // Add stats toggle
     const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -30,8 +34,8 @@ export const OffersTab: React.FC = () => {
     });
 
     const { data: offers, isLoading, isError } = useQuery<Offer[]>({
-        queryKey: ['offers', categoryFilter],
-        queryFn: () => api.getOffers(categoryFilter)
+        queryKey: ['offers', categoryFilter, priceTypeFilter], // Add price type to query key
+        queryFn: () => api.getOffers(categoryFilter, priceTypeFilter) // Pass both filters
     });
 
     const deleteMutation = useMutation({
@@ -77,6 +81,13 @@ export const OffersTab: React.FC = () => {
                     <Package className="mx-2 text-indigo-600" /> {translations.offersTitle}
                 </h2>
                 <div className="flex flex-wrap items-center gap-2">
+                    <Button
+                        onClick={() => setShowStats(!showStats)}
+                        variant={showStats ? "primary" : "secondary"}
+                        size="sm"
+                    >
+                        {showStats ? 'إخفاء الإحصائيات' : 'عرض الإحصائيات'}
+                    </Button>
                     <div className="relative">
                         <select
                             value={categoryFilter}
@@ -93,6 +104,10 @@ export const OffersTab: React.FC = () => {
                         </select>
                         <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                     </div>
+                    <PriceTypeFilter
+                        selectedPriceType={priceTypeFilter}
+                        onPriceTypeChange={setPriceTypeFilter}
+                    />
                     <Button
                         onClick={() => setShowForm(!showForm)}
                         icon={showForm ? null : <Plus size={18} className="mx-1" />}
@@ -105,6 +120,12 @@ export const OffersTab: React.FC = () => {
 
             {showForm && (
                 <OfferForm onSuccess={() => setShowForm(false)} />
+            )}
+
+            {showStats && (
+                <div className="mb-6">
+                    <PriceTypeStatistics />
+                </div>
             )}
 
             {isLoading ? (
@@ -146,7 +167,9 @@ export const OffersTab: React.FC = () => {
                                                 {offer.title}
                                             </td>
                                             <td className="px-3 py-4 text-sm text-gray-500 text-right">
-                                                <span className="font-medium">{offer.price} ليرة</span>
+                                                <span className="font-medium">
+                                                    {offer.price} {CURRENCY_SYMBOLS[offer.priceType || 'SYP']}
+                                                </span>
                                             </td>
                                             <td className="px-3 py-4 text-sm text-right">
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -229,7 +252,9 @@ export const OffersTab: React.FC = () => {
                                         <div className="mt-3 grid grid-cols-2 gap-2">
                                             <div className="bg-gray-50 p-2 rounded text-right">
                                                 <p className="text-xs text-gray-500 mb-1">{translations.price}</p>
-                                                <p className="font-semibold">${offer.price}</p>
+                                                <p className="font-semibold">
+                                                    {offer.price} {CURRENCY_SYMBOLS[offer.priceType || 'SYP']}
+                                                </p>
                                             </div>
                                             <div className="bg-gray-50 p-2 rounded text-right">
                                                 <p className="text-xs text-gray-500 mb-1">{translations.discount}</p>
@@ -335,7 +360,9 @@ export const OffersTab: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.price}</h4>
-                                <p className="text-xl font-semibold">${selectedOffer.price}</p>
+                                <p className="text-xl font-semibold">
+                                    {selectedOffer.price} {CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}
+                                </p>
                             </div>
                             <div>
                                 <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.discount}</h4>

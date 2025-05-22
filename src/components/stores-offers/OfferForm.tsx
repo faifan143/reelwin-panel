@@ -8,7 +8,7 @@ import { Card } from "./Card";
 import { CustomSelect } from "./CustomSelect";
 import { Input } from "./Input";
 import { translations } from "./translations";
-import { Category, Store } from "./types";
+import { Category, Store, PriceType, CURRENCY_SYMBOLS, CURRENCY_NAMES } from "./types";
 
 // OfferForm component
 export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
@@ -16,6 +16,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         title: '',
         description: '',
         price: '',
+        priceType: PriceType.SYP, // Add price type with default
         discount: '',
         storeId: '',
         categoryId: '',
@@ -45,6 +46,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 title: '',
                 description: '',
                 price: '',
+                priceType: PriceType.SYP, // Reset to default
                 discount: '',
                 storeId: '',
                 categoryId: '',
@@ -239,6 +241,12 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         label: store.name
     })) || [];
 
+    // Price type options for dropdown
+    const priceTypeOptions = Object.values(PriceType).map(type => ({
+        value: type,
+        label: `${CURRENCY_NAMES[type]} (${CURRENCY_SYMBOLS[type]})`
+    }));
+
     return (
         <Card className="mb-6">
             <h3 className="text-lg font-medium mb-4 text-gray-800 text-right">
@@ -258,6 +266,15 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     type="number"
                     value={formData.price}
                     onChange={handleChange}
+                    required
+                />
+                <CustomSelect
+                    label={translations.priceType}
+                    name="priceType"
+                    value={formData.priceType}
+                    onChange={handleChange}
+                    options={priceTypeOptions}
+                    placeholder={translations.selectPriceType}
                     required
                 />
                 <Input

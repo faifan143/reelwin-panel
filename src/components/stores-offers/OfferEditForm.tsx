@@ -7,7 +7,7 @@ import { Button } from "./Button";
 import { CustomSelect } from "./CustomSelect";
 import { Input } from "./Input";
 import { translations } from "./translations";
-import { Category, Offer, Store } from "./types";
+import { Category, Offer, Store, PriceType, CURRENCY_SYMBOLS, CURRENCY_NAMES } from "./types";
 
 // OfferEditForm component
 export const OfferEditForm: React.FC<{
@@ -19,6 +19,7 @@ export const OfferEditForm: React.FC<{
         title: offer.title,
         description: offer.description,
         price: String(offer.price),
+        priceType: offer.priceType || PriceType.SYP, // Add price type with fallback
         discount: String(offer.discount),
         storeId: offer.storeId,
         categoryId: offer.categoryId,
@@ -239,6 +240,12 @@ export const OfferEditForm: React.FC<{
         label: store.name
     })) || [];
 
+    // Price type options for dropdown
+    const priceTypeOptions = Object.values(PriceType).map(type => ({
+        value: type,
+        label: `${CURRENCY_NAMES[type]} (${CURRENCY_SYMBOLS[type]})`
+    }));
+
     return (
         <div>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4" dir="rtl">
@@ -255,6 +262,15 @@ export const OfferEditForm: React.FC<{
                     type="number"
                     value={formData.price}
                     onChange={handleChange}
+                    required
+                />
+                <CustomSelect
+                    label={translations.priceType}
+                    name="priceType"
+                    value={formData.priceType}
+                    onChange={handleChange}
+                    options={priceTypeOptions}
+                    placeholder={translations.selectPriceType}
                     required
                 />
                 <Input

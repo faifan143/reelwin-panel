@@ -85,6 +85,8 @@ export const translations = {
     addNewOffer: 'إضافة عرض جديد',
     title: 'العنوان',
     price: 'السعر',
+    priceType: 'نوع العملة',
+    selectPriceType: 'اختر نوع العملة',
     discount: 'الخصم',
     off: 'خصم',
     description: 'الوصف',

@@ -1,8 +1,5 @@
 "use client";
 import ContentManagementPage from "@/components/content/ContentManagementPage";
-import GemsVersionsPage from "@/components/pages/GemsVersionsPage";
-import RewardsManagementPage from "@/components/pages/RewardsAndCategoriesPage";
-import StoresAndOffersPage from "@/components/pages/StoresAndOffersPage";
 import useStore from "@/store"; // Import the Zustand store
 import {
   DatabaseOutlined,
@@ -22,6 +19,9 @@ import AdminPage from "../components/AdminPage";
 import LoginPage from "../components/LoginPage"; // Import the login page component
 import ManageInterests from "../components/ManageInterests";
 import "./globals.css";
+import GemsVersionsManager from "@/components/gems-versions/GemsVersionsManager";
+import RewardsManagementPage from "@/components/pages/RewardsAndCategoriesPage";
+import StoresAndOffersPage from "@/components/pages/StoresAndOffersPage";
 
 const { Content } = Layout;
 
@@ -369,7 +369,7 @@ export default function RootLayout() {
                 )}
                 {/* New content management tab */}
                 {activeTab === "interests" && <ManageInterests />}
-                {activeTab === "generate-gem" && <GemsVersionsPage />}
+                {activeTab === "generate-gem" && <GemsVersionsManager />}
                 {activeTab === "rewards" && <RewardsManagementPage />}
                 {activeTab === "stores" && <StoresAndOffersPage />}
               </Content>
