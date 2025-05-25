@@ -146,10 +146,10 @@ export const OffersTab: React.FC = () => {
                                         {translations.price}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
-                                        السعر النهائي
+                                        {translations.priceAfterDiscount}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
-                                        {translations.discount}
+                                        {translations.discountPercentage}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
                                         {translations.storesTitle}
@@ -184,9 +184,9 @@ export const OffersTab: React.FC = () => {
                                             </td>
                                             <td className="px-3 py-4 text-sm text-right">
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    {offer.priceAfterDiscount !== undefined ? 
-                                                        `${translations.off} ${(offer.price - offer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
-                                                        : '—'
+                                                    {offer.priceAfterDiscount !== undefined && offer.price > offer.priceAfterDiscount ? 
+                                                        `${(((offer.price - offer.priceAfterDiscount) / offer.price) * 100).toFixed(1)}%`
+                                                        : '0%'
                                                     }
                                                 </span>
                                             </td>
@@ -271,7 +271,7 @@ export const OffersTab: React.FC = () => {
                                                 </p>
                                             </div>
                                             <div className="bg-blue-50 p-2 rounded text-right">
-                                                <p className="text-xs text-gray-500 mb-1">السعر النهائي</p>
+                                                <p className="text-xs text-gray-500 mb-1">{translations.priceAfterDiscount}</p>
                                                 <p className="font-semibold text-blue-600">
                                                     {offer.priceAfterDiscount !== undefined ? 
                                                         `${offer.priceAfterDiscount} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
@@ -279,12 +279,12 @@ export const OffersTab: React.FC = () => {
                                                     }
                                                 </p>
                                             </div>
-                                            <div className="bg-gray-50 p-2 rounded text-right">
-                                                <p className="text-xs text-gray-500 mb-1">{translations.discount}</p>
+                                            <div className="bg-green-50 p-2 rounded text-right">
+                                                <p className="text-xs text-gray-500 mb-1">{translations.discountPercentage}</p>
                                                 <p className="font-semibold text-green-600">
-                                                    {offer.priceAfterDiscount !== undefined ? 
-                                                        `${translations.off} ${(offer.price - offer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
-                                                        : '—'
+                                                    {offer.priceAfterDiscount !== undefined && offer.price > offer.priceAfterDiscount ? 
+                                                        `${(((offer.price - offer.priceAfterDiscount) / offer.price) * 100).toFixed(1)}%`
+                                                        : '0%'
                                                     }
                                                 </p>
                                             </div>
@@ -393,7 +393,7 @@ export const OffersTab: React.FC = () => {
                                 </p>
                             </div>
                             <div>
-                                <h4 className="text-sm font-medium text-gray-500 mb-1">السعر النهائي</h4>
+                                <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.priceAfterDiscount}</h4>
                                 <p className="text-xl font-semibold text-blue-600">
                                     {selectedOffer.priceAfterDiscount !== undefined ? 
                                         `${selectedOffer.priceAfterDiscount} ${CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}`
@@ -402,11 +402,11 @@ export const OffersTab: React.FC = () => {
                                 </p>
                             </div>
                             <div>
-                                <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.discount}</h4>
+                                <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.discountPercentage}</h4>
                                 <p className="text-xl font-semibold text-green-600">
-                                    {selectedOffer.priceAfterDiscount !== undefined ? 
-                                        `${(selectedOffer.price - selectedOffer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}`
-                                        : '—'
+                                    {selectedOffer.priceAfterDiscount !== undefined && selectedOffer.price > selectedOffer.priceAfterDiscount ? 
+                                        `${(((selectedOffer.price - selectedOffer.priceAfterDiscount) / selectedOffer.price) * 100).toFixed(1)}%`
+                                        : '0%'
                                     }
                                 </p>
                             </div>

@@ -1,5 +1,5 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { MapPin, Plus, X } from "lucide-react";
+import { MapPin, Plus, X, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { api } from "./api";
 import { translations } from "./translations";
@@ -38,12 +38,51 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         longitude: '',
         latitude: '',
     });
+    // Phone input state
+    const [isPhoneDropdownOpen, setIsPhoneDropdownOpen] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState({
+        code: "SY",
+        name: "سوريا",
+        dialCode: "+963"
+    });
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const queryClient = useQueryClient();
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const marker = useRef<mapboxgl.Marker | null>(null);
+    const phoneDropdownRef = useRef<HTMLDivElement>(null);
+
+    // Country list with Arabic names
+    const countries = [
+        { code: "SY", name: "سوريا", dialCode: "+963" },
+        { code: "SA", name: "السعودية", dialCode: "+966" },
+        { code: "AE", name: "الإمارات العربية المتحدة", dialCode: "+971" },
+        { code: "QA", name: "قطر", dialCode: "+974" },
+        { code: "KW", name: "الكويت", dialCode: "+965" },
+        { code: "BH", name: "البحرين", dialCode: "+973" },
+        { code: "OM", name: "عُمان", dialCode: "+968" },
+        { code: "JO", name: "الأردن", dialCode: "+962" },
+        { code: "LB", name: "لبنان", dialCode: "+961" },
+        { code: "IQ", name: "العراق", dialCode: "+964" },
+        { code: "PS", name: "فلسطين", dialCode: "+970" },
+        { code: "YE", name: "اليمن", dialCode: "+967" },
+        { code: "EG", name: "مصر", dialCode: "+20" },
+        { code: "SD", name: "السودان", dialCode: "+249" },
+        { code: "DZ", name: "الجزائر", dialCode: "+213" },
+        { code: "MA", name: "المغرب", dialCode: "+212" },
+        { code: "TN", name: "تونس", dialCode: "+216" },
+        { code: "LY", name: "ليبيا", dialCode: "+218" },
+        { code: "TR", name: "تركيا", dialCode: "+90" },
+        { code: "DE", name: "ألمانيا", dialCode: "+49" },
+        { code: "FR", name: "فرنسا", dialCode: "+33" },
+        { code: "GB", name: "المملكة المتحدة", dialCode: "+44" },
+        { code: "IT", name: "إيطاليا", dialCode: "+39" },
+        { code: "ES", name: "إسبانيا", dialCode: "+34" },
+        { code: "NL", name: "هولندا", dialCode: "+31" },
+        { code: "CH", name: "سويسرا", dialCode: "+41" },
+        { code: "SE", name: "السويد", dialCode: "+46" },
+    ];
 
     const mutation = useMutation({
         mutationFn: api.createStore,
@@ -59,9 +98,94 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
             });
             setImage(null);
             setImagePreview(null);
+            // Reset phone related state
+            setSelectedCountry({ code: "SY", name: "سوريا", dialCode: "+963" });
+            setIsPhoneDropdownOpen(false);
             onSuccess();
         }
     });
+
+    // Flag component for better browser compatibility
+    const FlagIcon = ({ countryCode, className = "" }: { countryCode: string; className?: string }) => {
+        // Special handling for Syrian revolution flag (green, white, black horizontal stripes with 3 red stars)
+        if (countryCode === "SY") {
+            return (
+                <>
+                    {/* CSS-based Syrian revolution flag fallback */}
+                    <div className={`hidden inline-block ${className} relative overflow-hidden rounded-sm`}>
+                        <div className="w-full h-1/3 bg-green-600"></div>
+                        <div className="w-full h-1/3 bg-white relative">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="flex space-x-0.5">
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full h-1/3 bg-black"></div>
+                    </div>
+                </>
+            );
+        }
+
+        return (
+            <>
+                <img
+                    src={`https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`}
+                    alt={`${countryCode} flag`}
+                    className={`inline-block ${className}`}
+                    onError={(e) => {
+                        // Fallback to Flag icon if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) {
+                            fallback.classList.remove('hidden');
+                        }
+                    }}
+                />
+                <Flag className="w-4 h-4 text-gray-400 hidden" />
+            </>
+        );
+    };
+
+    // Handle country selection
+    const handleCountrySelect = (country: { code: string; name: string; dialCode: string }) => {
+        setSelectedCountry(country);
+        setIsPhoneDropdownOpen(false);
+        // Update phone field with new country code
+        if (formData.phone) {
+            // Keep the local part of the number but change the country code
+            let localPart = formData.phone.replace(/^\+\d+/, "");
+            // Remove leading zeros from local part
+            localPart = localPart.replace(/^0+/, "");
+            setFormData(prev => ({ ...prev, phone: country.dialCode + localPart }));
+        } else {
+            setFormData(prev => ({ ...prev, phone: country.dialCode }));
+        }
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Only allow numbers and remove leading zeros
+        let value = e.target.value.replace(/[^0-9]/g, "");
+        // Remove leading zeros
+        value = value.replace(/^0+/, "");
+        setFormData(prev => ({ ...prev, phone: selectedCountry.dialCode + value }));
+    };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (phoneDropdownRef.current && !(phoneDropdownRef.current as HTMLElement).contains(event.target as Node)) {
+                setIsPhoneDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [phoneDropdownRef]);
 
     // Initialize map when component mounts
     useEffect(() => {
@@ -217,13 +341,79 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     onChange={handleChange}
                     required
                 />
-                <Input
-                    label={translations.phone}
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                />
+                {/* Phone Input with Country Code Selector */}
+                <div className="w-full">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                        {translations.phone} <span className="text-red-500">*</span>
+                    </label>
+                    <div className="phone-input-rtl">
+                        <div className="relative w-full" ref={phoneDropdownRef}>
+                            {/* Main phone input container */}
+                            <div className="border border-gray-300 rounded-lg overflow-hidden transition-all">
+                                <div className="flex items-center h-12">
+                                    {/* Country selector area */}
+                                    <button
+                                        type="button"
+                                        className="flex items-center gap-1 px-3 py-3 border-r border-gray-300 h-full focus:outline-none hover:bg-gray-50 transition-colors"
+                                        onClick={() => setIsPhoneDropdownOpen(!isPhoneDropdownOpen)}
+                                    >
+                                        <div className="flex items-center mr-2">
+                                            <FlagIcon countryCode={selectedCountry.code} className="w-6 h-4" />
+                                        </div>
+                                        <span className="text-sm font-medium">{selectedCountry.code}</span>
+                                        <svg className="h-4 w-4 text-gray-500 ml-2 transition-transform" style={{ transform: isPhoneDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+
+                                    {/* Phone input field */}
+                                    <div className="flex-grow">
+                                        <input
+                                            type="tel"
+                                            value={formData.phone?.replace(selectedCountry.dialCode, "") || ""}
+                                            onChange={handlePhoneChange}
+                                            className="w-full h-full p-4 focus:outline-none text-base bg-transparent"
+                                            dir="ltr"
+                                            placeholder="مثال: 998419869"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Country code display on the right */}
+                                    <div className="px-4 text-base font-medium text-gray-600">
+                                        {selectedCountry.dialCode}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Custom dropdown */}
+                            {isPhoneDropdownOpen && (
+                                <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                                    {countries.map((country) => (
+                                        <div
+                                            key={country.code}
+                                            className={`flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${
+                                                selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'
+                                            }`}
+                                            onClick={() => handleCountrySelect(country)}
+                                        >
+                                            <div className="flex items-center gap-1">
+                                                <div className="flex items-center mr-3">
+                                                    <FlagIcon countryCode={country.code} className="w-6 h-4" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{country.name}</span>
+                                                    <span className="text-sm text-gray-500">{country.dialCode}</span>
+                                                </div>
+                                            </div>
+                                            <span className="text-sm font-mono text-gray-400">{country.code}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
                 <div className="w-full">
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
                         {translations.city} <span className="text-red-500">*</span>

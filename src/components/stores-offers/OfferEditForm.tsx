@@ -20,7 +20,7 @@ export const OfferEditForm: React.FC<{
         description: offer.description,
         price: String(offer.price),
         priceType: offer.priceType || PriceType.SYP, // Add price type with fallback
-        discount: String(offer.price - (offer.priceAfterDiscount || offer.price)), // Calculate discount from price difference
+        priceAfterDiscount: String(offer.priceAfterDiscount || offer.price), // Use priceAfterDiscount if available, else use price
         storeId: offer.storeId,
         categoryId: offer.categoryId,
         contentId: offer.contentId || '',
@@ -206,22 +206,15 @@ export const OfferEditForm: React.FC<{
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Send the data as it is - the backend will handle priceAfterDiscount directly
         const submitData = new FormData();
 
-        // Calculate priceAfterDiscount from price and discount
-        const price = parseFloat(formData.price);
-        const discount = parseFloat(formData.discount) || 0;
-        const priceAfterDiscount = Math.max(0, price - discount); // Ensure priceAfterDiscount is not negative
-
-        // Add all form fields to FormData, excluding discount
+        // Add all form fields to FormData
         for (const [key, value] of Object.entries(formData)) {
-            if (value !== undefined && value !== null && value !== '' && key !== 'discount') {
+            if (value !== undefined && value !== null && value !== '') {
                 submitData.append(key, String(value));
             }
         }
-
-        // Add the calculated priceAfterDiscount
-        submitData.append('priceAfterDiscount', priceAfterDiscount.toString());
 
         // Add existing images that weren't removed
         existingImages.forEach((imageUrl, index) => {
@@ -282,19 +275,21 @@ export const OfferEditForm: React.FC<{
                     required
                 />
                 <Input
-                    label={translations.discount}
-                    name="discount"
+                    label={translations.priceAfterDiscount}
+                    name="priceAfterDiscount"
                     type="number"
-                    value={formData.discount}
+                    value={formData.priceAfterDiscount}
                     onChange={handleChange}
                     required
                 />
-                {/* Show calculated final price */}
-                {formData.price && formData.discount && (
+                {/* Show calculated discount percentage */}
+                {formData.price && formData.priceAfterDiscount && (
                     <div className="sm:col-span-2">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-right">
-                            <p className="text-sm text-blue-800 font-medium">
-                                السعر النهائي: {Math.max(0, parseFloat(formData.price) - parseFloat(formData.discount))} {CURRENCY_SYMBOLS[formData.priceType || PriceType.SYP]}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-right">
+                            <p className="text-sm text-green-800 font-medium">
+                                {translations.discountPercentage}: {(
+                                    ((parseFloat(formData.price) - parseFloat(formData.priceAfterDiscount)) / parseFloat(formData.price)) * 100
+                                ).toFixed(1)}%
                             </p>
                         </div>
                     </div>

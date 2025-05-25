@@ -17,7 +17,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         description: '',
         price: '',
         priceType: PriceType.SYP, // Add price type with default
-        discount: '',
+        priceAfterDiscount: '',
         storeId: '',
         categoryId: '',
         contentId: '',
@@ -47,7 +47,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 description: '',
                 price: '',
                 priceType: PriceType.SYP, // Reset to default
-                discount: '',
+                priceAfterDiscount: '',
                 storeId: '',
                 categoryId: '',
                 contentId: '',
@@ -215,22 +215,15 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Send the data as it is - the backend will handle priceAfterDiscount directly
         const submitData = new FormData();
         
-        // Calculate priceAfterDiscount from price and discount
-        const price = parseFloat(formData.price);
-        const discount = parseFloat(formData.discount) || 0;
-        const priceAfterDiscount = Math.max(0, price - discount); // Ensure priceAfterDiscount is not negative
-        
-        // Append form data, but exclude discount and add priceAfterDiscount instead
+        // Append form data
         for (const [key, value] of Object.entries(formData)) {
-            if (value && key !== 'discount') {
+            if (value) {
                 submitData.append(key, value);
             }
         }
-        
-        // Add the calculated priceAfterDiscount
-        submitData.append('priceAfterDiscount', priceAfterDiscount.toString());
 
         // Append all selected files
         if (selectedFiles.length > 0) {
@@ -289,19 +282,21 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     required
                 />
                 <Input
-                    label={translations.discount}
-                    name="discount"
+                    label={translations.priceAfterDiscount}
+                    name="priceAfterDiscount"
                     type="number"
-                    value={formData.discount}
+                    value={formData.priceAfterDiscount}
                     onChange={handleChange}
                     required
                 />
-                {/* Show calculated final price */}
-                {formData.price && formData.discount && (
+                {/* Show calculated discount percentage */}
+                {formData.price && formData.priceAfterDiscount && (
                     <div className="sm:col-span-2">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-right">
-                            <p className="text-sm text-blue-800 font-medium">
-                                السعر النهائي: {Math.max(0, parseFloat(formData.price) - parseFloat(formData.discount))} {CURRENCY_SYMBOLS[formData.priceType || PriceType.SYP]}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-right">
+                            <p className="text-sm text-green-800 font-medium">
+                                {translations.discountPercentage}: {(
+                                    ((parseFloat(formData.price) - parseFloat(formData.priceAfterDiscount)) / parseFloat(formData.price)) * 100
+                                ).toFixed(1)}%
                             </p>
                         </div>
                     </div>
