@@ -32,10 +32,28 @@ interface Store {
   "latitude": number,
 }
 
+// Country code options interface
+interface CountryCode {
+  value: string;
+  label: string;
+  flag: string;
+  code: string;
+  mask: string;
+}
+
 export default function AdminPage() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [videoFiles, setVideoFiles] = useState<File[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
+
+  // Country code state
+  const [selectedCountryCode, setSelectedCountryCode] = useState<CountryCode>({
+    value: "+963",
+    label: "Syria",
+    flag: "🇸🇾",
+    code: "SY",
+    mask: "09XXXXXXXX"
+  });
 
   const setIsAddingContent = useStore((state) => state.setIsAddingContent);
   const token = useStore((state) => state.token);
@@ -47,6 +65,19 @@ export default function AdminPage() {
 
   // Owner type state
   const [ownerType, setOwnerType] = useState<ContentOwnerType>("INDIVIDUAL");
+
+  // Country codes list
+  const countryCodes: CountryCode[] = [
+    { value: "+963", label: "Syria", flag: "🇸🇾", code: "SY", mask: "09XXXXXXXX" },
+    { value: "+961", label: "Lebanon", flag: "🇱🇧", code: "LB", mask: "XXXXXXXX" },
+    { value: "+962", label: "Jordan", flag: "🇯🇴", code: "JO", mask: "7XXXXXXXX" },
+    { value: "+20", label: "Egypt", flag: "🇪🇬", code: "EG", mask: "10XXXXXXXX" },
+    { value: "+971", label: "UAE", flag: "🇦🇪", code: "AE", mask: "5XXXXXXXX" },
+    { value: "+966", label: "Saudi Arabia", flag: "🇸🇦", code: "SA", mask: "5XXXXXXXX" },
+    { value: "+90", label: "Turkey", flag: "🇹🇷", code: "TR", mask: "5XXXXXXXX" },
+    { value: "+964", label: "Iraq", flag: "🇮🇶", code: "IQ", mask: "7XXXXXXXX" },
+    { value: "+970", label: "Palestine", flag: "🇵🇸", code: "PS", mask: "5XXXXXXXX" },
+  ];
 
   // Queries
   const { data: interests, isLoading: interestsLoading } = useQuery<Interest[]>({
@@ -89,6 +120,7 @@ export default function AdminPage() {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ContentFormData>({
     defaultValues: {
@@ -104,6 +136,31 @@ export default function AdminPage() {
       interestIds: [],
     },
   });
+
+  // Watch phone number for validation
+  const phoneNumber = watch("ownerNumber");
+
+  // Get validation pattern based on selected country
+  const getPhoneValidationPattern = () => {
+    if (selectedCountryCode.code === "SY") {
+      return /^09\d{8}$/; // Syria: 09XXXXXXXX
+    } else {
+      // Generic pattern for other countries - adjust based on requirements
+      return /^\d{8,10}$/;
+    }
+  };
+
+  // Format full phone number with country code
+  const formatFullPhoneNumber = (number: string) => {
+    if (!number) return "";
+
+    // Remove leading 0 if exists when adding country code
+    if (number.startsWith("0")) {
+      return selectedCountryCode.value + number.substring(1);
+    }
+
+    return selectedCountryCode.value + number;
+  };
 
   // File removal functions
   const removeImageFile = (index: number) => {
@@ -129,7 +186,10 @@ export default function AdminPage() {
     // Handle owner-specific data
     if (ownerType === "INDIVIDUAL") {
       formData.append("ownerName", data.ownerName || "");
-      formData.append("ownerNumber", data.ownerNumber || "");
+
+      // Format phone number with country code
+      const fullPhoneNumber = formatFullPhoneNumber(data.ownerNumber!);
+      formData.append("ownerNumber", fullPhoneNumber || "");
     } else {
       formData.append("storeId", data.storeId || "");
     }
@@ -158,6 +218,13 @@ export default function AdminPage() {
       setImageFiles([]);
       setVideoFiles([]);
       setOwnerType("INDIVIDUAL");
+      setSelectedCountryCode({
+        value: "+963",
+        label: "Syria",
+        flag: "🇸🇾",
+        code: "SY",
+        mask: "09XXXXXXXX"
+      });
 
       if (formRef.current) {
         formRef.current.reset();
@@ -227,17 +294,59 @@ export default function AdminPage() {
               <label htmlFor="ownerNumber" className="block font-semibold text-gray-700 mb-2">
                 رقم المالك
               </label>
-              <input
-                {...register("ownerNumber", {
-                  required: ownerType === "INDIVIDUAL",
-                  pattern: /^09\d{8}$/
-                })}
-                className="w-full px-4 py-3 border rounded-lg"
-                placeholder="أدخل رقم الهاتف"
-              />
+              <div className="flex">
+                {/* Country Code Dropdown */}
+                <div className="relative w-1/3 md:w-1/4">
+                  <Select
+                    value={selectedCountryCode}
+                    onChange={(option) => setSelectedCountryCode(option as CountryCode)}
+                    options={countryCodes}
+                    isSearchable={false}
+                    formatOptionLabel={(option) => (
+                      <div className="flex items-center">
+                        <span className="mr-2">{option.flag}</span>
+                        <span>{option.value}</span>
+                      </div>
+                    )}
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        borderRadius: "0.5rem 0 0 0.5rem",
+                        borderRight: "none",
+                        height: "100%"
+                      }),
+                      valueContainer: (base) => ({
+                        ...base,
+                        padding: "0 8px",
+                      }),
+                      singleValue: (base) => ({
+                        ...base,
+                        fontSize: "0.875rem",
+                      }),
+                    }}
+                  />
+                </div>
+                {/* Phone Number Input */}
+                <input
+                  {...register("ownerNumber", {
+                    required: ownerType === "INDIVIDUAL",
+                    pattern: getPhoneValidationPattern()
+                  })}
+                  className="w-2/3 md:w-3/4 px-4 py-3 border rounded-none rounded-r-lg"
+                  placeholder={selectedCountryCode.mask}
+                  style={{ marginLeft: "-1px" }}
+                />
+              </div>
               {errors.ownerNumber && (
-                <p className="text-red-500 text-sm mt-2">رقم الهاتف غير صحيح</p>
+                <p className="text-red-500 text-sm mt-2">
+                  {selectedCountryCode.code === "SY"
+                    ? "يجب إدخال رقم سوري صحيح يبدأ بـ 09 متبوعًا بـ 8 أرقام"
+                    : "رقم الهاتف غير صحيح"}
+                </p>
               )}
+              <p className="text-gray-500 text-xs mt-1">
+                مثال: {selectedCountryCode.mask}
+              </p>
             </div>
           </>
         ) : (
@@ -768,4 +877,4 @@ export default function AdminPage() {
       </div>
     </div>
   );
-}   
+}
