@@ -133,19 +133,19 @@ export default function RootLayout() {
     }
   };
 
-  // If not authenticated, render login page
-  if (!isAuthenticated) {
-    return (
-      <html lang="ar" dir="rtl">
-        <body>
-          <QueryClientProvider client={queryClient}>
-            <LoginPage />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </body>
-      </html>
-    );
-  }
+  // // If not authenticated, render login page
+  // if (!isAuthenticated) {
+  //   return (
+  //     <html lang="ar" dir="rtl">
+  //       <body>
+  //         <QueryClientProvider client={queryClient}>
+  //           <LoginPage />
+  //           <ReactQueryDevtools initialIsOpen={false} />
+  //         </QueryClientProvider>
+  //       </body>
+  //     </html>
+  //   );
+  // }
 
   const Sidebar = () => (
     <div className="flex flex-col h-full bg-gradient-to-br from-blue-900 to-indigo-950 shadow-xl">

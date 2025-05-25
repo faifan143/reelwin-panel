@@ -12,7 +12,7 @@ import {
   User,
   Video
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select, { SingleValue } from "react-select";
 import { FormSection } from "./content/FormSection";
@@ -24,6 +24,7 @@ import { ContentFormData, ContentOwnerType, Interest } from "./content/type";
 // Import the react-phone-number-input components and styles
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { Flag, Globe } from 'lucide-react';
 
 interface Store {
   "id": string,
@@ -44,10 +45,10 @@ export default function AdminPage() {
   const setIsAddingContent = useStore((state) => state.setIsAddingContent);
   const token = useStore((state) => state.token);
 
-  // Set default end validation date
-  const defaultDate = new Date();
-  defaultDate.setFullYear(defaultDate.getFullYear() + 1);
-  const formattedDefaultDate = defaultDate.toISOString().slice(0, 16);
+  // Set default end validation date to today
+  const today = new Date();
+  const formattedDefaultDate = today.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+
 
   // Owner type state
   const [ownerType, setOwnerType] = useState<ContentOwnerType>("INDIVIDUAL");
@@ -133,7 +134,10 @@ export default function AdminPage() {
     // Handle owner-specific data
     if (ownerType === "INDIVIDUAL") {
       formData.append("ownerName", data.ownerName || "");
-      formData.append("ownerNumber", data.ownerNumber || "");
+      // Format phone number: remove + symbol and leading zeros
+      const formattedPhone = data.ownerNumber ?
+        data.ownerNumber.replace(/^\+/, "").replace(/^0+/, "") : "";
+      formData.append("ownerNumber", formattedPhone);
     } else {
       formData.append("storeId", data.storeId || "");
     }
@@ -238,22 +242,200 @@ export default function AdminPage() {
                   rules={{
                     required: ownerType === "INDIVIDUAL",
                     validate: (value) => {
-                      // Phone number validation is handled by the PhoneInput component
                       return value && value.length >= 9 || "رقم الهاتف غير صحيح";
                     }
                   }}
-                  render={({ field }) => (
-                    <PhoneInput
-                      international
-                      defaultCountry="SY"
-                      countries={["SY", "LB", "JO", "EG", "AE", "SA", "TR", "IQ", "PS"]}
-                      countryCallingCodeEditable={false}
-                      value={field.value}
-                      onChange={field.onChange}
-                      className="w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                      placeholder="أدخل رقم الهاتف"
-                    />
-                  )}
+                  render={({ field }) => {
+                    // Custom country selector implementation
+                    const [isOpen, setIsOpen] = useState(false);
+                    const [selectedCountry, setSelectedCountry] = useState({
+                      code: "SY",
+                      name: "سوريا",
+                      dialCode: "+963"
+                    });
+
+                    // Flag component for better browser compatibility
+                    const FlagIcon = ({ countryCode, className = "" }: { countryCode: string; className?: string }) => {
+                      // Special handling for Syrian revolution flag (green, white, black horizontal stripes with 3 red stars)
+                      if (countryCode === "SY") {
+                        return (
+                          <>
+                            {/* CSS-based Syrian revolution flag fallback */}
+                            <div className={`hidden inline-block ${className} relative overflow-hidden rounded-sm`}>
+                              <div className="w-full h-1/3 bg-green-600"></div>
+                              <div className="w-full h-1/3 bg-white relative">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <div className="flex space-x-0.5">
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                    <div className="w-1 h-1 bg-red-600 rounded-full"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="w-full h-1/3 bg-black"></div>
+                            </div>
+                          </>
+                        );
+                      }
+
+                      return (
+                        <>
+                          <img
+                            src={`https://flagcdn.com/24x18/${countryCode.toLowerCase()}.png`}
+                            alt={`${countryCode} flag`}
+                            className={`inline-block ${className}`}
+                            onError={(e) => {
+                              // Fallback to Flag icon if image fails to load
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) {
+                                fallback.classList.remove('hidden');
+                              }
+                            }}
+                          />
+                          <Flag className="w-4 h-4 text-gray-400 hidden" />
+                        </>
+                      );
+                    };
+
+                    // Country list with Arabic names
+                    const countries = [
+                      { code: "SY", name: "سوريا", dialCode: "+963" },
+                      { code: "SA", name: "السعودية", dialCode: "+966" },
+                      { code: "AE", name: "الإمارات العربية المتحدة", dialCode: "+971" },
+                      { code: "QA", name: "قطر", dialCode: "+974" },
+                      { code: "KW", name: "الكويت", dialCode: "+965" },
+                      { code: "BH", name: "البحرين", dialCode: "+973" },
+                      { code: "OM", name: "عُمان", dialCode: "+968" },
+                      { code: "JO", name: "الأردن", dialCode: "+962" },
+                      { code: "LB", name: "لبنان", dialCode: "+961" },
+                      { code: "IQ", name: "العراق", dialCode: "+964" },
+                      { code: "PS", name: "فلسطين", dialCode: "+970" },
+                      { code: "YE", name: "اليمن", dialCode: "+967" },
+                      { code: "EG", name: "مصر", dialCode: "+20" },
+                      { code: "SD", name: "السودان", dialCode: "+249" },
+                      { code: "DZ", name: "الجزائر", dialCode: "+213" },
+                      { code: "MA", name: "المغرب", dialCode: "+212" },
+                      { code: "TN", name: "تونس", dialCode: "+216" },
+                      { code: "LY", name: "ليبيا", dialCode: "+218" },
+                      { code: "TR", name: "تركيا", dialCode: "+90" },
+                      { code: "DE", name: "ألمانيا", dialCode: "+49" },
+                      { code: "FR", name: "فرنسا", dialCode: "+33" },
+                      { code: "GB", name: "المملكة المتحدة", dialCode: "+44" },
+                      { code: "IT", name: "إيطاليا", dialCode: "+39" },
+                      { code: "ES", name: "إسبانيا", dialCode: "+34" },
+                      { code: "NL", name: "هولندا", dialCode: "+31" },
+                      { code: "CH", name: "سويسرا", dialCode: "+41" },
+                      { code: "SE", name: "السويد", dialCode: "+46" },
+                    ];
+
+                    // Handle country selection
+                    const handleCountrySelect = (country: { code: string; name: string; dialCode: string }) => {
+                      setSelectedCountry(country);
+                      setIsOpen(false);
+                      // Update phone field with new country code
+                      if (field.value) {
+                        // Keep the local part of the number but change the country code
+                        let localPart = field.value.replace(/^\+\d+/, "");
+                        // Remove leading zeros from local part
+                        localPart = localPart.replace(/^0+/, "");
+                        field.onChange(country.dialCode + localPart);
+                      } else {
+                        field.onChange(country.dialCode);
+                      }
+                    };
+
+                    const dropdownRef = useRef<HTMLDivElement>(null);
+
+                    // Close dropdown when clicking outside
+                    useEffect(() => {
+                      const handleClickOutside = (event: MouseEvent) => {
+                        if (dropdownRef.current && !(dropdownRef.current as HTMLElement).contains(event.target as Node)) {
+                          setIsOpen(false);
+                        }
+                      };
+
+                      document.addEventListener("mousedown", handleClickOutside);
+                      return () => {
+                        document.removeEventListener("mousedown", handleClickOutside);
+                      };
+                    }, [dropdownRef]);
+
+                    return (
+                      <>
+                        <div className="relative w-full" ref={dropdownRef}>
+                          {/* Main phone input container */}
+                          <div className="border border-gray-300 rounded-lg overflow-hidden  transition-all">
+                            <div className="flex items-center h-12">
+                              {/* Country selector area */}
+                              <button
+                                type="button"
+                                className="flex items-center gap-1 px-3 py-3 border-r border-gray-300 h-full focus:outline-none hover:bg-gray-50 transition-colors"
+                                onClick={() => setIsOpen(!isOpen)}
+                              >
+                                <div className="flex items-center mr-2">
+                                  <FlagIcon countryCode={selectedCountry.code} className="w-6 h-4" />
+                                </div>
+                                <span className="text-sm font-medium">{selectedCountry.code}</span>
+                                <svg className="h-4 w-4 text-gray-500 ml-2 transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+
+                              {/* Phone input field */}
+                              <div className="flex-grow">
+                                <input
+                                  type="tel"
+                                  value={field.value?.replace(selectedCountry.dialCode, "") || ""}
+                                  onChange={(e) => {
+                                    // Only allow numbers and remove leading zeros
+                                    let value = e.target.value.replace(/[^0-9]/g, "");
+                                    // Remove leading zeros
+                                    value = value.replace(/^0+/, "");
+                                    field.onChange(selectedCountry.dialCode + value);
+                                  }}
+                                  className="w-full h-full p-4 focus:outline-none text-base bg-transparent"
+                                  dir="ltr"
+                                  placeholder="مثال: 998419869"
+                                />
+                              </div>
+
+                              {/* Country code display on the right */}
+                              <div className="px-4 text-base font-medium text-gray-600">
+                                {selectedCountry.dialCode}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Custom dropdown */}
+                          {isOpen && (
+                            <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                              {countries.map((country) => (
+                                <div
+                                  key={country.code}
+                                  className={`flex items-center  justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'}`}
+                                  onClick={() => handleCountrySelect(country)}
+                                >
+                                  <div className="flex items-center gap-1">
+                                    <div className="flex items-center mr-3">
+                                      <FlagIcon countryCode={country.code} className="w-6 h-4" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{country.name}</span>
+                                      <span className="text-sm text-gray-500">{country.dialCode}</span>
+                                    </div>
+                                  </div>
+                                  <span className="text-sm font-mono text-gray-400">{country.code}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+
+                      </>
+                    );
+                  }}
                 />
               </div>
               {errors.ownerNumber && (
@@ -261,9 +443,7 @@ export default function AdminPage() {
                   {errors.ownerNumber.message || "رقم الهاتف مطلوب"}
                 </p>
               )}
-              <p className="text-gray-500 text-xs mt-1">
-                سيتم استخدام هذا الرقم للتواصل مع المالك
-              </p>
+
             </div>
           </>
         ) : (
@@ -494,7 +674,7 @@ export default function AdminPage() {
               <div>
                 <label
                   htmlFor="endValidationDate"
-                  className=" font-semibold text-gray-700 mb-2 flex items-center"
+                  className="font-semibold text-gray-700 mb-2 flex items-center"
                 >
                   <span className="text-red-500 mx-1">*</span> تاريخ انتهاء الصلاحية
                 </label>
@@ -502,15 +682,22 @@ export default function AdminPage() {
                   <Controller
                     name="endValidationDate"
                     control={control}
-                    rules={{ required: "تاريخ انتهاء الصلاحية مطلوب" }}
+                    rules={{
+                      required: "تاريخ انتهاء الصلاحية مطلوب",
+                      validate: (value) => {
+                        const selectedDate = new Date(value);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
+                        return selectedDate >= today || "لا يمكن اختيار تاريخ في الماضي";
+                      },
+                    }}
                     render={({ field }) => (
                       <input
                         type="datetime-local"
                         id="endValidationDate"
-                        className={`w-full px-4 py-3 pl-10 border ${errors.endValidationDate
-                          ? "border-red-500"
-                          : "border-gray-300"
+                        className={`w-full px-4 py-3 pl-10 border ${errors.endValidationDate ? "border-red-500" : "border-gray-300"
                           } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                        min={new Date().toISOString().slice(0, 16)} // Prevent past dates
                         {...field}
                       />
                     )}
@@ -535,7 +722,6 @@ export default function AdminPage() {
                   )}
                 </div>
               </div>
-
               <div className="md:col-span-2">
                 <label
                   htmlFor="interestIds"

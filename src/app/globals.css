@@ -184,48 +184,5 @@ body {
 
 
 
-    /* Custom styles for RTL phone input */
-    .phone-input-rtl .PhoneInput {
-      direction: ltr; /* Keep the component LTR */
-      text-align: left;
-      display: flex;
-      align-items: center;
-    }
-    
-    .phone-input-rtl .PhoneInputCountry {
-      margin-right: 0.5rem;
-    }
-    
-    .phone-input-rtl .PhoneInputInput {
-      padding: 0.75rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      width: 100%;
-      font-family: inherit;
-    }
-    
-    .phone-input-rtl .PhoneInputInput:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-    }
-    
-    /* Style country select button */
-    .phone-input-rtl .PhoneInputCountrySelect {
-      position: relative;
-      align-self: stretch;
-    }
-    
-    /* Fix flag positioning */
-    .phone-input-rtl .PhoneInputCountryIcon {
-      margin-right: 0.5rem;
-      width: 1.5em;
-      height: 1em;
-    }
-    
-    /* Style country code */
-    .phone-input-rtl .PhoneInputCountrySelectArrow {
-      margin-left: 0.5rem;
-      opacity: 0.6;
-    }
+
   
