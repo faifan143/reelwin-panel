@@ -206,6 +206,7 @@ export default function AdminPage() {
       formData.append("files", file);
     });
 
+
     videoFiles.forEach((file) => {
       formData.append("files", file);
     });
