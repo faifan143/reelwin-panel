@@ -146,6 +146,9 @@ export const OffersTab: React.FC = () => {
                                         {translations.price}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
+                                        السعر النهائي
+                                    </th>
+                                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
                                         {translations.discount}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
@@ -171,9 +174,20 @@ export const OffersTab: React.FC = () => {
                                                     {offer.price} {CURRENCY_SYMBOLS[offer.priceType || 'SYP']}
                                                 </span>
                                             </td>
+                                            <td className="px-3 py-4 text-sm text-gray-500 text-right">
+                                                <span className="font-medium text-blue-600">
+                                                    {offer.priceAfterDiscount !== undefined ? 
+                                                        `${offer.priceAfterDiscount} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                        : `${offer.price} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                    }
+                                                </span>
+                                            </td>
                                             <td className="px-3 py-4 text-sm text-right">
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    {translations.off} {offer.discount}%
+                                                    {offer.priceAfterDiscount !== undefined ? 
+                                                        `${translations.off} ${(offer.price - offer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                        : '—'
+                                                    }
                                                 </span>
                                             </td>
                                             <td className="px-3 py-4 text-sm text-gray-500 text-right">
@@ -216,7 +230,7 @@ export const OffersTab: React.FC = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={6} className="py-8 text-center text-gray-500">
+                                        <td colSpan={7} className="py-8 text-center text-gray-500">
                                             {translations.noOffers}
                                         </td>
                                     </tr>
@@ -249,16 +263,30 @@ export const OffersTab: React.FC = () => {
                                             <h3 className="font-medium text-gray-900 flex-1 text-right truncate">{offer.title}</h3>
                                         </div>
 
-                                        <div className="mt-3 grid grid-cols-2 gap-2">
+                                        <div className="mt-3 grid grid-cols-3 gap-2">
                                             <div className="bg-gray-50 p-2 rounded text-right">
                                                 <p className="text-xs text-gray-500 mb-1">{translations.price}</p>
                                                 <p className="font-semibold">
                                                     {offer.price} {CURRENCY_SYMBOLS[offer.priceType || 'SYP']}
                                                 </p>
                                             </div>
+                                            <div className="bg-blue-50 p-2 rounded text-right">
+                                                <p className="text-xs text-gray-500 mb-1">السعر النهائي</p>
+                                                <p className="font-semibold text-blue-600">
+                                                    {offer.priceAfterDiscount !== undefined ? 
+                                                        `${offer.priceAfterDiscount} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                        : `${offer.price} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                    }
+                                                </p>
+                                            </div>
                                             <div className="bg-gray-50 p-2 rounded text-right">
                                                 <p className="text-xs text-gray-500 mb-1">{translations.discount}</p>
-                                                <p className="font-semibold text-green-600">{translations.off} {offer.discount}%</p>
+                                                <p className="font-semibold text-green-600">
+                                                    {offer.priceAfterDiscount !== undefined ? 
+                                                        `${translations.off} ${(offer.price - offer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[offer.priceType || 'SYP']}`
+                                                        : '—'
+                                                    }
+                                                </p>
                                             </div>
                                         </div>
 
@@ -357,7 +385,7 @@ export const OffersTab: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
                             <div>
                                 <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.price}</h4>
                                 <p className="text-xl font-semibold">
@@ -365,8 +393,22 @@ export const OffersTab: React.FC = () => {
                                 </p>
                             </div>
                             <div>
+                                <h4 className="text-sm font-medium text-gray-500 mb-1">السعر النهائي</h4>
+                                <p className="text-xl font-semibold text-blue-600">
+                                    {selectedOffer.priceAfterDiscount !== undefined ? 
+                                        `${selectedOffer.priceAfterDiscount} ${CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}`
+                                        : `${selectedOffer.price} ${CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}`
+                                    }
+                                </p>
+                            </div>
+                            <div>
                                 <h4 className="text-sm font-medium text-gray-500 mb-1">{translations.discount}</h4>
-                                <p className="text-xl font-semibold text-green-600">{selectedOffer.discount}%</p>
+                                <p className="text-xl font-semibold text-green-600">
+                                    {selectedOffer.priceAfterDiscount !== undefined ? 
+                                        `${(selectedOffer.price - selectedOffer.priceAfterDiscount).toFixed(0)} ${CURRENCY_SYMBOLS[selectedOffer.priceType || 'SYP']}`
+                                        : '—'
+                                    }
+                                </p>
                             </div>
                         </div>
 

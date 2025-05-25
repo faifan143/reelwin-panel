@@ -20,7 +20,7 @@ export const OfferEditForm: React.FC<{
         description: offer.description,
         price: String(offer.price),
         priceType: offer.priceType || PriceType.SYP, // Add price type with fallback
-        discount: String(offer.discount),
+        discount: String(offer.price - (offer.priceAfterDiscount || offer.price)), // Calculate discount from price difference
         storeId: offer.storeId,
         categoryId: offer.categoryId,
         contentId: offer.contentId || '',
@@ -208,12 +208,20 @@ export const OfferEditForm: React.FC<{
 
         const submitData = new FormData();
 
-        // Add all form fields to FormData
+        // Calculate priceAfterDiscount from price and discount
+        const price = parseFloat(formData.price);
+        const discount = parseFloat(formData.discount) || 0;
+        const priceAfterDiscount = Math.max(0, price - discount); // Ensure priceAfterDiscount is not negative
+
+        // Add all form fields to FormData, excluding discount
         for (const [key, value] of Object.entries(formData)) {
-            if (value !== undefined && value !== null && value !== '') {
+            if (value !== undefined && value !== null && value !== '' && key !== 'discount') {
                 submitData.append(key, String(value));
             }
         }
+
+        // Add the calculated priceAfterDiscount
+        submitData.append('priceAfterDiscount', priceAfterDiscount.toString());
 
         // Add existing images that weren't removed
         existingImages.forEach((imageUrl, index) => {
@@ -281,6 +289,16 @@ export const OfferEditForm: React.FC<{
                     onChange={handleChange}
                     required
                 />
+                {/* Show calculated final price */}
+                {formData.price && formData.discount && (
+                    <div className="sm:col-span-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-right">
+                            <p className="text-sm text-blue-800 font-medium">
+                                السعر النهائي: {Math.max(0, parseFloat(formData.price) - parseFloat(formData.discount))} {CURRENCY_SYMBOLS[formData.priceType || PriceType.SYP]}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 <CustomSelect
                     label={translations.categoriesTitle}
                     name="categoryId"

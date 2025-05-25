@@ -216,10 +216,21 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         e.preventDefault();
 
         const submitData = new FormData();
+        
+        // Calculate priceAfterDiscount from price and discount
+        const price = parseFloat(formData.price);
+        const discount = parseFloat(formData.discount) || 0;
+        const priceAfterDiscount = Math.max(0, price - discount); // Ensure priceAfterDiscount is not negative
+        
+        // Append form data, but exclude discount and add priceAfterDiscount instead
         for (const [key, value] of Object.entries(formData)) {
-            if (value)
+            if (value && key !== 'discount') {
                 submitData.append(key, value);
+            }
         }
+        
+        // Add the calculated priceAfterDiscount
+        submitData.append('priceAfterDiscount', priceAfterDiscount.toString());
 
         // Append all selected files
         if (selectedFiles.length > 0) {
@@ -285,6 +296,16 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     onChange={handleChange}
                     required
                 />
+                {/* Show calculated final price */}
+                {formData.price && formData.discount && (
+                    <div className="sm:col-span-2">
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-right">
+                            <p className="text-sm text-blue-800 font-medium">
+                                السعر النهائي: {Math.max(0, parseFloat(formData.price) - parseFloat(formData.discount))} {CURRENCY_SYMBOLS[formData.priceType || PriceType.SYP]}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 <CustomSelect
                     label={translations.categoriesTitle}
                     name="categoryId"

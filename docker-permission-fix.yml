@@ -1,0 +1,16 @@
+# Add this to your docker-compose.yml or Docker run command
+
+# If using docker-compose.yml, add this to your ads-platform service:
+services:
+  ads-platform-app:
+    # ... your existing configuration
+    user: "1001:33"  # Run as user 1001, group www-data (33)
+    volumes:
+      - /var/www/media:/var/www/media:rw  # Ensure read-write access
+    # ... rest of your config
+
+# OR if using Docker run command:
+# docker run --user 1001:33 -v /var/www/media:/var/www/media:rw your-image
+
+# OR add this to your Dockerfile:
+# USER 1001:33

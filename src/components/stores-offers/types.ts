@@ -59,7 +59,7 @@ export interface Offer {
     description: string;
     price: number;
     priceType: PriceType; // Add price type
-    discount: number;
+    priceAfterDiscount?: number; // The actual field from backend
     images: string[];
     storeId: string;
     categoryId: string;
