@@ -21,6 +21,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         storeId: '',
         categoryId: '',
         contentId: '',
+        endDate: '' // Add endDate field
     });
 
     // Changed to array of Files instead of FileList for better manipulation
@@ -51,6 +52,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 storeId: '',
                 categoryId: '',
                 contentId: '',
+                endDate: '' // Reset endDate
             });
             setSelectedFiles([]);
             setImagePreviews([]);
@@ -217,7 +219,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
 
         // Send the data as it is - the backend will handle priceAfterDiscount directly
         const submitData = new FormData();
-        
+
         // Append form data
         for (const [key, value] of Object.entries(formData)) {
             if (value) {
@@ -301,6 +303,14 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                         </div>
                     </div>
                 )}
+                <Input
+                    label={translations.endDate} // Add label for endDate
+                    name="endDate"
+                    type="date"
+                    value={formData.endDate}
+                    onChange={handleChange}
+                    required
+                />
                 <CustomSelect
                     label={translations.categoriesTitle}
                     name="categoryId"
