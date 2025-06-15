@@ -66,7 +66,7 @@ export default function AdminPage() {
     queryKey: ["stores"],
     queryFn: async () => {
       const response = await axios.get("https://anycode-sy.com/radar/api/stores");
-      return response.data;
+      return Array.isArray(response.data) ? response.data : response.data.data || [];
     },
   });
 
