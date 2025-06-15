@@ -64,7 +64,7 @@ export const api = {
         const { data } = await axios.get(`${API_BASE_URL}/stores`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        return data;
+        return Array.isArray(data) ? data : data.data || [];
     },
 
     getStore: async (id: string) => {

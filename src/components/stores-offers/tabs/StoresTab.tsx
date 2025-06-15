@@ -27,6 +27,9 @@ export const StoresTab: React.FC = () => {
         queryFn: api.getStores
     });
 
+
+    console.log("stores are : ", stores);
+
     const deleteMutation = useMutation({
         mutationFn: (id: string) => api.deleteStore(id),
         onSuccess: () => {
