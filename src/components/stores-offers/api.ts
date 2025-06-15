@@ -107,18 +107,21 @@ export const api = {
     getOffers: async (categoryId?: string, priceType?: string) => {
         const { token } = useStore.getState();
         const params = new URLSearchParams();
-        
+
         if (categoryId) params.append('categoryId', categoryId);
         if (priceType) params.append('priceType', priceType);
-        
+
         const queryString = params.toString();
-        const url = queryString 
+        const url = queryString
             ? `${API_BASE_URL}/offers?${queryString}`
             : `${API_BASE_URL}/offers`;
 
         const { data } = await axios.get(url, {
             headers: { Authorization: `Bearer ${token}` }
         });
+
+        console.log("the offers data are :  ", data);
+
         return Array.isArray(data) ? data : data.data || [];
     },
 
