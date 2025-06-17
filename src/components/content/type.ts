@@ -1,4 +1,4 @@
-export type ContentOwnerType  = "INDIVIDUAL"| "STORE"
+export type ContentOwnerType = "INDIVIDUAL" | "STORE"
 
 // Types
 export interface ContentFormData {
@@ -35,7 +35,7 @@ export interface MediaPreviewProps {
 
 export interface StatusMessageProps {
   type: "success" | "error" | "loading";
-  title: string;
+  title?: string;
   message: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any;

@@ -99,4 +99,19 @@ export const translations = {
     allCategories: 'جميع الفئات',
     noOffers: 'لا توجد عروض',
     errorOffers: 'خطأ في تحميل العروض',
+
+    // Store Categories
+    storeCategories: 'فئات المتاجر',
+    storeCategoriesTitle: 'إدارة فئات المتاجر',
+    addNewStoreCategory: 'إضافة فئة متجر جديدة',
+    noStoreCategories: 'لا توجد فئات متاجر',
+    categoryNamePlaceholder: 'اسم فئة المتجر',
+    addCategorySuccess: 'تمت إضافة الفئة بنجاح',
+    addCategoryError: 'فشل في إضافة الفئة',
+    updateCategorySuccess: 'تم تحديث الفئة بنجاح',
+    updateCategoryError: 'فشل في تحديث الفئة',
+    deleteCategorySuccess: 'تم حذف الفئة بنجاح',
+    deleteCategoryError: 'فشل في حذف الفئة',
+    name: 'الاسم',
+    actions: 'الإجراءات',
 };

@@ -3,7 +3,8 @@ import {
   Menu,
   Package,
   Store,
-  Tag
+  Tag,
+  Building2
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../stores-offers/Button';
@@ -12,10 +13,11 @@ import { OffersTab } from '../stores-offers/tabs/OffersTab';
 import { StoresTab } from '../stores-offers/tabs/StoresTab';
 import { translations } from '../stores-offers/translations';
 import { CategoriesTab } from '../stores-offers/tabs/CategoriesTab';
+import { StoreCategoriesTab } from '../stores-offers/tabs/StoreCategoriesTab';
 
 // Main Dashboard Page
 const StoresAndOffersPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'offers' | 'stores' | 'categories'>('offers');
+  const [activeTab, setActiveTab] = useState<'offers' | 'stores' | 'categories' | 'storeCategories'>('offers');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Detect mobile view
@@ -79,6 +81,12 @@ const StoresAndOffersPage: React.FC = () => {
               label={translations.categories}
               onClick={() => setActiveTab('categories')}
             />
+            <Tab
+              active={activeTab === 'storeCategories'}
+              icon={<Building2 size={18} />}
+              label={translations.storeCategories}
+              onClick={() => setActiveTab('storeCategories')}
+            />
           </div>
 
           {/* Mobile Navigation */}
@@ -114,6 +122,16 @@ const StoresAndOffersPage: React.FC = () => {
                 }}
                 mobileView={true}
               />
+              <Tab
+                active={activeTab === 'storeCategories'}
+                icon={<Building2 size={18} />}
+                label={translations.storeCategories}
+                onClick={() => {
+                  setActiveTab('storeCategories');
+                  setIsMobileMenuOpen(false);
+                }}
+                mobileView={true}
+              />
             </div>
           </div>
 
@@ -121,6 +139,7 @@ const StoresAndOffersPage: React.FC = () => {
             {activeTab === 'offers' && <OffersTab />}
             {activeTab === 'stores' && <StoresTab />}
             {activeTab === 'categories' && <CategoriesTab />}
+            {activeTab === 'storeCategories' && <StoreCategoriesTab />}
           </div>
         </div>
       </div>
