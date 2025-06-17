@@ -140,9 +140,7 @@ export const StoreCategoriesTab: React.FC = () => {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {translations.id}
-                                    </th>
+
                                     <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {translations.name}
                                     </th>
@@ -157,9 +155,7 @@ export const StoreCategoriesTab: React.FC = () => {
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {storeCategories?.map(category => (
                                     <tr key={category.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {category.id}
-                                        </td>
+
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {editingCategory?.id === category.id ? (
                                                 <Input
