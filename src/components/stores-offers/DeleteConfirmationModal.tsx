@@ -8,28 +8,38 @@ export const DeleteConfirmationModal: React.FC<{
     onClose: () => void;
     onConfirm: () => void;
     itemName: string;
-    itemType: 'category' | 'store' | 'offer';
+    itemType: 'category' | 'store' | 'offer' | 'store_category';
     isDeleting: boolean;
 }> = ({ isOpen, onClose, onConfirm, itemName, itemType, isDeleting }) => {
-    const typeTranslation =
-        itemType === 'category'
-            ? translations.categoriesTitle
-            : itemType === 'store'
-                ? translations.storesTitle
-                : translations.offersTitle;
+    const getTypeTranslation = (type: string) => {
+        switch (type) {
+            case 'category':
+                return translations.categoriesTitle || 'الفئة';
+            case 'store':
+                return translations.storesTitle || 'المتجر';
+            case 'offer':
+                return translations.offersTitle || 'العرض';
+            case 'store_category':
+                return 'فئة المتجر';
+            default:
+                return 'العنصر';
+        }
+    };
+
+    const typeTranslation = getTypeTranslation(itemType);
 
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={translations.confirmDelete}
+            title={translations.confirmDelete || 'تأكيد الحذف'}
         >
             <div className="text-right">
                 <p className="text-red-600 font-medium mb-2">
-                    {translations.deleteWarning}
+                    {translations.deleteWarning || 'تحذير: هذا الإجراء لا يمكن التراجع عنه'}
                 </p>
                 <p className="mb-6">
-                    {translations.sureDelete} {typeTranslation} "{itemName}"؟
+                    {translations.sureDelete || 'هل أنت متأكد من حذف'} {typeTranslation} "{itemName}"؟
                 </p>
                 <div className="flex justify-end gap-3 gap-reverse">
                     <Button
@@ -37,14 +47,14 @@ export const DeleteConfirmationModal: React.FC<{
                         onClick={onClose}
                         disabled={isDeleting}
                     >
-                        {translations.cancel}
+                        {translations.cancel || 'إلغاء'}
                     </Button>
                     <Button
                         variant="danger"
                         onClick={onConfirm}
                         disabled={isDeleting}
                     >
-                        {isDeleting ? '...' : translations.confirm}
+                        {isDeleting ? 'جاري الحذف...' : (translations.confirm || 'تأكيد')}
                     </Button>
                 </div>
             </div>

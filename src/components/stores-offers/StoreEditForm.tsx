@@ -1,9 +1,9 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { MapPin, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { api } from "./api";
 import { translations } from "./translations";
-import { Store } from "./types";
+import { Store, StoreCategory } from "./types";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import mapboxgl from "mapbox-gl";
@@ -25,9 +25,9 @@ const providenceTranslations = {
     SUWAYDA: "السويداء",
     QUNEITRA: "القنيطرة",
     RAQQAH: "الرقة"
-  };
+};
 
-// StoreEditForm component
+// StoreEditForm component with category support
 export const StoreEditForm: React.FC<{
     store: Store;
     onClose: () => void;
@@ -40,6 +40,7 @@ export const StoreEditForm: React.FC<{
         address: store.address,
         longitude: store.longitude,
         latitude: store.latitude,
+        categoryId: store.categoryId || '', // Add category field
     });
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(store.image || null);
@@ -50,6 +51,12 @@ export const StoreEditForm: React.FC<{
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const marker = useRef<mapboxgl.Marker | null>(null);
+
+    // Fetch store categories
+    const { data: categories } = useQuery<StoreCategory[]>({
+        queryKey: ['store-categories'],
+        queryFn: api.getStoreCategories
+    });
 
     const mutation = useMutation({
         mutationFn: (data: FormData) => api.updateStore(store.id, data),
@@ -209,6 +216,29 @@ export const StoreEditForm: React.FC<{
                     onChange={handleChange}
                     required
                 />
+
+                {/* Store Category Dropdown */}
+                <div className="w-full">
+                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                        فئة المتجر
+                    </label>
+                    <select
+                        id="categoryId"
+                        name="categoryId"
+                        value={formData.categoryId}
+                        onChange={(e) => setFormData(prev => ({ ...prev, categoryId: e.target.value }))}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        dir="rtl"
+                    >
+                        <option value="">اختر فئة المتجر (اختياري)</option>
+                        {categories?.filter(cat => cat.isActive).map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 <Input
                     label={translations.phone}
                     name="phone"
@@ -216,27 +246,27 @@ export const StoreEditForm: React.FC<{
                     onChange={handleChange}
                     required
                 />
-              <div className="w-full">
-  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
-    {translations.city} <span className="text-red-500">*</span>
-  </label>
-  <select
-    id="city"
-    name="city"
-    value={formData.city}
-    onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
-    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    required
-    dir="rtl"
-  >
-    <option value="" disabled>اختر المدينة</option>
-    {Object.entries(providenceTranslations).map(([value, label]) => (
-      <option key={value} value={value}>
-        {label}
-      </option>
-    ))}
-  </select>
-</div>
+                <div className="w-full">
+                    <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                        {translations.city} <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        required
+                        dir="rtl"
+                    >
+                        <option value="" disabled>اختر المدينة</option>
+                        {Object.entries(providenceTranslations).map(([value, label]) => (
+                            <option key={value} value={value}>
+                                {label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
                 <Input
                     label={translations.address}
                     name="address"

@@ -40,6 +40,17 @@ export interface Category {
     updatedAt?: string;
 }
 
+// Add StoreCategory interface
+export interface StoreCategory {
+    id: string;
+    name: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+    stores?: Store[];
+}
+
+// Update Store interface to include categoryId and category
 export interface Store {
     id: string;
     name: string;
@@ -49,6 +60,8 @@ export interface Store {
     longitude: string;
     latitude: string;
     image: string;
+    categoryId?: string | null;  // Add this field
+    category?: StoreCategory;     // Add this optional field
     createdAt?: string;
     updatedAt?: string;
 }
@@ -72,4 +85,3 @@ export interface Offer {
     store?: Store;
     category?: Category;
 }
-

@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { MapPin, Plus, X, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { api } from "./api";
@@ -8,11 +8,11 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { StoreCategory } from "./types";
 
 // Replace with your Mapbox API key
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibW9ra3MiLCJhIjoiY20zdno3MXl1MHozNzJxcXp5bmdvbTllYyJ9.Ed_O6F-c2IZJE9DoCyPZ2Q';
 mapboxgl.accessToken = MAPBOX_API_KEY;
-
 
 const providenceTranslations = {
     ALEPPO: "حلب",
@@ -28,7 +28,7 @@ const providenceTranslations = {
     RAQQAH: "الرقة"
 };
 
-// StoreForm component
+// StoreForm component with category support
 export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         name: '',
@@ -37,6 +37,7 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         address: '',
         longitude: '',
         latitude: '',
+        categoryId: '', // Add category field
     });
     // Phone input state
     const [isPhoneDropdownOpen, setIsPhoneDropdownOpen] = useState(false);
@@ -52,6 +53,12 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
     const map = useRef<mapboxgl.Map | null>(null);
     const marker = useRef<mapboxgl.Marker | null>(null);
     const phoneDropdownRef = useRef<HTMLDivElement>(null);
+
+    // Fetch store categories
+    const { data: categories } = useQuery<StoreCategory[]>({
+        queryKey: ['store-categories'],
+        queryFn: api.getStoreCategories
+    });
 
     // Country list with Arabic names
     const countries = [
@@ -95,6 +102,7 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 address: '',
                 longitude: '',
                 latitude: '',
+                categoryId: '', // Reset category
             });
             setImage(null);
             setImagePreview(null);
@@ -341,6 +349,29 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     onChange={handleChange}
                     required
                 />
+
+                {/* Store Category Dropdown */}
+                <div className="w-full">
+                    <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                        فئة المتجر
+                    </label>
+                    <select
+                        id="categoryId"
+                        name="categoryId"
+                        value={formData.categoryId}
+                        onChange={(e) => setFormData(prev => ({ ...prev, categoryId: e.target.value }))}
+                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        dir="rtl"
+                    >
+                        <option value="">اختر فئة المتجر (اختياري)</option>
+                        {categories?.filter(cat => cat.isActive).map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 {/* Phone Input with Country Code Selector */}
                 <div className="w-full">
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1 text-right">
@@ -392,9 +423,8 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                                     {countries.map((country) => (
                                         <div
                                             key={country.code}
-                                            className={`flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${
-                                                selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'
-                                            }`}
+                                            className={`flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'
+                                                }`}
                                             onClick={() => handleCountrySelect(country)}
                                         >
                                             <div className="flex items-center gap-1">
@@ -414,6 +444,7 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                         </div>
                     </div>
                 </div>
+
                 <div className="w-full">
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">
                         {translations.city} <span className="text-red-500">*</span>

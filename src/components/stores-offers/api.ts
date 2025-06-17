@@ -58,6 +58,53 @@ export const api = {
         return data;
     },
 
+    // Store Categories
+    getStoreCategories: async () => {
+        const { token } = useStore.getState();
+        const { data } = await axios.get(`${API_BASE_URL}/store-categories`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return Array.isArray(data) ? data : data.data || [];
+    },
+
+    getStoreCategory: async (id: string) => {
+        const { token } = useStore.getState();
+        const { data } = await axios.get(`${API_BASE_URL}/store-categories/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return data;
+    },
+
+    createStoreCategory: async (categoryData: { name: string; isActive?: boolean }) => {
+        const { token } = useStore.getState();
+        const { data } = await axios.post(`${API_BASE_URL}/store-categories`, categoryData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return data;
+    },
+
+    updateStoreCategory: async (id: string, categoryData: { name?: string; isActive?: boolean }) => {
+        const { token } = useStore.getState();
+        const { data } = await axios.put(`${API_BASE_URL}/store-categories/${id}`, categoryData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        return data;
+    },
+
+    deleteStoreCategory: async (id: string) => {
+        const { token } = useStore.getState();
+        const { data } = await axios.delete(`${API_BASE_URL}/store-categories/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        return data;
+    },
+
     // Stores
     getStores: async () => {
         const { token } = useStore.getState();

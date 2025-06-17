@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Building, Edit, Plus, ShoppingBag, Store as StoreIcon, Trash } from "lucide-react";
+import { Building, Edit, Plus, ShoppingBag, Store as StoreIcon, Trash, Tag, Filter } from "lucide-react";
 import { useState } from "react";
 import { api } from "../api";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
@@ -8,17 +8,18 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { StoreEditForm } from "../StoreEditForm";
 import { StoreForm } from "../StoreForm";
 import { translations } from "../translations";
-import { Store } from "../types";
+import { Store, StoreCategory } from "../types";
 import { Button } from "../Button";
 import { Card } from "../Card";
 import { Modal } from "../Modal";
 
-// Enhanced StoresTab component
+// Enhanced StoresTab component with categories
 export const StoresTab: React.FC = () => {
     const [showForm, setShowForm] = useState(false);
     const [selectedStore, setSelectedStore] = useState<Store | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('');
 
     const queryClient = useQueryClient();
 
@@ -27,6 +28,10 @@ export const StoresTab: React.FC = () => {
         queryFn: api.getStores
     });
 
+    const { data: categories } = useQuery<StoreCategory[]>({
+        queryKey: ['store-categories'],
+        queryFn: api.getStoreCategories
+    });
 
     console.log("stores are : ", stores);
 
@@ -55,6 +60,19 @@ export const StoresTab: React.FC = () => {
         }
     };
 
+    // Filter stores by category
+    const filteredStores = stores?.filter(store => {
+        if (!selectedCategoryFilter) return true;
+        return store.categoryId === selectedCategoryFilter;
+    });
+
+    // Get category name helper function
+    const getCategoryName = (categoryId: string | null) => {
+        if (!categoryId || !categories) return 'غير محدد';
+        const category = categories.find(cat => cat.id === categoryId);
+        return category?.name || 'غير محدد';
+    };
+
     return (
         <div dir="rtl">
             <div className="flex justify-between items-center mb-6">
@@ -68,6 +86,39 @@ export const StoresTab: React.FC = () => {
                 >
                     {showForm ? translations.hideForm : translations.addStore}
                 </Button>
+            </div>
+
+            {/* Category Filter */}
+            <div className="mb-6">
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center text-gray-700">
+                        <Filter className="w-4 h-4 mx-2" />
+                        <span className="text-sm font-medium">تصفية حسب الفئة:</span>
+                    </div>
+                    <select
+                        value={selectedCategoryFilter}
+                        onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+                        className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        dir="rtl"
+                    >
+                        <option value="">جميع الفئات</option>
+                        {categories?.filter(cat => cat.isActive).map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                        <option value="uncategorized">غير مصنف</option>
+                    </select>
+                    {selectedCategoryFilter && (
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => setSelectedCategoryFilter('')}
+                        >
+                            إزالة التصفية
+                        </Button>
+                    )}
+                </div>
             </div>
 
             {showForm && (
@@ -89,6 +140,9 @@ export const StoresTab: React.FC = () => {
                                         {translations.storeName}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
+                                        الفئة
+                                    </th>
+                                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
                                         {translations.city}
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">
@@ -103,11 +157,22 @@ export const StoresTab: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
-                                {stores && stores.length > 0 ? (
-                                    stores.map((store) => (
+                                {filteredStores && filteredStores.length > 0 ? (
+                                    filteredStores.map((store) => (
                                         <tr key={store.id} className="hover:bg-gray-50 transition-colors duration-150">
                                             <td className="py-4 pl-6 pr-3 text-sm font-medium text-gray-900 text-right">
                                                 {store.name}
+                                            </td>
+                                            <td className="px-3 py-4 text-sm text-gray-500 text-right">
+                                                <div className="flex items-center justify-end">
+                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${store.categoryId
+                                                        ? 'bg-blue-100 text-blue-800'
+                                                        : 'bg-gray-100 text-gray-800'
+                                                        }`}>
+                                                        <Tag className="w-3 h-3 ml-1" />
+                                                        {getCategoryName(store.categoryId ?? "")}
+                                                    </span>
+                                                </div>
                                             </td>
                                             <td className="px-3 py-4 text-sm text-gray-500 text-right">
                                                 {store.city}
@@ -142,8 +207,8 @@ export const StoresTab: React.FC = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={5} className="py-8 text-center text-gray-500">
-                                            {translations.noStores}
+                                        <td colSpan={6} className="py-8 text-center text-gray-500">
+                                            {selectedCategoryFilter ? 'لا توجد متاجر في هذه الفئة' : translations.noStores}
                                         </td>
                                     </tr>
                                 )}
@@ -153,8 +218,8 @@ export const StoresTab: React.FC = () => {
 
                     {/* Mobile Card View */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
-                        {stores && stores.length > 0 ? (
-                            stores.map((store) => (
+                        {filteredStores && filteredStores.length > 0 ? (
+                            filteredStores.map((store) => (
                                 <Card key={store.id}>
                                     <div className="flex justify-between items-start">
                                         <div className="flex gap-2">
@@ -174,6 +239,15 @@ export const StoresTab: React.FC = () => {
                                         <div className="flex-1 text-right">
                                             <h3 className="font-medium text-gray-900 mb-2">{store.name}</h3>
                                             <div className="space-y-1 text-sm">
+                                                <div className="flex items-center justify-end text-gray-600 mb-2">
+                                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${store.categoryId
+                                                        ? 'bg-blue-100 text-blue-800'
+                                                        : 'bg-gray-100 text-gray-800'
+                                                        }`}>
+                                                        <Tag className="w-3 h-3 ml-1" />
+                                                        {getCategoryName(store.categoryId ?? "")}
+                                                    </span>
+                                                </div>
                                                 <div className="flex items-center justify-end text-gray-600">
                                                     <span>{store.city}</span>
                                                     <Building className="w-4 h-4 mx-2 " />
@@ -192,7 +266,7 @@ export const StoresTab: React.FC = () => {
                             ))
                         ) : (
                             <div className="col-span-2 py-8 text-center text-gray-500">
-                                {translations.noStores}
+                                {selectedCategoryFilter ? 'لا توجد متاجر في هذه الفئة' : translations.noStores}
                             </div>
                         )}
                     </div>
