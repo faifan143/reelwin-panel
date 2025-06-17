@@ -61,7 +61,7 @@ export const api = {
     // Store Categories
     getStoreCategories: async () => {
         const { token } = useStore.getState();
-        const { data } = await axios.get(`${API_BASE_URL}/stores/store-categories`, {
+        const { data } = await axios.get(`${API_BASE_URL}/stores/store-categories/all`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return Array.isArray(data) ? data : data.data || [];
@@ -69,7 +69,7 @@ export const api = {
 
     getStoreCategory: async (id: string) => {
         const { token } = useStore.getState();
-        const { data } = await axios.get(`${API_BASE_URL}/stores/store-categories/${id}`, {
+        const { data } = await axios.get(`${API_BASE_URL}/stores/store-categories/find/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return data;
@@ -77,7 +77,7 @@ export const api = {
 
     createStoreCategory: async (categoryData: { name: string; isActive?: boolean }) => {
         const { token } = useStore.getState();
-        const { data } = await axios.post(`${API_BASE_URL}/stores/store-categories`, categoryData, {
+        const { data } = await axios.post(`${API_BASE_URL}/stores/store-categories/create`, categoryData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export const api = {
 
     updateStoreCategory: async (id: string, categoryData: { name?: string; isActive?: boolean }) => {
         const { token } = useStore.getState();
-        const { data } = await axios.put(`${API_BASE_URL}/stores/store-categories/${id}`, categoryData, {
+        const { data } = await axios.put(`${API_BASE_URL}/stores/store-categories/update/${id}`, categoryData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ export const api = {
 
     deleteStoreCategory: async (id: string) => {
         const { token } = useStore.getState();
-        const { data } = await axios.delete(`${API_BASE_URL}/stores/store-categories/${id}`, {
+        const { data } = await axios.delete(`${API_BASE_URL}/stores/store-categories/delete/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         return data;
