@@ -215,8 +215,10 @@ const RewardsTab: React.FC = () => {
                     </label>
                     <div className="flex justify-end gap-2">
                         <Button type="button" variant="secondary" onClick={resetAndCloseModal}>إلغاء</Button>
-                        <Button type="submit" variant="primary" loading={createMutation.isPending || updateMutation.isPending}>
-                            {selectedReward ? 'تحديث' : 'إضافة'}
+                        <Button type="submit" variant="primary" disabled={createMutation.isPending || updateMutation.isPending}>
+                            {createMutation.isPending || updateMutation.isPending
+                                ? 'جاري الحفظ...'
+                                : selectedReward ? 'تحديث' : 'إضافة'}
                         </Button>
                     </div>
                 </form>
