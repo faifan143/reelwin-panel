@@ -256,135 +256,137 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <StoreAuthProvider>
             <Layout className="min-h-screen">
-            {/* Modal for navigation warning */}
-            <Modal
-              title={
-                <div className="text-right font-bold text-red-600">تحذير</div>
-              }
-              open={!!attemptedNavigation}
-              onCancel={() => setAttemptedNavigation(null)}
-              footer={[
-                <Button
-                  key="back"
-                  onClick={() => setAttemptedNavigation(null)}
-                  className="bg-gray-200 hover:bg-gray-300"
-                >
-                  البقاء هنا
-                </Button>,
-              ]}
-              centered
-            >
-              <div className="text-right">
-                <p className="text-lg">جاري إضافة المحتوى...</p>
-                <p className="text-gray-600">
-                  لا يمكنك الانتقال إلى صفحة أخرى حتى يتم الانتهاء من العملية.
-                </p>
-              </div>
-            </Modal>
-
-            {/* Mobile Top Navbar */}
-            {isMobile && (
-              <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-blue-900 to-indigo-950 h-16 flex items-center px-4 shadow-lg">
-                <Button
-                  type="text"
-                  icon={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="white"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-6 h-6"
-                    >
-                      <line x1="4" y1="6" x2="20" y2="6"></line>
-                      <line x1="4" y1="12" x2="20" y2="12"></line>
-                      <line x1="4" y1="18" x2="20" y2="18"></line>
-                    </svg>
-                  }
-                  onClick={toggleMenu}
-                  className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${isAddingContent ? "opacity-50" : ""
-                    }`}
-                  disabled={isAddingContent}
-                />
-                <div className="flex items-center mx-4">
-                  <div className="flex flex-col">
-                    <h1 className="text-lg font-bold text-white m-0 leading-tight">
-                      Radar
-                    </h1>
-                    <span className="text-xs font-normal text-blue-200">
-                      لوحة الإدارة
-                    </span>
-                  </div>
+              {/* Modal for navigation warning */}
+              <Modal
+                title={
+                  <div className="text-right font-bold text-red-600">تحذير</div>
+                }
+                open={!!attemptedNavigation}
+                onCancel={() => setAttemptedNavigation(null)}
+                footer={[
+                  <Button
+                    key="back"
+                    onClick={() => setAttemptedNavigation(null)}
+                    className="bg-gray-200 hover:bg-gray-300"
+                  >
+                    البقاء هنا
+                  </Button>,
+                ]}
+                centered
+              >
+                <div className="text-right">
+                  <p className="text-lg">جاري إضافة المحتوى...</p>
+                  <p className="text-gray-600">
+                    لا يمكنك الانتقال إلى صفحة أخرى حتى يتم الانتهاء من العملية.
+                  </p>
                 </div>
+              </Modal>
 
-                {/* Show a loading indicator in the mobile header when content is being added */}
-                {isAddingContent && (
-                  <div className="mx-auto flex items-center">
-                    <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mx-2"></div>
-                    <span className="text-yellow-200 text-xs">
-                      جاري الإضافة...
-                    </span>
+              {/* Mobile Top Navbar */}
+              {isMobile && (
+                <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-blue-900 to-indigo-950 h-16 flex items-center px-4 shadow-lg">
+                  <Button
+                    type="text"
+                    icon={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-6 h-6"
+                      >
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                      </svg>
+                    }
+                    onClick={toggleMenu}
+                    className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${isAddingContent ? "opacity-50" : ""
+                      }`}
+                    disabled={isAddingContent}
+                  />
+                  <div className="flex items-center mx-4">
+                    <div className="flex flex-col">
+                      <h1 className="text-lg font-bold text-white m-0 leading-tight">
+                        Radar
+                      </h1>
+                      <span className="text-xs font-normal text-blue-200">
+                        لوحة الإدارة
+                      </span>
+                    </div>
                   </div>
-                )}
-              </div>
-            )}
 
-            {/* Mobile Drawer with improved animation */}
-            {isMobile ? (
-              <Drawer
-                placement="right"
-                onClose={() => {
-                  if (!isAddingContent) {
-                    setDrawerVisible(false);
-                  }
+                  {/* Show a loading indicator in the mobile header when content is being added */}
+                  {isAddingContent && (
+                    <div className="mx-auto flex items-center">
+                      <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mx-2"></div>
+                      <span className="text-yellow-200 text-xs">
+                        جاري الإضافة...
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Mobile Drawer with improved animation */}
+              {isMobile ? (
+                <Drawer
+                  placement="right"
+                  onClose={() => {
+                    if (!isAddingContent) {
+                      setDrawerVisible(false);
+                    }
+                  }}
+                  open={drawerVisible}
+                  width={280}
+                  styles={{
+                    body: { padding: 0 },
+                    header: { display: "none" }
+                  }} className="sidebar-drawer"
+                  maskClosable={!isAddingContent}
+                >
+                  <Sidebar />
+                </Drawer>
+              ) : (
+                /* Desktop Sidebar with subtle shadow and smoother transition */
+                <div
+                  className="fixed right-0 top-0 h-full transition-all duration-300 ease-in-out z-40 shadow-xl"
+                  style={{ width: "280px" }} // Always use full width for desktop
+                >
+                  <Sidebar />
+                </div>
+              )}
+
+              {/* Main Content with improved styling */}
+              <Layout
+                style={{
+                  marginRight: isMobile ? 0 : 280, // Increased width for desktop
+                  marginTop: isMobile ? 64 : 0,
+                  transition: "margin 0.3s ease",
+                  background: "#f5f7fa",
                 }}
-                open={drawerVisible}
-                width={280}
-                styles={{
-                  body: { padding: 0 },
-                  header: { display: "none" }
-                }} className="sidebar-drawer"
-                maskClosable={!isAddingContent}
               >
-                <Sidebar />
-              </Drawer>
-            ) : (
-              /* Desktop Sidebar with subtle shadow and smoother transition */
-              <div
-                className="fixed right-0 top-0 h-full transition-all duration-300 ease-in-out z-40 shadow-xl"
-                style={{ width: "280px" }} // Always use full width for desktop
-              >
-                <Sidebar />
-              </div>
-            )}
-
-            {/* Main Content with improved styling */}
-            <Layout
-              style={{
-                marginRight: isMobile ? 0 : 280, // Increased width for desktop
-                marginTop: isMobile ? 64 : 0,
-                transition: "margin 0.3s ease",
-                background: "#f5f7fa",
-              }}
-            >
-              <Content className="m-4 sm:m-6 p-6 bg-white rounded-xl shadow-sm">
-                {activeTab === "content" && <AdminPage />}
-                {activeTab === "content-management" && (
-                  <ContentManagementPage />
-                )}
-                {/* New content management tab */}
-                {activeTab === "interests" && <ManageInterests />}
-                {activeTab === "generate-gem" && <GemsVersionsManager />}
-                {activeTab === "rewards" && <RewardsManagementPage />}
-                {activeTab === "stores" && <StoresAndOffersPage />}
-              </Content>
+                <Content className="m-4 sm:m-6 p-6 bg-white rounded-xl shadow-sm">
+                  {activeTab === "content" && <AdminPage />}
+                  {activeTab === "content-management" && (
+                    <ContentManagementPage />
+                  )}
+                  {/* New content management tab */}
+                  {activeTab === "interests" && <ManageInterests />}
+                  {activeTab === "generate-gem" && <GemsVersionsManager />}
+                  {activeTab === "rewards" && <RewardsManagementPage />}
+                  {activeTab === "stores" && <StoresAndOffersPage />}
+                </Content>
+              </Layout>
             </Layout>
-          </Layout>
-          <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools initialIsOpen={false} />
+
+          </StoreAuthProvider>
         </QueryClientProvider>
         {/* Global styles for better animations */}
         <style jsx global>{`

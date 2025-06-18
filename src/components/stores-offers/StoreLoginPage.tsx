@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Card, Form, Input, Button, message } from "antd";
 import { useStoreAuth } from "./StoreAuthContext";
 import { requestStoreOtp, verifyStoreOtp } from "./storeAuthApi";
+import { useRouter } from "next/navigation";
 
 const StoreLoginPage = () => {
   const [step, setStep] = useState<"phone" | "otp">("phone");
@@ -10,6 +11,7 @@ const StoreLoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const { login } = useStoreAuth();
+  const router = useRouter();
 
   const handleRequestOtp = async () => {
     setLoading(true);
@@ -31,7 +33,7 @@ const StoreLoginPage = () => {
       const { token, store } = res.data;
       login(token, store);
       message.success("تم تسجيل الدخول بنجاح");
-      // Redirect or update UI as needed
+      router.replace("/store-auth/rewards");
     } catch (e) {
       message.error("رمز التحقق غير صحيح أو منتهي الصلاحية.");
     } finally {
@@ -48,7 +50,7 @@ const StoreLoginPage = () => {
           </h2>
           {step === "phone" && (
             <Form onFinish={handleRequestOtp} layout="vertical">
-              <Form.Item name="phone" rules={[{ required: true, message: "الرجاء إدخال رقم الهاتف" }]}> 
+              <Form.Item name="phone" rules={[{ required: true, message: "الرجاء إدخال رقم الهاتف" }]}>
                 <Input
                   placeholder="رقم الهاتف"
                   size="large"
@@ -66,7 +68,7 @@ const StoreLoginPage = () => {
           )}
           {step === "otp" && (
             <Form onFinish={handleVerifyOtp} layout="vertical">
-              <Form.Item name="otp" rules={[{ required: true, message: "الرجاء إدخال رمز التحقق" }]}> 
+              <Form.Item name="otp" rules={[{ required: true, message: "الرجاء إدخال رمز التحقق" }]}>
                 <Input
                   placeholder="رمز التحقق"
                   size="large"

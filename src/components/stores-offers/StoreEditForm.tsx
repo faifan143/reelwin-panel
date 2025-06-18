@@ -3,7 +3,7 @@ import { MapPin, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { api } from "./api";
 import { translations } from "./translations";
-import { Store, StoreCategory } from "./types";
+import { Category, Store } from "./types";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import mapboxgl from "mapbox-gl";
@@ -40,14 +40,13 @@ export const StoreEditForm: React.FC<{
         address: store.address,
         longitude: store.longitude,
         latitude: store.latitude,
-        categoryId: store.categoryId || '', // Add category field
+        categoryId: store.categoryId || '',
         menuUrl: store.menuUrl || '',
         facebookUrl: store.facebookUrl || '',
         instagramUrl: store.instagramUrl || '',
     });
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(store.image || null);
-    const [originalImage, setOriginalImage] = useState<string | null>(store.image || null);
     const [imageRemoved, setImageRemoved] = useState(false);
 
     const queryClient = useQueryClient();
@@ -56,7 +55,7 @@ export const StoreEditForm: React.FC<{
     const marker = useRef<mapboxgl.Marker | null>(null);
 
     // Fetch unified offer categories
-    const { data: categories } = useQuery({
+    const { data: categories } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: api.getCategories
     });
@@ -256,7 +255,7 @@ export const StoreEditForm: React.FC<{
                         dir="rtl"
                     >
                         <option value="">اختر فئة المتجر (اختياري)</option>
-                        {categories?.filter(cat => cat.isActive).map((category) => (
+                        {categories?.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>

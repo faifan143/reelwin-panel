@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { RewardStatus, UserReward } from '../rewards-managment/types';

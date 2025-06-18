@@ -64,6 +64,9 @@ export interface Store {
     category?: StoreCategory;     // Add this optional field
     createdAt?: string;
     updatedAt?: string;
+    menuUrl?: string;
+    facebookUrl?: string;
+    instagramUrl?: string;
 }
 
 export interface Offer {

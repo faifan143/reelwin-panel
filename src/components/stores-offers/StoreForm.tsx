@@ -8,7 +8,7 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { StoreCategory } from "./types";
+import { Category, StoreCategory } from "./types";
 
 // Replace with your Mapbox API key
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibW9ra3MiLCJhIjoiY20zdno3MXl1MHozNzJxcXp5bmdvbTllYyJ9.Ed_O6F-c2IZJE9DoCyPZ2Q';
@@ -58,7 +58,7 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
     const phoneDropdownRef = useRef<HTMLDivElement>(null);
 
     // Fetch unified offer categories
-    const { data: categories } = useQuery({
+    const { data: categories } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: api.getCategories
     });
@@ -392,7 +392,7 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                         dir="rtl"
                     >
                         <option value="">اختر فئة المتجر (اختياري)</option>
-                        {categories?.filter(cat => cat.isActive).map((category) => (
+                        {categories?.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>
