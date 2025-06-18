@@ -55,6 +55,7 @@ export interface CreateRewardDto {
     pointsCost: number;
     categoryId: string;
     isActive?: boolean;
+    storeId?: string;
 }
 
 export interface UpdateRewardDto {

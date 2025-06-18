@@ -17,6 +17,7 @@ const RewardsTab: React.FC = () => {
         pointsCost: 0,
         categoryId: '',
         isActive: true,
+        storeId: '',
     });
 
     // Get all rewards and categories
@@ -28,6 +29,12 @@ const RewardsTab: React.FC = () => {
     const { data: categories = [], isLoading: isLoadingCategories } = useQuery({
         queryKey: ['categories'],
         queryFn: () => getCategories(),
+    });
+
+    // Fetch stores for the dropdown
+    const { data: stores = [], isLoading: isLoadingStores } = useQuery({
+        queryKey: ['stores'],
+        queryFn: () => import('../../stores-offers/api').then(m => m.api.getStores()),
     });
 
     // Mutations
@@ -93,12 +100,18 @@ const RewardsTab: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // Only send storeId if selected
+        const dataToSend = { ...formData };
+        if (!dataToSend.storeId) {
+            delete dataToSend.storeId;
+        }
         if (selectedReward) {
-            updateMutation.mutate({ id: selectedReward.id, data: formData });
+            updateMutation.mutate({ id: selectedReward.id, data: dataToSend });
         } else {
-            createMutation.mutate(formData as CreateRewardDto);
+            createMutation.mutate(dataToSend as CreateRewardDto);
         }
     };
+
 
     const handleDelete = (id: string) => {
         if (window.confirm('هل أنت متأكد من حذف هذه المكافأة؟')) {
@@ -136,6 +149,78 @@ const RewardsTab: React.FC = () => {
                     إضافة مكافأة
                 </Button>
             </div>
+
+            {/* Reward Form Modal */}
+            <Modal isOpen={isModalOpen} onClose={resetAndCloseModal} title={selectedReward ? 'تعديل مكافأة' : 'إضافة مكافأة'}>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        type="text"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        placeholder="عنوان المكافأة"
+                        className="w-full border rounded p-2"
+                        required
+                    />
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleInputChange}
+                        placeholder="وصف المكافأة"
+                        className="w-full border rounded p-2"
+                        required
+                    />
+                    <input
+                        type="number"
+                        name="pointsCost"
+                        value={formData.pointsCost}
+                        onChange={handleInputChange}
+                        placeholder="تكلفة النقاط"
+                        className="w-full border rounded p-2"
+                        required
+                    />
+                    <select
+                        name="categoryId"
+                        value={formData.categoryId}
+                        onChange={handleInputChange}
+                        className="w-full border rounded p-2"
+                        required
+                    >
+                        <option value="">اختر الفئة</option>
+                        {categories.map((cat: any) => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                    </select>
+                    {/* Store select (optional) */}
+                    <select
+                        name="storeId"
+                        value={formData.storeId || ''}
+                        onChange={handleInputChange}
+                        className="w-full border rounded p-2"
+                    >
+                        <option value="">بدون متجر (اختياري)</option>
+                        {stores.map((store: any) => (
+                            <option key={store.id} value={store.id}>{store.name}</option>
+                        ))}
+                    </select>
+                    <label className="flex items-center">
+                        <input
+                            type="checkbox"
+                            name="isActive"
+                            checked={!!formData.isActive}
+                            onChange={handleInputChange}
+                            className="mr-2"
+                        />
+                        مفعل
+                    </label>
+                    <div className="flex justify-end gap-2">
+                        <Button type="button" variant="secondary" onClick={resetAndCloseModal}>إلغاء</Button>
+                        <Button type="submit" variant="primary" loading={createMutation.isPending || updateMutation.isPending}>
+                            {selectedReward ? 'تحديث' : 'إضافة'}
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
 
             {/* Desktop Table View */}
             <div className="hidden md:block overflow-hidden shadow-md rounded-lg">
