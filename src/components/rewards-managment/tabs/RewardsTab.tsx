@@ -412,6 +412,25 @@ const RewardsTab: React.FC = () => {
                             </select>
                         </div>
 
+
+                        <div>
+                            <div className="block text-sm font-medium text-gray-700 mb-1">
+                                الفئة
+                            </div>
+                            {/* Store select (optional) */}
+                            <select
+                                name="storeId"
+                                value={formData.storeId || ''}
+                                onChange={handleInputChange}
+                                className="w-full border rounded p-2"
+                            >
+                                <option value="">بدون متجر (اختياري)</option>
+                                {stores.map((store: any) => (
+                                    <option key={store.id} value={store.id}>{store.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
                         <div className="flex items-center">
                             <input
                                 type="checkbox"
