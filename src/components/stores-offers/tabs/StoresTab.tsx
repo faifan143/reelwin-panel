@@ -8,7 +8,7 @@ import { LoadingSpinner } from "../LoadingSpinner";
 import { StoreEditForm } from "../StoreEditForm";
 import { StoreForm } from "../StoreForm";
 import { translations } from "../translations";
-import { Store, StoreCategory } from "../types";
+import { Category, Store, StoreCategory } from "../types";
 import { Button } from "../Button";
 import { Card } from "../Card";
 import { Modal } from "../Modal";
@@ -28,9 +28,9 @@ export const StoresTab: React.FC = () => {
         queryFn: api.getStores
     });
 
-    const { data: categories } = useQuery<StoreCategory[]>({
+    const { data: categories } = useQuery<Category[]>({
         queryKey: ['store-categories'],
-        queryFn: api.getStoreCategories
+        queryFn: api.getCategories
     });
 
     console.log("stores are : ", stores);
@@ -102,7 +102,7 @@ export const StoresTab: React.FC = () => {
                         dir="rtl"
                     >
                         <option value="">جميع الفئات</option>
-                        {categories?.filter(cat => cat.isActive).map((category) => (
+                        {categories?.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>

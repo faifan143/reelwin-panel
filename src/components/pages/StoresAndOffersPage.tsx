@@ -81,12 +81,6 @@ const StoresAndOffersPage: React.FC = () => {
               label={translations.categories}
               onClick={() => setActiveTab('categories')}
             />
-            <Tab
-              active={activeTab === 'storeCategories'}
-              icon={<Building2 size={18} />}
-              label={translations.storeCategories}
-              onClick={() => setActiveTab('storeCategories')}
-            />
           </div>
 
           {/* Mobile Navigation */}
