@@ -41,6 +41,9 @@ export const StoreEditForm: React.FC<{
         longitude: store.longitude,
         latitude: store.latitude,
         categoryId: store.categoryId || '', // Add category field
+        menuUrl: store.menuUrl || '',
+        facebookUrl: store.facebookUrl || '',
+        instagramUrl: store.instagramUrl || '',
     });
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(store.image || null);
@@ -52,10 +55,10 @@ export const StoreEditForm: React.FC<{
     const map = useRef<mapboxgl.Map | null>(null);
     const marker = useRef<mapboxgl.Marker | null>(null);
 
-    // Fetch store categories
-    const { data: categories } = useQuery<StoreCategory[]>({
-        queryKey: ['store-categories'],
-        queryFn: api.getStoreCategories
+    // Fetch unified offer categories
+    const { data: categories } = useQuery({
+        queryKey: ['categories'],
+        queryFn: api.getCategories
     });
 
     const mutation = useMutation({
@@ -209,6 +212,28 @@ export const StoreEditForm: React.FC<{
     return (
         <div>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4" dir="rtl">
+                {/* New Optional Fields */}
+                <Input
+                    label="رابط قائمة الطعام (Menu URL)"
+                    name="menuUrl"
+                    value={formData.menuUrl}
+                    onChange={handleChange}
+                    placeholder="https://..."
+                />
+                <Input
+                    label="رابط فيسبوك (Facebook URL)"
+                    name="facebookUrl"
+                    value={formData.facebookUrl}
+                    onChange={handleChange}
+                    placeholder="https://facebook.com/..."
+                />
+                <Input
+                    label="رابط انستغرام (Instagram URL)"
+                    name="instagramUrl"
+                    value={formData.instagramUrl}
+                    onChange={handleChange}
+                    placeholder="https://instagram.com/..."
+                />
                 <Input
                     label={translations.storeName}
                     name="name"

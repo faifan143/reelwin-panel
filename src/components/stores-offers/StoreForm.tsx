@@ -38,6 +38,9 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         longitude: '',
         latitude: '',
         categoryId: '', // Add category field
+        menuUrl: '',
+        facebookUrl: '',
+        instagramUrl: '',
     });
     // Phone input state
     const [isPhoneDropdownOpen, setIsPhoneDropdownOpen] = useState(false);
@@ -54,10 +57,10 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
     const marker = useRef<mapboxgl.Marker | null>(null);
     const phoneDropdownRef = useRef<HTMLDivElement>(null);
 
-    // Fetch store categories
-    const { data: categories } = useQuery<StoreCategory[]>({
-        queryKey: ['store-categories'],
-        queryFn: api.getStoreCategories
+    // Fetch unified offer categories
+    const { data: categories } = useQuery({
+        queryKey: ['categories'],
+        queryFn: api.getCategories
     });
 
     // Country list with Arabic names
@@ -103,6 +106,9 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 longitude: '',
                 latitude: '',
                 categoryId: '', // Reset category
+                menuUrl: '',
+                facebookUrl: '',
+                instagramUrl: '',
             });
             setImage(null);
             setImagePreview(null);
@@ -342,6 +348,28 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 {translations.addNewStore}
             </h3>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" dir="rtl">
+                {/* New Optional Fields */}
+                <Input
+                    label="رابط قائمة الطعام (Menu URL)"
+                    name="menuUrl"
+                    value={formData.menuUrl}
+                    onChange={handleChange}
+                    placeholder="https://..."
+                />
+                <Input
+                    label="رابط فيسبوك (Facebook URL)"
+                    name="facebookUrl"
+                    value={formData.facebookUrl}
+                    onChange={handleChange}
+                    placeholder="https://facebook.com/..."
+                />
+                <Input
+                    label="رابط انستغرام (Instagram URL)"
+                    name="instagramUrl"
+                    value={formData.instagramUrl}
+                    onChange={handleChange}
+                    placeholder="https://instagram.com/..."
+                />
                 <Input
                     label={translations.storeName}
                     name="name"

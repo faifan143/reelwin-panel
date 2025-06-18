@@ -25,6 +25,8 @@ import StoresAndOffersPage from "@/components/pages/StoresAndOffersPage";
 
 const { Content } = Layout;
 
+import { StoreAuthProvider } from "@/components/stores-offers/StoreAuthContext";
+
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
   const [collapsed, setCollapsed] = useState(false);
@@ -134,12 +136,18 @@ export default function RootLayout() {
   };
 
   // // If not authenticated, render login page
+  // Store owner login page (OTP-based)
+  // TODO: Route to this page for store owners, or add a switch between admin/store login as needed
+  // Example: if (storeLoginRoute) { ... }
+
   if (!isAuthenticated) {
     return (
       <html lang="ar" dir="rtl">
         <body>
           <QueryClientProvider client={queryClient}>
-            <LoginPage />
+            <StoreAuthProvider>
+              <LoginPage />
+            </StoreAuthProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </body>
@@ -246,7 +254,8 @@ export default function RootLayout() {
     <html lang="ar" dir="rtl">
       <body className="bg-gray-100">
         <QueryClientProvider client={queryClient}>
-          <Layout className="min-h-screen">
+          <StoreAuthProvider>
+            <Layout className="min-h-screen">
             {/* Modal for navigation warning */}
             <Modal
               title={
