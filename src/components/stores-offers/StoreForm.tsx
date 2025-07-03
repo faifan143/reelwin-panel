@@ -401,77 +401,13 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 </div>
 
                 {/* Phone Input with Country Code Selector */}
-                <div className="w-full">
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1 text-right">
-                        {translations.phone} <span className="text-red-500">*</span>
-                    </label>
-                    <div className="phone-input-rtl">
-                        <div className="relative w-full" ref={phoneDropdownRef}>
-                            {/* Main phone input container */}
-                            <div className="border border-gray-300 rounded-lg overflow-hidden transition-all">
-                                <div className="flex items-center h-12">
-                                    {/* Country selector area */}
-                                    <button
-                                        type="button"
-                                        className="flex items-center gap-1 px-3 py-3 border-r border-gray-300 h-full focus:outline-none hover:bg-gray-50 transition-colors"
-                                        onClick={() => setIsPhoneDropdownOpen(!isPhoneDropdownOpen)}
-                                    >
-                                        <div className="flex items-center mr-2">
-                                            <FlagIcon countryCode={selectedCountry.code} className="w-6 h-4" />
-                                        </div>
-                                        <span className="text-sm font-medium">{selectedCountry.code}</span>
-                                        <svg className="h-4 w-4 text-gray-500 ml-2 transition-transform" style={{ transform: isPhoneDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-
-                                    {/* Phone input field */}
-                                    <div className="flex-grow">
-                                        <input
-                                            type="tel"
-                                            value={formData.phone?.replace(selectedCountry.dialCode, "") || ""}
-                                            onChange={handlePhoneChange}
-                                            className="w-full h-full p-4 focus:outline-none text-base bg-transparent"
-                                            dir="ltr"
-                                            placeholder="مثال: 998419869"
-                                            required
-                                        />
-                                    </div>
-
-                                    {/* Country code display on the right */}
-                                    <div className="px-4 text-base font-medium text-gray-600">
-                                        {selectedCountry.dialCode}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Custom dropdown */}
-                            {isPhoneDropdownOpen && (
-                                <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                                    {countries.map((country) => (
-                                        <div
-                                            key={country.code}
-                                            className={`flex items-center justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'
-                                                }`}
-                                            onClick={() => handleCountrySelect(country)}
-                                        >
-                                            <div className="flex items-center gap-1">
-                                                <div className="flex items-center mr-3">
-                                                    <FlagIcon countryCode={country.code} className="w-6 h-4" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="font-medium">{country.name}</span>
-                                                    <span className="text-sm text-gray-500">{country.dialCode}</span>
-                                                </div>
-                                            </div>
-                                            <span className="text-sm font-mono text-gray-400">{country.code}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <PhoneInputWithCountryCode
+                    value={formData.phone}
+                    onChange={val => setFormData(prev => ({ ...prev, phone: val }))}
+                    countries={countries}
+                    label={translations.phone}
+                    required
+                />
 
                 <div className="w-full">
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1 text-right">

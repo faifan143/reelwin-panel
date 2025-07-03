@@ -1,4 +1,3 @@
-
 // api.ts
 import useStore from '@/store';
 import axios from 'axios';
@@ -97,4 +96,15 @@ export const getAllUserRewards = async (): Promise<UserReward[]> => {
 export const updateUserRewardStatus = async (id: string, data: UpdateUserRewardStatusDto): Promise<UserReward> => {
     const response = await api.put(`/rewards/admin/purchases/${id}/status`, data);
     return response.data;
+};
+
+export const deleteCategoryAndRewards = async (category: Category): Promise<void> => {
+    // Delete all rewards in the category first
+    if (category.rewards && category.rewards.length > 0) {
+        for (const reward of category.rewards) {
+            await deleteReward(reward.id);
+        }
+    }
+    // Then delete the category
+    await deleteCategory(category.id);
 };

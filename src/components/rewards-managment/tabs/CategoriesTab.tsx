@@ -8,7 +8,7 @@ import {
 
     Category, CreateCategoryDto, UpdateCategoryDto
 } from '../types';
-import { getCategories, createCategory, updateCategory, deleteCategory } from '../api';
+import { getCategories, createCategory, updateCategory, deleteCategory, deleteCategoryAndRewards } from '../api';
 
 const CategoriesTab: React.FC = () => {
     const queryClient = useQueryClient();
@@ -87,8 +87,19 @@ const CategoriesTab: React.FC = () => {
     };
 
     const handleDelete = (id: string) => {
-        if (window.confirm('هل أنت متأكد من حذف هذه الفئة؟')) {
-            deleteMutation.mutate(id);
+        const category = categories.find((cat) => cat.id === id);
+        if (!category) return;
+        if (category.rewards && category.rewards.length > 0) {
+            if (window.confirm('هذه الفئة تحتوي على مكافآت. هل أنت متأكد أنك تريد حذف الفئة وجميع مكافآتها؟')) {
+                deleteCategoryAndRewards(category).then(() => {
+                    queryClient.invalidateQueries({ queryKey: ['categories'] });
+                });
+            }
+        } else {
+            if (window.confirm('هل أنت متأكد من حذف هذه الفئة؟')) {
+                deleteCategory(id);
+                queryClient.invalidateQueries({ queryKey: ['categories'] });
+            }
         }
     };
 
@@ -169,7 +180,6 @@ const CategoriesTab: React.FC = () => {
                                             size="sm"
                                             icon={<Trash size={16} />}
                                             onClick={() => handleDelete(category.id)}
-                                            disabled={category.rewards && category.rewards.length > 0}
                                         >
                                             حذف
                                         </Button>
@@ -211,7 +221,6 @@ const CategoriesTab: React.FC = () => {
                                 fullWidth
                                 icon={<Trash size={16} />}
                                 onClick={() => handleDelete(category.id)}
-                                disabled={category.rewards && category.rewards.length > 0}
                             >
                                 حذف
                             </Button>
