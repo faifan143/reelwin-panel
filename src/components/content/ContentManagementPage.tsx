@@ -289,7 +289,7 @@ export default function ContentManagementPage() {
       storeId: content.storeId || "",
       intervalHours: content.intervalHours,
       endValidationDate: formattedDate,
-      interestIds: content.interests.map((interest) => interest.id),
+      interestIds: (content.interests || []).map((interest) => interest.id),
       type: content.type,
     });
 
@@ -521,7 +521,7 @@ export default function ContentManagementPage() {
                               {content.description}
                             </div>
                             <div className="mt-1 flex flex-wrap gap-1">
-                              {content.interests.map((interest) => (
+                              {(content.interests || []).map((interest) => (
                                 <span
                                   key={interest.id}
                                   className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
@@ -692,7 +692,7 @@ export default function ContentManagementPage() {
 
                   {/* Tags/Interests */}
                   <div className="flex flex-wrap gap-1 mb-3">
-                    {content.interests.map((interest) => (
+                    {(content.interests || []).map((interest) => (
                       <span
                         key={interest.id}
                         className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
