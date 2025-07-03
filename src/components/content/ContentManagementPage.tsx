@@ -126,7 +126,7 @@ export default function ContentManagementPage() {
     queryKey: ["stores"],
     queryFn: async () => {
       const response = await axios.get("https://anycode-sy.com/radar/api/stores");
-      return response.data as Store[];
+      return response.data.data as Store[];
     },
   });
 
