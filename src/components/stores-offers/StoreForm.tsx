@@ -9,6 +9,7 @@ import { Button } from "./Button";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Category, StoreCategory } from "./types";
+import PhoneInputWithCountryCode from "./PhoneInputWithCountryCode";
 
 // Replace with your Mapbox API key
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibW9ra3MiLCJhIjoiY20zdno3MXl1MHozNzJxcXp5bmdvbTllYyJ9.Ed_O6F-c2IZJE9DoCyPZ2Q';
@@ -404,7 +405,6 @@ export const StoreForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 <PhoneInputWithCountryCode
                     value={formData.phone}
                     onChange={val => setFormData(prev => ({ ...prev, phone: val }))}
-                    countries={countries}
                     label={translations.phone}
                     required
                 />
