@@ -57,7 +57,9 @@ export default function AdminPage() {
   const { data: interests, isLoading: interestsLoading } = useQuery<Interest[]>({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       return response.data;
     },
   });
@@ -65,7 +67,9 @@ export default function AdminPage() {
   const { data: stores, isLoading: storesLoading } = useQuery<Store[]>({
     queryKey: ["stores"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/radar/api/stores");
+      const response = await axios.get("https://anycode-sy.com/radar/api/stores", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       return Array.isArray(response.data) ? response.data : response.data.data || [];
     },
   });

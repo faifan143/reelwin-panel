@@ -125,7 +125,9 @@ export default function ContentManagementPage() {
   const { data: stores } = useQuery({
     queryKey: ["stores"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/radar/api/stores");
+      const response = await axios.get("https://anycode-sy.com/radar/api/stores", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       return response.data.data as Store[];
     },
   });
@@ -184,7 +186,9 @@ export default function ContentManagementPage() {
   const { data: interests } = useQuery({
     queryKey: ["interests"],
     queryFn: async () => {
-      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list");
+      const response = await axios.get("https://anycode-sy.com/radar/api/interests/list", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       return response.data as Interest[];
     },
   });

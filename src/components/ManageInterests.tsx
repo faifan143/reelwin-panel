@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Form, message } from "antd";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import useStore from "@/store";
 
 // Components
 import InterestTableView from "./interests/InterestTableView";
@@ -17,7 +18,10 @@ import { Interest } from "./interests/types";
 
 // API functions
 const fetchInterests = async (): Promise<Interest[]> => {
-  const response = await axios.get("https://anycode-sy.com/radar/api/interests");
+  const { token } = useStore.getState();
+  const response = await axios.get("https://anycode-sy.com/radar/api/interests", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return response.data;
 };
 
@@ -50,8 +54,12 @@ const ManageInterests: React.FC = () => {
   });
 
   const addInterestMutation = useMutation({
-    mutationFn: (newInterest: Omit<Interest, "id">) =>
-      axios.post("https://anycode-sy.com/radar/api/interests", newInterest),
+    mutationFn: (newInterest: Omit<Interest, "id">) => {
+      const { token } = useStore.getState();
+      return axios.post("https://anycode-sy.com/radar/api/interests", newInterest, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
@@ -77,7 +85,12 @@ const ManageInterests: React.FC = () => {
     }: {
       id: string;
       updatedInterest: Partial<Interest>;
-    }) => axios.put(`https://anycode-sy.com/radar/api/interests/${id}`, updatedInterest),
+    }) => {
+      const { token } = useStore.getState();
+      return axios.put(`https://anycode-sy.com/radar/api/interests/${id}`, updatedInterest, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
@@ -97,7 +110,12 @@ const ManageInterests: React.FC = () => {
   });
 
   const deleteInterestMutation = useMutation({
-    mutationFn: (id: string) => axios.delete(`https://anycode-sy.com/radar/api/interests/${id}`),
+    mutationFn: (id: string) => {
+      const { token } = useStore.getState();
+      return axios.delete(`https://anycode-sy.com/radar/api/interests/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["interests"] });
       message.success({
