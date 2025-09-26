@@ -1,21 +1,52 @@
-import React, { useState } from 'react';
-import { QrCode, Package, Search, Filter, Plus, Download, RefreshCw, Gift, Eye, Edit, Trash2, Check, X, Users } from 'lucide-react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { QrCodeType, QrStatus, QrCodeWithScans, CreateQrCodeDto } from '../types';
-import { getAllQrCodes, activateQrCode, deactivateQrCode, deleteQrCode, selectRandomWinner, generateQrCodePdf } from '../api';
-import QrCodeForm from './qr/QrCodeForm';
-import QrCodeDetails from './qr/QrCodeDetails';
+import React, { useState } from "react";
+import {
+  QrCode,
+  Package,
+  Search,
+  Filter,
+  Plus,
+  Download,
+  RefreshCw,
+  Gift,
+  Eye,
+  Edit,
+  Trash2,
+  Check,
+  X,
+  Users,
+} from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QrCodeType,
+  QrStatus,
+  QrCodeWithScans,
+  CreateQrCodeDto,
+} from "../types";
+import {
+  getAllQrCodes,
+  activateQrCode,
+  deactivateQrCode,
+  deleteQrCode,
+  selectRandomWinner,
+  generateQrCodePdf,
+} from "../api";
+import QrCodeForm from "./qr/QrCodeForm";
+import BulkOncePdfModal from "./qr/BulkOncePdfModal";
+import QrCodeDetails from "./qr/QrCodeDetails";
 
 const QrCodeTab: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedQrCode, setSelectedQrCode] = useState<QrCodeWithScans | null>(null);
+  const [selectedQrCode, setSelectedQrCode] = useState<QrCodeWithScans | null>(
+    null
+  );
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // Queries
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['qrCodes', currentPage],
+    queryKey: ["qrCodes", currentPage],
     queryFn: () => getAllQrCodes(currentPage, 10),
   });
 
@@ -23,28 +54,28 @@ const QrCodeTab: React.FC = () => {
   const activateMutation = useMutation({
     mutationFn: (id: string) => activateQrCode(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['qrCodes'] });
+      queryClient.invalidateQueries({ queryKey: ["qrCodes"] });
     },
   });
 
   const deactivateMutation = useMutation({
     mutationFn: (id: string) => deactivateQrCode(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['qrCodes'] });
+      queryClient.invalidateQueries({ queryKey: ["qrCodes"] });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteQrCode(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['qrCodes'] });
+      queryClient.invalidateQueries({ queryKey: ["qrCodes"] });
     },
   });
 
   const lotteryMutation = useMutation({
     mutationFn: (id: string) => selectRandomWinner(id),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['qrCodes'] });
+      queryClient.invalidateQueries({ queryKey: ["qrCodes"] });
       alert(`The winner is: ${data.winner.name}`);
     },
   });
@@ -53,9 +84,9 @@ const QrCodeTab: React.FC = () => {
     mutationFn: (id: string) => generateQrCodePdf(id),
     onSuccess: (data, id) => {
       const url = window.URL.createObjectURL(new Blob([data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', `qr-code-${id}.pdf`);
+      link.setAttribute("download", `qr-code-${id}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -71,6 +102,10 @@ const QrCodeTab: React.FC = () => {
     setIsCreateModalOpen(true);
   };
 
+  const handleOpenBulkModal = () => {
+    setIsBulkModalOpen(true);
+  };
+
   const handleViewDetails = (qrCode: QrCodeWithScans) => {
     setSelectedQrCode(qrCode);
     setIsDetailsModalOpen(true);
@@ -79,6 +114,7 @@ const QrCodeTab: React.FC = () => {
   const handleCloseModals = () => {
     setIsCreateModalOpen(false);
     setIsDetailsModalOpen(false);
+    setIsBulkModalOpen(false);
     setSelectedQrCode(null);
   };
 
@@ -91,13 +127,17 @@ const QrCodeTab: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('هل أنت متأكد من حذف رمز QR هذا؟')) {
+    if (window.confirm("هل أنت متأكد من حذف رمز QR هذا؟")) {
       deleteMutation.mutate(id);
     }
   };
 
   const handleLottery = (id: string) => {
-    if (window.confirm('هل أنت متأكد من تحديد فائز عشوائي؟ سيتم تعطيل رمز QR هذا بعد ذلك.')) {
+    if (
+      window.confirm(
+        "هل أنت متأكد من تحديد فائز عشوائي؟ سيتم تعطيل رمز QR هذا بعد ذلك."
+      )
+    ) {
       lotteryMutation.mutate(id);
     }
   };
@@ -172,10 +212,16 @@ const QrCodeTab: React.FC = () => {
     return (
       <div className="w-full p-8 bg-red-50 rounded-lg border border-red-200 text-red-700">
         <h3 className="text-lg font-bold mb-2">حدث خطأ</h3>
-        <p>{error instanceof Error ? error.message : 'حدث خطأ أثناء تحميل رموز QR'}</p>
+        <p>
+          {error instanceof Error
+            ? error.message
+            : "حدث خطأ أثناء تحميل رموز QR"}
+        </p>
         <button
           className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200"
-          onClick={() => queryClient.invalidateQueries({ queryKey: ['qrCodes'] })}
+          onClick={() =>
+            queryClient.invalidateQueries({ queryKey: ["qrCodes"] })
+          }
         >
           إعادة المحاولة
         </button>
@@ -205,6 +251,13 @@ const QrCodeTab: React.FC = () => {
               <Plus size={16} className="ml-2" />
               إنشاء رمز QR جديد
             </button>
+            <button
+              onClick={handleOpenBulkModal}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md flex items-center"
+            >
+              <Download size={16} className="ml-2" />
+              توليد PDF لرموز مرة واحدة
+            </button>
           </div>
           <div className="flex gap-2">
             <div className="relative">
@@ -213,7 +266,10 @@ const QrCodeTab: React.FC = () => {
                 placeholder="بحث..."
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <Search size={16} className="absolute left-3 top-3 text-gray-400" />
+              <Search
+                size={16}
+                className="absolute left-3 top-3 text-gray-400"
+              />
             </div>
             <button className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center">
               <Filter size={16} className="ml-2" />
@@ -221,7 +277,9 @@ const QrCodeTab: React.FC = () => {
             </button>
             <button
               className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center"
-              onClick={() => queryClient.invalidateQueries({ queryKey: ['qrCodes'] })}
+              onClick={() =>
+                queryClient.invalidateQueries({ queryKey: ["qrCodes"] })
+              }
             >
               <RefreshCw size={16} className="ml-2" />
               تحديث
@@ -236,22 +294,40 @@ const QrCodeTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   الاسم
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   النوع
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   الحالة
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   المسح
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   تاريخ الإنشاء
                 </th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   إجراءات
                 </th>
               </tr>
@@ -263,9 +339,13 @@ const QrCodeTab: React.FC = () => {
                     <div className="flex items-center">
                       <QrCode size={20} className="ml-2 text-gray-500" />
                       <div>
-                        <div className="text-sm font-medium text-gray-900">{qrCode.name}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {qrCode.name}
+                        </div>
                         {qrCode.description && (
-                          <div className="text-xs text-gray-500 max-w-xs truncate">{qrCode.description}</div>
+                          <div className="text-xs text-gray-500 max-w-xs truncate">
+                            {qrCode.description}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -283,7 +363,7 @@ const QrCodeTab: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(qrCode.createdAt).toLocaleDateString('ar-SA')}
+                    {new Date(qrCode.createdAt).toLocaleDateString("ar-SA")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                     <div className="flex space-x-2 rtl:space-x-reverse">
@@ -324,7 +404,14 @@ const QrCodeTab: React.FC = () => {
                         title="اختيار فائز عشوائي"
                         disabled={qrCode.scansCount === 0}
                       >
-                        <Gift size={18} className={qrCode.scansCount === 0 ? 'opacity-50 cursor-not-allowed' : ''} />
+                        <Gift
+                          size={18}
+                          className={
+                            qrCode.scansCount === 0
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
+                        />
                       </button>
                       <button
                         onClick={() => handleDelete(qrCode.id)}
@@ -332,7 +419,14 @@ const QrCodeTab: React.FC = () => {
                         title="حذف"
                         disabled={qrCode.scansCount > 0}
                       >
-                        <Trash2 size={18} className={qrCode.scansCount > 0 ? 'opacity-50 cursor-not-allowed' : ''} />
+                        <Trash2
+                          size={18}
+                          className={
+                            qrCode.scansCount > 0
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
+                        />
                       </button>
                     </div>
                   </td>
@@ -348,21 +442,37 @@ const QrCodeTab: React.FC = () => {
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-700">
-                  عرض <span className="font-medium">{(data.pagination.page - 1) * data.pagination.limit + 1}</span>{' '}
-                  إلى{' '}
+                  عرض{" "}
                   <span className="font-medium">
-                    {Math.min(data.pagination.page * data.pagination.limit, data.pagination.total)}
-                  </span>{' '}
-                  من <span className="font-medium">{data.pagination.total}</span> عنصر
+                    {(data.pagination.page - 1) * data.pagination.limit + 1}
+                  </span>{" "}
+                  إلى{" "}
+                  <span className="font-medium">
+                    {Math.min(
+                      data.pagination.page * data.pagination.limit,
+                      data.pagination.total
+                    )}
+                  </span>{" "}
+                  من{" "}
+                  <span className="font-medium">{data.pagination.total}</span>{" "}
+                  عنصر
                 </p>
               </div>
               <div>
-                <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <nav
+                  className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                  aria-label="Pagination"
+                >
                   <button
-                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                    onClick={() =>
+                      handlePageChange(Math.max(1, currentPage - 1))
+                    }
                     disabled={currentPage === 1}
-                    className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
+                      currentPage === 1
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "text-gray-500 hover:bg-gray-50"
+                    }`}
                   >
                     <span className="sr-only">Previous</span>
                     السابق
@@ -373,20 +483,28 @@ const QrCodeTab: React.FC = () => {
                     <button
                       key={index}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${currentPage === index + 1
-                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                        : 'text-gray-500 hover:bg-gray-50'
-                        }`}
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
+                        currentPage === index + 1
+                          ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                          : "text-gray-500 hover:bg-gray-50"
+                      }`}
                     >
                       {index + 1}
                     </button>
                   ))}
 
                   <button
-                    onClick={() => handlePageChange(Math.min(data.pagination.pages, currentPage + 1))}
+                    onClick={() =>
+                      handlePageChange(
+                        Math.min(data.pagination.pages, currentPage + 1)
+                      )
+                    }
                     disabled={currentPage === data.pagination.pages}
-                    className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === data.pagination.pages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                    className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
+                      currentPage === data.pagination.pages
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "text-gray-500 hover:bg-gray-50"
+                    }`}
                   >
                     <span className="sr-only">Next</span>
                     التالي
@@ -432,11 +550,17 @@ const QrCodeTab: React.FC = () => {
                   <X size={20} />
                 </button>
               </div>
-              <QrCodeDetails qrCode={selectedQrCode} onClose={handleCloseModals} />
+              <QrCodeDetails
+                qrCode={selectedQrCode}
+                onClose={handleCloseModals}
+              />
             </div>
           </div>
         </div>
       )}
+
+      {/* Bulk Once PDF Modal */}
+      {isBulkModalOpen && <BulkOncePdfModal onClose={handleCloseModals} />}
     </div>
   );
 };

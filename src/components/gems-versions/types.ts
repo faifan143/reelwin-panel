@@ -1,108 +1,117 @@
 // types.ts
 export interface GenerateGemDto {
-    points: number;
-    contentId?: string;
+  points: number;
+  contentId?: string;
 }
 
 export interface ContentGem {
-    contentId: string;
-    contentTitle: string;
-    mediaUrls: string[];
-    points: number;
-    claimedByUserId?: string;
-    claimedAt?: string;
-    createdAt?: string;
+  contentId: string;
+  contentTitle: string;
+  mediaUrls: string[];
+  points: number;
+  claimedByUserId?: string;
+  claimedAt?: string;
+  createdAt?: string;
 }
 
 export interface GemResponse {
-    success: boolean;
-    message: string;
-    gem: ContentGem;
+  success: boolean;
+  message: string;
+  gem: ContentGem;
 }
 
 export interface CreateVersionDto {
-    version: string;
-    isRequired: boolean;
+  version: string;
+  isRequired: boolean;
 }
 
 export interface Version {
-    id?: string;
-    version: string;
-    isRequired: boolean;
-    createdAt?: string;
+  id?: string;
+  version: string;
+  isRequired: boolean;
+  createdAt?: string;
 }
 
 // QR Code types
 export enum QrCodeType {
-    PERMANENT = 'PERMANENT',
-    ONCE = 'ONCE'
+  PERMANENT = "PERMANENT",
+  ONCE = "ONCE",
 }
 
 export enum QrStatus {
-    ACTIVE = 'ACTIVE',
-    INACTIVE = 'INACTIVE',
-    COMPLETED = 'COMPLETED'
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  COMPLETED = "COMPLETED",
 }
 
 export interface QrCode {
-    id: string;
-    name: string;
-    description?: string;
-    type: QrCodeType;
-    status: QrStatus;
-    createdAt: string;
-    updatedAt: string;
-    reward1000Count: number;
-    reward500Count: number;
-    reward250Count: number;
-    reward125Count: number;
+  id: string;
+  name: string;
+  description?: string;
+  type: QrCodeType;
+  status: QrStatus;
+  createdAt: string;
+  updatedAt: string;
+  reward1000Count: number;
+  reward500Count: number;
+  reward250Count: number;
+  reward125Count: number;
 }
 
 export interface QrScan {
+  id: string;
+  qrCodeId: string;
+  userId: string;
+  points: number;
+  scannedAt: string;
+  user?: {
     id: string;
-    qrCodeId: string;
-    userId: string;
-    points: number;
-    scannedAt: string;
-    user?: {
-        id: string;
-        name: string;
-        phone: string;
-        profilePhoto?: string;
-    };
+    name: string;
+    phone: string;
+    profilePhoto?: string;
+  };
 }
 
 export interface QrCodeWithScans extends QrCode {
-    scans: QrScan[];
-    scansCount: number;
+  scans: QrScan[];
+  scansCount: number;
 }
 
 export interface PaginatedQrCodesResponse {
-    data: QrCodeWithScans[];
-    pagination: {
-        total: number;
-        page: number;
-        limit: number;
-        pages: number;
-    };
+  data: QrCodeWithScans[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
 }
 
 export interface CreateQrCodeDto {
-    name: string;
-    description?: string;
-    type: QrCodeType;
-    reward1000Count?: number;
-    reward500Count?: number;
-    reward250Count?: number;
-    reward125Count?: number;
+  name: string;
+  description?: string;
+  type: QrCodeType;
+  reward1000Count?: number;
+  reward500Count?: number;
+  reward250Count?: number;
+  reward125Count?: number;
 }
 
 export interface UpdateQrCodeDto {
-    name?: string;
-    description?: string;
-    type?: QrCodeType;
-    reward1000Count?: number;
-    reward500Count?: number;
-    reward250Count?: number;
-    reward125Count?: number;
+  name?: string;
+  description?: string;
+  type?: QrCodeType;
+  reward1000Count?: number;
+  reward500Count?: number;
+  reward250Count?: number;
+  reward125Count?: number;
+}
+
+// Bulk generate-once QR PDF payload
+export interface BulkOncePdfDto {
+  count: number; // total QR codes
+  rows: number; // stickers per row
+  cols: number; // stickers per column
+  namePrefix?: string;
+  description?: string;
 }
