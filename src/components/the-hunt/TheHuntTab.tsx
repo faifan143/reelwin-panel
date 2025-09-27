@@ -11,6 +11,7 @@ import type { Hunt, HuntStatus } from "./types";
 
 const TheHuntTab: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
@@ -30,14 +31,19 @@ const TheHuntTab: React.FC = () => {
   });
 
   const downloadZip = async (id: string) => {
-    const blob = await downloadAllPdfsZip(id);
-    const url = URL.createObjectURL(new Blob([blob]));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `hunt-${id}.zip`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    try {
+      setDownloadingId(id);
+      const blob = await downloadAllPdfsZip(id);
+      const url = URL.createObjectURL(new Blob([blob]));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `hunt-${id}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   if (isLoading) {
@@ -86,10 +92,40 @@ const TheHuntTab: React.FC = () => {
                     <div className="flex space-x-2 rtl:space-x-reverse">
                       <button
                         onClick={() => downloadZip(hunt.id)}
-                        className="text-green-600 hover:text-green-900"
-                        title="تحميل كل ملفات PDF"
+                        className={`text-green-600 hover:text-green-900 ${
+                          downloadingId === hunt.id
+                            ? "opacity-60 cursor-not-allowed"
+                            : ""
+                        }`}
+                        title={
+                          downloadingId === hunt.id
+                            ? "جارٍ التحميل..."
+                            : "تحميل كل ملفات PDF"
+                        }
+                        disabled={downloadingId === hunt.id}
                       >
-                        <Download size={18} />
+                        {downloadingId === hunt.id ? (
+                          <svg
+                            className="animate-spin h-4 w-4"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <Download size={18} />
+                        )}
                       </button>
                       {hunt.status !== "ACTIVE" && (
                         <button
