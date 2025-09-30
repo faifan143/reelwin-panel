@@ -10,6 +10,17 @@ import {
 import type { Hunt, HuntStatus } from "./types";
 import CreateHuntModal from "./CreateHuntModal";
 
+// Minimal, efficient date formatting reused across rows
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit'
+});
+const formatISODate = (iso: string): string => {
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? '-' : dateFmt.format(d);
+};
+
 const TheHuntTab: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
