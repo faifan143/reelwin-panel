@@ -11,19 +11,21 @@ import type { Hunt, HuntStatus } from "./types";
 import CreateHuntModal from "./CreateHuntModal";
 
 // Minimal, efficient date formatting reused across rows
-const dateFmt = new Intl.DateTimeFormat('en-GB', {
-  year: '2-digit',
-  month: '2-digit',
-  day: '2-digit'
+const dateFmt = new Intl.DateTimeFormat("en-GB", {
+  year: "2-digit",
+  month: "2-digit",
+  day: "2-digit",
 });
 const formatISODate = (iso: string): string => {
   const d = new Date(iso);
-  return isNaN(d.getTime()) ? '-' : dateFmt.format(d);
+  return isNaN(d.getTime()) ? "-" : dateFmt.format(d);
 };
 
 const TheHuntTab: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -55,6 +57,27 @@ const TheHuntTab: React.FC = () => {
       a.remove();
     } finally {
       setDownloadingId(null);
+    }
+  };
+
+  const handleToggleStatus = async (id: string, nextStatus: HuntStatus) => {
+    try {
+      setStatusUpdatingId(id);
+      await statusMutation.mutateAsync({ id, status: nextStatus });
+    } finally {
+      setStatusUpdatingId(null);
+    }
+  };
+
+  const handleDelete = async (id: string, currentStatus: HuntStatus) => {
+    if (currentStatus !== "DRAFT") return;
+    const confirmed = window.confirm("هل أنت متأكد من الحذف؟ لا يمكن التراجع.");
+    if (!confirmed) return;
+    try {
+      setDeletingId(id);
+      await deleteMutation.mutateAsync(id);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -123,9 +146,11 @@ const TheHuntTab: React.FC = () => {
                     {hunt.status}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {new Date(hunt.startsAt).toLocaleDateString("en")}
-                    {" > "}
-                    {new Date(hunt.endsAt).toLocaleDateString("en")}
+                    <span className="font-mono text-gray-800">
+                      {formatISODate(hunt.endsAt)}
+                      {" → "}
+                      {formatISODate(hunt.startsAt)}
+                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                     <div className="flex space-x-2 rtl:space-x-reverse">
@@ -166,40 +191,113 @@ const TheHuntTab: React.FC = () => {
                           <Download size={18} />
                         )}
                       </button>
-                      {hunt.status !== "ACTIVE" && (
+                      {hunt.status !== "ACTIVE" ? (
                         <button
-                          onClick={() =>
-                            statusMutation.mutate({
-                              id: hunt.id,
-                              status: "ACTIVE",
-                            })
-                          }
-                          className="text-blue-600 hover:text-blue-900"
+                          onClick={() => handleToggleStatus(hunt.id, "ACTIVE")}
+                          className={`text-blue-600 hover:text-blue-900 ${
+                            statusUpdatingId === hunt.id
+                              ? "opacity-60 cursor-not-allowed"
+                              : ""
+                          }`}
                           title="تفعيل"
+                          disabled={statusUpdatingId === hunt.id}
                         >
-                          <Check size={18} />
+                          {statusUpdatingId === hunt.id ? (
+                            <svg
+                              className="animate-spin h-4 w-4"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                              ></path>
+                            </svg>
+                          ) : (
+                            <Check size={18} />
+                          )}
                         </button>
-                      )}
-                      {hunt.status === "ACTIVE" && (
+                      ) : (
                         <button
-                          onClick={() =>
-                            statusMutation.mutate({
-                              id: hunt.id,
-                              status: "DRAFT",
-                            })
-                          }
-                          className="text-orange-600 hover:text-orange-900"
+                          onClick={() => handleToggleStatus(hunt.id, "DRAFT")}
+                          className={`text-orange-600 hover:text-orange-900 ${
+                            statusUpdatingId === hunt.id
+                              ? "opacity-60 cursor-not-allowed"
+                              : ""
+                          }`}
                           title="تعطيل"
+                          disabled={statusUpdatingId === hunt.id}
                         >
-                          <X size={18} />
+                          {statusUpdatingId === hunt.id ? (
+                            <svg
+                              className="animate-spin h-4 w-4"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                              ></path>
+                            </svg>
+                          ) : (
+                            <X size={18} />
+                          )}
                         </button>
                       )}
                       <button
-                        onClick={() => deleteMutation.mutate(hunt.id)}
-                        className="text-red-600 hover:text-red-900"
-                        title="حذف (مسودة فقط)"
+                        onClick={() => handleDelete(hunt.id, hunt.status)}
+                        className={`text-red-600 hover:text-red-900 ${
+                          hunt.status !== "DRAFT" || deletingId === hunt.id
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }`}
+                        title={
+                          hunt.status !== "DRAFT"
+                            ? "الحذف متاح في وضع المسودة فقط"
+                            : "حذف"
+                        }
+                        disabled={
+                          hunt.status !== "DRAFT" || deletingId === hunt.id
+                        }
                       >
-                        <Trash2 size={18} />
+                        {deletingId === hunt.id ? (
+                          <svg
+                            className="animate-spin h-4 w-4"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <Trash2 size={18} />
+                        )}
                       </button>
                     </div>
                   </td>
