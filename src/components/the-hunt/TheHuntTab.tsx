@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Download, Eye, Trash2, Check, X } from "lucide-react";
+import { Download, Eye, Trash2, Check, X, Plus } from "lucide-react";
 import {
   listHunts,
   deleteHunt,
@@ -8,13 +8,14 @@ import {
   updateHuntStatus,
 } from "./api";
 import type { Hunt, HuntStatus } from "./types";
+import CreateHuntModal from "./CreateHuntModal";
 
 const TheHuntTab: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["hunts", currentPage],
     queryFn: () => listHunts(currentPage, 10),
   });
@@ -46,17 +47,43 @@ const TheHuntTab: React.FC = () => {
     }
   };
 
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
   if (isLoading) {
     return <div className="p-6">جارٍ التحميل...</div>;
   }
 
   if (isError) {
-    return <div className="p-6 text-red-600">تعذر تحميل الرحلات</div>;
+    return (
+      <div className="p-6">
+        <div className="mb-3 p-3 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+          {error instanceof Error
+            ? error.message
+            : (error as any)?.response?.data?.message || "تعذر تحميل الرحلات"}
+        </div>
+        <button
+          className="px-3 py-2 text-sm rounded bg-gray-100 hover:bg-gray-200"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["hunts"] })}
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    );
   }
 
   return (
     <div className="w-full" dir="rtl">
       <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="p-4 flex justify-between items-center border-b">
+          <h2 className="text-lg font-semibold">إدارة الرحلة</h2>
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+          >
+            <Plus size={16} className="ml-2" />
+            إضافة الرحلة
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -85,8 +112,9 @@ const TheHuntTab: React.FC = () => {
                     {hunt.status}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {new Date(hunt.startsAt).toLocaleDateString("ar-SA")} -{" "}
-                    {new Date(hunt.endsAt).toLocaleDateString("ar-SA")}
+                    {new Date(hunt.startsAt).toLocaleDateString("en")}
+                    {" > "}
+                    {new Date(hunt.endsAt).toLocaleDateString("en")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                     <div className="flex space-x-2 rtl:space-x-reverse">
@@ -170,6 +198,10 @@ const TheHuntTab: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {isCreateOpen && (
+        <CreateHuntModal onClose={() => setIsCreateOpen(false)} />
+      )}
     </div>
   );
 };
