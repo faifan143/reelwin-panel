@@ -1,9 +1,14 @@
-// Card component
+import { Card as ShadcnCard, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+// Card component wrapper for shadcn/ui
 export const Card: React.FC<{
     children: React.ReactNode;
     className?: string;
 }> = ({ children, className = "" }) => (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-100 p-5 ${className}`}>
-        {children}
-    </div>
+    <ShadcnCard className={cn(className)}>
+        <CardContent className="p-5">
+            {children}
+        </CardContent>
+    </ShadcnCard>
 );

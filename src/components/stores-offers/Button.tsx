@@ -1,4 +1,7 @@
-// Button component
+import { Button as ShadcnButton } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// Button component wrapper for shadcn/ui
 export const Button: React.FC<{
     children: React.ReactNode;
     onClick?: () => void;
@@ -18,31 +21,43 @@ export const Button: React.FC<{
     icon,
     type = "button"
 }) => {
-        const baseClasses = "flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200";
-
-        const variantClasses = {
-            primary: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300",
-            secondary: "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200",
-            danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300"
+        const variantMap = {
+            primary: "default" as const,
+            secondary: "outline" as const,
+            danger: "destructive" as const,
         };
 
-        const sizeClasses = {
-            sm: "px-3 py-1.5 text-xs",
-            md: "px-4 py-2.5 text-sm",
-            lg: "px-6 py-3 text-base"
+        const sizeMap = {
+            sm: "sm" as const,
+            md: "default" as const,
+            lg: "lg" as const,
         };
 
-        const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer";
+        // Custom dark theme classes for each variant
+        const getVariantClasses = () => {
+            switch (variant) {
+                case 'primary':
+                    return 'bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg shadow-blue-500/20 border-0';
+                case 'secondary':
+                    return 'bg-slate-700/60 hover:bg-slate-700/80 text-slate-200 border border-slate-600/50 shadow-sm';
+                case 'danger':
+                    return 'bg-gradient-to-br from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white shadow-lg shadow-red-500/20 border-0';
+                default:
+                    return '';
+            }
+        };
 
         return (
-            <button
+            <ShadcnButton
                 onClick={onClick}
                 disabled={disabled}
                 type={type}
-                className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`}
+                variant={variantMap[variant]}
+                size={sizeMap[size]}
+                className={cn("gap-2 transition-all duration-200", getVariantClasses(), className)}
             >
                 {children}
                 {icon}
-            </button>
+            </ShadcnButton>
         );
     };

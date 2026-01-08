@@ -1,5 +1,6 @@
 // components/Modal.tsx
 import React, { ReactNode, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -38,8 +39,6 @@ export const Modal: React.FC<ModalProps> = ({
         };
     }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
-
     const getSizeClass = () => {
         switch (size) {
             case 'sm': return 'max-w-sm';
@@ -50,42 +49,46 @@ export const Modal: React.FC<ModalProps> = ({
         }
     };
 
-    return (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    if (!isOpen) return null;
+
+    // Render modal in a portal at document body level to overlay entire page
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] overflow-y-auto">
+            <div className="flex min-h-screen items-center justify-center px-4 py-8 text-center">
                 {/* Background overlay */}
                 <div
-                    className="fixed inset-0 backdrop-blur-md bg-black/50 transition-opacity"
+                    className="fixed inset-0 backdrop-blur-md bg-black/70 transition-opacity"
                     onClick={onClose}
                     aria-hidden="true"
                 />
 
                 {/* Modal panel */}
                 <div
-                    className={`inline-block w-full ${getSizeClass()} my-8 overflow-hidden rounded-lg bg-white text-right shadow-xl transform transition-all`}
+                    className={`relative inline-block w-full ${getSizeClass()} max-h-[80vh] no-scrollbar overflow-y-auto rounded-2xl bg-slate-800/95 backdrop-blur-xl border border-slate-700/50 text-right shadow-2xl transform transition-all flex flex-col`}
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
-                    <div className="px-4 py-3 bg-gray-50 border-b flex items-center justify-between">
+                    <div className="flex-shrink-0 px-6 py-4 bg-slate-700/50 border-b border-slate-700/50 flex items-center justify-between">
                         <button
                             type="button"
-                            className="text-gray-400 hover:text-gray-500 transition-colors"
+                            className="text-slate-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-slate-600/50"
                             onClick={onClose}
                         >
                             <span className="sr-only">إغلاق</span>
                             <X size={20} />
                         </button>
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">
+                        <h3 className="text-lg font-semibold leading-6 text-white">
                             {title}
                         </h3>
                     </div>
 
-                    {/* Content */}
-                    <div className="px-4 py-4">
+                    {/* Content - Scrollable */}
+                    <div className="flex-1 overflow-y-auto px-6 py-6 bg-slate-800/50">
                         {children}
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

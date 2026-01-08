@@ -350,40 +350,57 @@ export default function ContentManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 px-4 py-6 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold text-white">إدارة المحتوى</h1>
-        <p className="mt-2 text-blue-100">
-          عرض وتعديل وحذف المحتوى الموجود في النظام
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Professional Header */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <Eye className="h-7 w-7 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">إدارة المحتوى</h1>
+                <p className="text-slate-400 text-sm mt-0.5">عرض وتعديل وحذف المحتوى الموجود في النظام</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-medium text-gray-900">
-              {totalItems} محتوى
-            </h2>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Filters Card */}
+        <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-white">
+                {totalItems} محتوى
+              </h2>
+              <span className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium">
+                {contentData?.length || 0} نتيجة
+              </span>
+            </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-600 bg-slate-800/50 text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all font-medium text-sm"
             >
-              <Filter className="h-4 w-4 mx-2" />
+              <Filter className="h-4 w-4" />
               {showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}
             </button>
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-slate-700/50">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   اسم المالك
                 </label>
                 <input
                   type="text"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                   value={filters.ownerName || ""}
                   onChange={(e) =>
                     setFilters({ ...filters, ownerName: e.target.value })
@@ -393,12 +410,12 @@ export default function ContentManagementPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   رقم الهاتف
                 </label>
                 <input
                   type="text"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                   value={filters.ownerNumber || ""}
                   onChange={(e) =>
                     setFilters({ ...filters, ownerNumber: e.target.value })
@@ -408,42 +425,41 @@ export default function ContentManagementPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   الفئة
                 </label>
                 <select
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                   value={filters.interestId || ""}
                   onChange={(e) =>
                     setFilters({ ...filters, interestId: e.target.value })
                   }
                 >
-                  <option value="">جميع الفئات</option>
+                  <option value="" className="bg-slate-800">جميع الفئات</option>
                   {interests?.map((interest) => (
-                    <option key={interest.id} value={interest.id}>
+                    <option key={interest.id} value={interest.id} className="bg-slate-800">
                       {interest.name}
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex items-end gap-2 gap-reverse">
+              <div className="flex items-end gap-2">
                 <button
                   onClick={() => {
                     refetch();
                     setCurrentPage(1);
                   }}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20 transition-all"
                 >
-                  <Search className="h-4 w-4 mx-2" />
+                  <Search className="h-4 w-4" />
                   بحث
                 </button>
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-slate-600 bg-slate-800/50 text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all font-medium text-sm"
                 >
-                  <X className="h-4 w-4 mx-2" />
-                  مسح
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -452,83 +468,83 @@ export default function ContentManagementPage() {
         {/* Content List */}
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         ) : isError ? (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          <div className="bg-red-900/20 border border-red-500/50 text-red-400 px-6 py-4 rounded-xl">
             حدث خطأ أثناء تحميل البيانات. الرجاء المحاولة مرة أخرى.
           </div>
         ) : contentData && contentData.length > 0 ? (
           <>
             {/* Desktop Table View */}
-            <div className="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="hidden md:block bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-slate-700/50">
+                  <thead className="bg-slate-800/50">
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         معرف المحتوى
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         العنوان
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         الوسائط
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         المالك
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         الإعدادات
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         الإحصائيات
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
                       >
                         الإجراءات
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="divide-y divide-slate-700/50">
                     {currentItems.map((content) => (
-                      <tr key={content.id} className="hover:bg-gray-50">
+                      <tr key={content.id} className="hover:bg-slate-800/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-500 font-mono">{content.id}</div>
+                          <div className="text-sm text-slate-400 font-mono">{content.id.slice(0, 8)}...</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col">
-                            <div className="text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col gap-2">
+                            <div className="text-sm font-semibold text-white">
                               {content.title}
                             </div>
-                            <div className="text-sm text-gray-500 line-clamp-2">
+                            <div className="text-sm text-slate-400 line-clamp-2">
                               {content.description}
                             </div>
-                            <div className="mt-1 flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1">
                               {(content.interests || []).map((interest) => (
                                 <span
                                   key={interest.id}
-                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
                                 >
                                   {interest.name}
                                 </span>
@@ -537,20 +553,20 @@ export default function ContentManagementPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex gap-1 gap-reverse">
+                          <div className="flex gap-2">
                             {content.mediaUrls.map((media, index) => (
                               <button
                                 key={index}
                                 onClick={() => handleMediaClick(media)}
-                                className={`p-1 rounded-md ${media.type === "IMAGE"
-                                  ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                                  : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                                className={`p-2 rounded-lg transition-all ${media.type === "IMAGE"
+                                  ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
+                                  : "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20"
                                   }`}
                               >
                                 {media.type === "IMAGE" ? (
-                                  <Image className="h-5 w-5" />
+                                  <Image className="h-4 w-4" />
                                 ) : (
-                                  <Video className="h-5 w-5" />
+                                  <Video className="h-4 w-4" />
                                 )}
                               </button>
                             ))}
@@ -560,25 +576,25 @@ export default function ContentManagementPage() {
 
 
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col">
+                          <div className="flex flex-col gap-2">
                             {content.ownerType === "INDIVIDUAL" ? (
                               <>
-                                <div className="text-sm font-medium text-gray-900 flex items-center">
-                                  <User className="h-4 w-4 mx-1 text-gray-400" />
+                                <div className="text-sm font-medium text-white flex items-center gap-2">
+                                  <User className="h-4 w-4 text-slate-400" />
                                   {content.ownerName}
                                 </div>
-                                <div className="text-sm text-gray-500 flex items-center">
-                                  <Phone className="h-4 w-4 mx-1 text-gray-400" />
+                                <div className="text-sm text-slate-400 flex items-center gap-2">
+                                  <Phone className="h-4 w-4 text-slate-400" />
                                   {content.ownerNumber}
                                 </div>
                               </>
                             ) : (
-                              <div className="text-sm font-medium text-gray-900 flex items-center">
-                                <Store className="h-4 w-4 mx-1 text-gray-400" />
+                              <div className="text-sm font-medium text-white flex items-center gap-2">
+                                <Store className="h-4 w-4 text-slate-400" />
                                 {content.store?.name || "متجر"}
                               </div>
                             )}
-                            <div className="text-xs mt-1 px-2 py-1 bg-gray-100 rounded text-gray-600 inline-block w-fit">
+                            <div className="text-xs px-2 py-1 bg-slate-700/50 rounded-lg text-slate-300 inline-block w-fit border border-slate-600">
                               {content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"}
                             </div>
                           </div>
@@ -588,13 +604,13 @@ export default function ContentManagementPage() {
 
 
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col">
-                            <div className="text-sm text-gray-500 flex items-center">
-                              <Clock className="h-4 w-4 mx-1 text-gray-400" />
+                          <div className="flex flex-col gap-2">
+                            <div className="text-sm text-slate-300 flex items-center gap-2">
+                              <Clock className="h-4 w-4 text-slate-400" />
                               {content.intervalHours} ساعة
                             </div>
-                            <div className="text-sm text-gray-500 flex items-center">
-                              <Calendar className="h-4 w-4 mx-1 text-gray-400" />
+                            <div className="text-sm text-slate-300 flex items-center gap-2">
+                              <Calendar className="h-4 w-4 text-slate-400" />
                               {new Date(
                                 content.endValidationDate
                               ).toLocaleDateString("ar")}
@@ -602,43 +618,43 @@ export default function ContentManagementPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col">
-                            <div className="text-sm text-gray-600 flex items-center">
-                              <Eye className="h-4 w-4 mx-1 text-gray-400" />
-                              {content._count?.viewedBy || 0} مشاهدة
+                          <div className="flex flex-col gap-2">
+                            <div className="text-sm text-slate-300 flex items-center gap-2">
+                              <Eye className="h-4 w-4 text-blue-400" />
+                              <span className="text-white font-medium">{content._count?.viewedBy || 0}</span> مشاهدة
                             </div>
-                            <div className="text-sm text-gray-600 flex items-center">
-                              <ThumbsUp className="h-4 w-4 mx-1 text-gray-400" />
-                              {content._count?.likedBy || 0} إعجاب
+                            <div className="text-sm text-slate-300 flex items-center gap-2">
+                              <ThumbsUp className="h-4 w-4 text-green-400" />
+                              <span className="text-white font-medium">{content._count?.likedBy || 0}</span> إعجاب
                             </div>
-                            <div className="text-sm text-gray-600 flex items-center">
-                              <MessageCircle className="h-4 w-4 mx-1 text-gray-400" />
-                              {content._count?.whatsappedBy || 0} تواصل
+                            <div className="text-sm text-slate-300 flex items-center gap-2">
+                              <MessageCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white font-medium">{content._count?.whatsappedBy || 0}</span> تواصل
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex gap-2 gap-reverse">
+                          <div className="flex gap-2">
                             <button
                               onClick={() => handleGemClick(content)}
-                              className="text-yellow-600 hover:text-yellow-900"
+                              className="p-2 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all"
                               title="إنشاء جائزة"
                             >
-                              <Gem className="h-5 w-5" />
+                              <Gem className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleEditClick(content)}
-                              className="text-indigo-600 hover:text-indigo-900"
+                              className="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all"
                               title="تعديل"
                             >
-                              <Edit className="h-5 w-5" />
+                              <Edit className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(content)}
-                              className="text-red-600 hover:text-red-900"
+                              className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all"
                               title="حذف"
                             >
-                              <Trash2 className="h-5 w-5" />
+                              <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
                         </td>
@@ -654,34 +670,34 @@ export default function ContentManagementPage() {
               {currentItems.map((content) => (
                 <div
                   key={content.id}
-                  className="bg-white rounded-lg shadow-sm p-4"
+                  className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl p-5"
                 >
                   {/* Card Header */}
-                  <div className="flex justify-between flex-wrap items-start mb-3">
-                    <h3 className="text-lg font-medium text-gray-900">
+                  <div className="flex justify-between flex-wrap items-start mb-4">
+                    <h3 className="text-lg font-semibold text-white">
                       {content.title}
                     </h3>
-                    <div className="text-xs text-gray-500 font-mono mt-1 w-full">
-                      معرف: {content.id}
+                    <div className="text-xs text-slate-400 font-mono mt-1 w-full">
+                      معرف: {content.id.slice(0, 12)}...
                     </div>
-                    <div className="flex gap-1 gap-reverse">
+                    <div className="flex gap-2 mt-3">
                       <button
                         onClick={() => handleGemClick(content)}
-                        className="text-yellow-600 hover:text-yellow-900 p-1"
+                        className="p-2 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all"
                         title="إنشاء جائزة"
                       >
                         <Gem className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleEditClick(content)}
-                        className="text-indigo-600 hover:text-indigo-900 p-1"
+                        className="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all"
                         title="تعديل"
                       >
                         <Edit className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(content)}
-                        className="text-red-600 hover:text-red-900 p-1"
+                        className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all"
                         title="حذف"
                       >
                         <Trash2 className="h-5 w-5" />
@@ -690,16 +706,16 @@ export default function ContentManagementPage() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-500 mb-3 line-clamp-2">
+                  <p className="text-sm text-slate-400 mb-4 line-clamp-2">
                     {content.description}
                   </p>
 
                   {/* Tags/Interests */}
-                  <div className="flex flex-wrap gap-1 mb-3">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {(content.interests || []).map((interest) => (
                       <span
                         key={interest.id}
-                        className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
                       >
                         {interest.name}
                       </span>
@@ -709,24 +725,24 @@ export default function ContentManagementPage() {
                   {/* Media, Owner, and Settings */}
                   <div className="grid grid-cols-2 gap-3 mb-3">
                     {/* Media */}
-                    <div className="bg-gray-50 p-2 rounded">
-                      <div className="text-xs font-medium text-gray-500 mb-1">
+                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
+                      <div className="text-xs font-semibold text-slate-300 mb-2">
                         الوسائط
                       </div>
-                      <div className="flex gap-1 gap-reverse">
+                      <div className="flex gap-2">
                         {content.mediaUrls.map((media, index) => (
                           <button
                             key={index}
                             onClick={() => handleMediaClick(media)}
-                            className={`p-1 rounded-md ${media.type === "IMAGE"
-                              ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                              : "bg-purple-100 text-purple-600 hover:bg-purple-200"
+                            className={`p-2 rounded-lg transition-all ${media.type === "IMAGE"
+                              ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
+                              : "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20"
                               }`}
                           >
                             {media.type === "IMAGE" ? (
-                              <Image className="h-5 w-5" />
+                              <Image className="h-4 w-4" />
                             ) : (
-                              <Video className="h-5 w-5" />
+                              <Video className="h-4 w-4" />
                             )}
                           </button>
                         ))}
@@ -734,24 +750,24 @@ export default function ContentManagementPage() {
                     </div>
 
                     {/* Owner */}
-                    <div className="bg-gray-50 p-2 rounded">
-                      <div className="text-xs font-medium text-gray-500 mb-1">
+                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
+                      <div className="text-xs font-semibold text-slate-300 mb-2">
                         المالك ({content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"})
                       </div>
                       {content.ownerType === "INDIVIDUAL" ? (
                         <>
-                          <div className="text-sm font-medium text-gray-900 flex items-center">
-                            <User className="h-4 w-4 mx-1 text-gray-400" />
+                          <div className="text-sm font-medium text-white flex items-center gap-2 mb-1">
+                            <User className="h-4 w-4 text-slate-400" />
                             {content.ownerName}
                           </div>
-                          <div className="text-sm text-gray-500 flex items-center">
-                            <Phone className="h-4 w-4 mx-1 text-gray-400" />
+                          <div className="text-sm text-slate-400 flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-slate-400" />
                             {content.ownerNumber}
                           </div>
                         </>
                       ) : (
-                        <div className="text-sm font-medium text-gray-900 flex items-center">
-                          <Store className="h-4 w-4 mx-1 text-gray-400" />
+                        <div className="text-sm font-medium text-white flex items-center gap-2">
+                          <Store className="h-4 w-4 text-slate-400" />
                           {content.store?.name || "متجر"}
                         </div>
                       )}
@@ -761,16 +777,16 @@ export default function ContentManagementPage() {
                   {/* Settings and Stats */}
                   <div className="grid grid-cols-2 gap-3">
                     {/* Settings */}
-                    <div className="bg-gray-50 p-2 rounded">
-                      <div className="text-xs font-medium text-gray-500 mb-1">
+                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
+                      <div className="text-xs font-semibold text-slate-300 mb-2">
                         الإعدادات
                       </div>
-                      <div className="text-sm text-gray-600 flex items-center">
-                        <Clock className="h-4 w-4 mx-1 text-gray-400" />
+                      <div className="text-sm text-slate-300 flex items-center gap-2 mb-1">
+                        <Clock className="h-4 w-4 text-slate-400" />
                         {content.intervalHours} ساعة
                       </div>
-                      <div className="text-sm text-gray-600 flex items-center">
-                        <Calendar className="h-4 w-4 mx-1 text-gray-400" />
+                      <div className="text-sm text-slate-300 flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-slate-400" />
                         {new Date(content.endValidationDate).toLocaleDateString(
                           "ar"
                         )}
@@ -778,28 +794,28 @@ export default function ContentManagementPage() {
                     </div>
 
                     {/* Stats */}
-                    <div className="bg-gray-50 p-2 rounded">
-                      <div className="text-xs font-medium text-gray-500 mb-1">
+                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
+                      <div className="text-xs font-semibold text-slate-300 mb-2">
                         الإحصائيات
                       </div>
-                      <div className="grid grid-cols-3 gap-1">
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="text-xs text-center">
-                          <div className="flex justify-center">
-                            <Eye className="h-4 w-4 text-gray-400" />
+                          <div className="flex justify-center mb-1">
+                            <Eye className="h-4 w-4 text-blue-400" />
                           </div>
-                          <div>{content._count?.viewedBy || 0}</div>
+                          <div className="text-white font-medium">{content._count?.viewedBy || 0}</div>
                         </div>
                         <div className="text-xs text-center">
-                          <div className="flex justify-center">
-                            <ThumbsUp className="h-4 w-4 text-gray-400" />
+                          <div className="flex justify-center mb-1">
+                            <ThumbsUp className="h-4 w-4 text-green-400" />
                           </div>
-                          <div>{content._count?.likedBy || 0}</div>
+                          <div className="text-white font-medium">{content._count?.likedBy || 0}</div>
                         </div>
                         <div className="text-xs text-center">
-                          <div className="flex justify-center">
-                            <MessageCircle className="h-4 w-4 text-gray-400" />
+                          <div className="flex justify-center mb-1">
+                            <MessageCircle className="h-4 w-4 text-purple-400" />
                           </div>
-                          <div>{content._count?.whatsappedBy || 0}</div>
+                          <div className="text-white font-medium">{content._count?.whatsappedBy || 0}</div>
                         </div>
                       </div>
                     </div>
@@ -809,57 +825,59 @@ export default function ContentManagementPage() {
             </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-between mt-4 bg-white px-4 py-3 border-t border-gray-200 sm:px-6 rounded-lg shadow-sm">
+            <div className="flex items-center justify-between mt-6 bg-slate-900/50 backdrop-blur-sm px-6 py-4 border-t border-slate-700/50 rounded-2xl shadow-xl">
               {/* Mobile pagination */}
-              <div className="flex justify-between w-full sm:hidden">
+              <div className="flex justify-between items-center w-full sm:hidden">
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === 1
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  className={`relative inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium rounded-xl transition-all ${currentPage === 1
+                    ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                    : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
                     }`}
                 >
+                  <ChevronRight className="h-4 w-4" />
                   السابق
                 </button>
-                <span className="text-sm text-gray-700">
+                <span className="text-sm text-slate-300 font-medium">
                   {currentPage} من {totalPages}
                 </span>
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages || totalPages === 0}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${currentPage === totalPages || totalPages === 0
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
+                  className={`relative inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium rounded-xl transition-all ${currentPage === totalPages || totalPages === 0
+                    ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                    : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
                     }`}
                 >
                   التالي
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
               </div>
 
               {/* Desktop pagination */}
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm text-gray-700">
-                    عرض <span className="font-medium">{startIndex + 1}</span>{" "}
+                  <p className="text-sm text-slate-300">
+                    عرض <span className="font-semibold text-white">{startIndex + 1}</span>{" "}
                     إلى{" "}
-                    <span className="font-medium">
+                    <span className="font-semibold text-white">
                       {Math.min(endIndex, totalItems)}
                     </span>{" "}
-                    من <span className="font-medium">{totalItems}</span> عنصر
+                    من <span className="font-semibold text-white">{totalItems}</span> عنصر
                   </p>
                 </div>
                 <div>
                   <nav
-                    className="relative z-0 inline-flex rounded-md shadow-sm -gap-px"
+                    className="relative z-0 inline-flex gap-2"
                     aria-label="Pagination"
                   >
                     <button
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${currentPage === 1
-                        ? "text-gray-300 cursor-not-allowed"
-                        : "text-gray-500 hover:bg-gray-50"
+                      className={`relative inline-flex items-center px-3 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === 1
+                        ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                        : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
                         }`}
                     >
                       <span className="sr-only">السابق</span>
@@ -880,9 +898,9 @@ export default function ContentManagementPage() {
                         <button
                           key={pageNumber}
                           onClick={() => goToPage(pageNumber)}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${currentPage === pageNumber
-                            ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600"
-                            : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+                          className={`relative inline-flex items-center px-4 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === pageNumber
+                            ? "z-10 bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-500/20"
+                            : "bg-slate-800/50 border-slate-600 text-slate-200 hover:bg-slate-700/50"
                             }`}
                         >
                           {pageNumber}
@@ -892,9 +910,9 @@ export default function ContentManagementPage() {
                     <button
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages || totalPages === 0}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${currentPage === totalPages || totalPages === 0
-                        ? "text-gray-300 cursor-not-allowed"
-                        : "text-gray-500 hover:bg-gray-50"
+                      className={`relative inline-flex items-center px-3 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === totalPages || totalPages === 0
+                        ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                        : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
                         }`}
                     >
                       <span className="sr-only">التالي</span>
@@ -906,10 +924,10 @@ export default function ContentManagementPage() {
             </div>
           </>
         ) : (
-          <div className="bg-white p-6 text-center rounded-lg shadow-sm">
-            <div className="text-gray-500 my-8">
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl p-12 text-center">
+            <div className="text-slate-400 my-8">
               <svg
-                className="mx-auto h-12 w-12 text-gray-400"
+                className="mx-auto h-16 w-16 text-slate-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -918,14 +936,14 @@ export default function ContentManagementPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1}
+                  strokeWidth={1.5}
                   d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
                 />
               </svg>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
+              <h3 className="mt-4 text-lg font-semibold text-white">
                 لا يوجد محتوى
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-slate-400">
                 لم يتم العثور على أي محتوى يطابق معايير البحث.
               </p>
             </div>
@@ -938,10 +956,11 @@ export default function ContentManagementPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
-              className="fixed inset-0 transition-opacity"
+              className="fixed inset-0 transition-opacity backdrop-blur-sm"
               aria-hidden="true"
+              onClick={() => setIsEditModalOpen(false)}
             >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              <div className="absolute inset-0 bg-black/70"></div>
             </div>
 
             <span
@@ -951,18 +970,26 @@ export default function ContentManagementPage() {
               &#8203;
             </span>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+              <div className="bg-slate-900 px-6 pt-6 pb-4 sm:p-8 sm:pb-6">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:text-right sm:w-full">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
-                      تعديل المحتوى
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                          <Edit className="h-5 w-5 text-white" />
+                        </div>
+                        تعديل المحتوى
+                      </h3>
+                      <button
+                        onClick={() => setIsEditModalOpen(false)}
+                        className="p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-white transition-all"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500 mb-4">
+                      <p className="text-sm text-slate-400 mb-6">
                         تعديل تفاصيل المحتوى (لا يمكن تعديل الوسائط)
                       </p>
 
@@ -970,25 +997,25 @@ export default function ContentManagementPage() {
                         onSubmit={handleSubmit(onSubmit)}
                         className="space-y-6"
                       >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="md:col-span-2">
                             <label
                               htmlFor="title"
-                              className="block text-sm font-medium text-gray-700 mb-1"
+                              className="block text-sm font-medium text-slate-200 mb-2"
                             >
                               العنوان
                             </label>
                             <input
                               type="text"
                               id="title"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.title ? "border-red-500" : ""
+                              className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.title ? "border-red-500" : "border-slate-600"
                                 }`}
                               {...register("title", {
                                 required: "العنوان مطلوب",
                               })}
                             />
                             {errors.title && (
-                              <p className="mt-1 text-sm text-red-600">
+                              <p className="mt-2 text-sm text-red-400">
                                 {errors.title.message}
                               </p>
                             )}
@@ -997,50 +1024,50 @@ export default function ContentManagementPage() {
                           <div className="md:col-span-2">
                             <label
                               htmlFor="description"
-                              className="block text-sm font-medium text-gray-700 mb-1"
+                              className="block text-sm font-medium text-slate-200 mb-2"
                             >
                               الوصف
                             </label>
                             <textarea
                               id="description"
-                              rows={3}
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.description ? "border-red-500" : ""
+                              rows={4}
+                              className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.description ? "border-red-500" : "border-slate-600"
                                 }`}
                               {...register("description", {
                                 required: "الوصف مطلوب",
                               })}
                             />
                             {errors.description && (
-                              <p className="mt-1 text-sm text-red-600">
+                              <p className="mt-2 text-sm text-red-400">
                                 {errors.description.message}
                               </p>
                             )}
                           </div>
 
                           <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-slate-200 mb-2">
                               نوع المالك
                             </label>
-                            <div className="flex gap-4">
-                              <label className="inline-flex items-center">
+                            <div className="flex gap-6">
+                              <label className="inline-flex items-center cursor-pointer">
                                 <input
                                   type="radio"
                                   value="INDIVIDUAL"
                                   checked={watchedOwnerType === "INDIVIDUAL"}
                                   onChange={() => handleOwnerTypeChange("INDIVIDUAL")}
-                                  className="form-radio"
+                                  className="form-radio text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900"
                                 />
-                                <span className="mx-2">فردي</span>
+                                <span className="mx-2 text-slate-200">فردي</span>
                               </label>
-                              <label className="inline-flex items-center">
+                              <label className="inline-flex items-center cursor-pointer">
                                 <input
                                   type="radio"
                                   value="STORE"
                                   checked={watchedOwnerType === "STORE"}
                                   onChange={() => handleOwnerTypeChange("STORE")}
-                                  className="form-radio"
+                                  className="form-radio text-blue-500 focus:ring-blue-500 focus:ring-offset-slate-900"
                                 />
-                                <span className="mx-2">متجر</span>
+                                <span className="mx-2 text-slate-200">متجر</span>
                               </label>
                             </div>
                           </div>
@@ -1049,7 +1076,7 @@ export default function ContentManagementPage() {
                             <div className="md:col-span-2">
                               <label
                                 htmlFor="storeId"
-                                className="block text-sm font-medium text-gray-700 mb-1"
+                                className="block text-sm font-medium text-slate-200 mb-2"
                               >
                                 اختر المتجر
                               </label>
@@ -1081,13 +1108,63 @@ export default function ContentManagementPage() {
                                       ) => {
                                         field.onChange(newValue ? newValue.value : '');
                                       }}
-                                    // theme styling...
+                                      theme={(theme) => ({
+                                        ...theme,
+                                        colors: {
+                                          ...theme.colors,
+                                          primary: "#3b82f6",
+                                          primary25: "#1e293b",
+                                          primary50: "#334155",
+                                          neutral0: "#1e293b",
+                                          neutral80: "#f8fafc",
+                                          neutral50: "#94a3b8",
+                                          neutral40: "#64748b",
+                                          neutral30: "#475569",
+                                          neutral20: "#334155",
+                                        },
+                                      })}
+                                      styles={{
+                                        control: (base, state) => ({
+                                          ...base,
+                                          borderRadius: "0.75rem",
+                                          borderColor: state.isFocused ? "#3b82f6" : "#475569",
+                                          backgroundColor: "#1e293b80",
+                                          padding: "0.5rem",
+                                          boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.2)" : "none",
+                                          "&:hover": {
+                                            borderColor: "#3b82f6",
+                                          },
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          backgroundColor: "#1e293b",
+                                          borderRadius: "0.75rem",
+                                          border: "1px solid #475569",
+                                        }),
+                                        option: (base, state) => ({
+                                          ...base,
+                                          backgroundColor: state.isSelected
+                                            ? "#3b82f6"
+                                            : state.isFocused
+                                              ? "#334155"
+                                              : "#1e293b",
+                                          color: "#f8fafc",
+                                        }),
+                                        input: (base) => ({
+                                          ...base,
+                                          color: "#f8fafc",
+                                        }),
+                                        singleValue: (base) => ({
+                                          ...base,
+                                          color: "#f8fafc",
+                                        }),
+                                      }}
                                     />
                                   );
                                 }}
                               />
                               {errors.storeId && (
-                                <p className="mt-1 text-sm text-red-600">
+                                <p className="mt-2 text-sm text-red-400">
                                   {errors.storeId.message}
                                 </p>
                               )}
@@ -1098,20 +1175,20 @@ export default function ContentManagementPage() {
                               <div>
                                 <label
                                   htmlFor="ownerName"
-                                  className="block text-sm font-medium text-gray-700 mb-1"
+                                  className="block text-sm font-medium text-slate-200 mb-2"
                                 >
                                   اسم المالك
                                 </label>
                                 <input
                                   type="text"
                                   id="ownerName"
-                                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerName ? "border-red-500" : ""}`}
+                                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.ownerName ? "border-red-500" : "border-slate-600"}`}
                                   {...register("ownerName", {
                                     required: watchedOwnerType === "INDIVIDUAL" ? "اسم المالك مطلوب" : false,
                                   })}
                                 />
                                 {errors.ownerName && (
-                                  <p className="mt-1 text-sm text-red-600">
+                                  <p className="mt-2 text-sm text-red-400">
                                     {errors.ownerName.message}
                                   </p>
                                 )}
@@ -1120,14 +1197,14 @@ export default function ContentManagementPage() {
                               <div>
                                 <label
                                   htmlFor="ownerNumber"
-                                  className="block text-sm font-medium text-gray-700 mb-1"
+                                  className="block text-sm font-medium text-slate-200 mb-2"
                                 >
                                   رقم الهاتف
                                 </label>
                                 <input
                                   type="text"
                                   id="ownerNumber"
-                                  className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.ownerNumber ? "border-red-500" : ""}`}
+                                  className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.ownerNumber ? "border-red-500" : "border-slate-600"}`}
                                   {...register("ownerNumber", {
                                     required: watchedOwnerType === "INDIVIDUAL" ? "رقم الهاتف مطلوب" : false,
                                     pattern: {
@@ -1137,7 +1214,7 @@ export default function ContentManagementPage() {
                                   })}
                                 />
                                 {errors.ownerNumber && (
-                                  <p className="mt-1 text-sm text-red-600">
+                                  <p className="mt-2 text-sm text-red-400">
                                     {errors.ownerNumber.message}
                                   </p>
                                 )}
@@ -1147,7 +1224,7 @@ export default function ContentManagementPage() {
                           <div>
                             <label
                               htmlFor="intervalHours"
-                              className="block text-sm font-medium text-gray-700 mb-1"
+                              className="block text-sm font-medium text-slate-200 mb-2"
                             >
                               ساعات الفاصل
                             </label>
@@ -1155,7 +1232,7 @@ export default function ContentManagementPage() {
                               type="number"
                               id="intervalHours"
                               min={1}
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.intervalHours ? "border-red-500" : ""
+                              className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.intervalHours ? "border-red-500" : "border-slate-600"
                                 }`}
                               {...register("intervalHours", {
                                 required: "ساعات الفاصل مطلوبة",
@@ -1166,7 +1243,7 @@ export default function ContentManagementPage() {
                               })}
                             />
                             {errors.intervalHours && (
-                              <p className="mt-1 text-sm text-red-600">
+                              <p className="mt-2 text-sm text-red-400">
                                 {errors.intervalHours.message}
                               </p>
                             )}
@@ -1175,21 +1252,21 @@ export default function ContentManagementPage() {
                           <div>
                             <label
                               htmlFor="endValidationDate"
-                              className="block text-sm font-medium text-gray-700 mb-1"
+                              className="block text-sm font-medium text-slate-200 mb-2"
                             >
                               تاريخ انتهاء الصلاحية
                             </label>
                             <input
                               type="datetime-local"
                               id="endValidationDate"
-                              className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md ${errors.endValidationDate ? "border-red-500" : ""
+                              className={`w-full px-4 py-3 bg-slate-800/50 border rounded-xl text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${errors.endValidationDate ? "border-red-500" : "border-slate-600"
                                 }`}
                               {...register("endValidationDate", {
                                 required: "تاريخ انتهاء الصلاحية مطلوب",
                               })}
                             />
                             {errors.endValidationDate && (
-                              <p className="mt-1 text-sm text-red-600">
+                              <p className="mt-2 text-sm text-red-400">
                                 {errors.endValidationDate.message}
                               </p>
                             )}
@@ -1198,7 +1275,7 @@ export default function ContentManagementPage() {
                           <div className="md:col-span-2">
                             <label
                               htmlFor="interestIds"
-                              className="block text-sm font-medium text-gray-700 mb-1"
+                              className="block text-sm font-medium text-slate-200 mb-2"
                             >
                               الاهتمامات
                             </label>
@@ -1212,6 +1289,46 @@ export default function ContentManagementPage() {
                                     label: interest.name,
                                   }))
                                   : [];
+
+                                const selectStyles = {
+                                  control: (base: any, state: any) => ({
+                                    ...base,
+                                    borderRadius: "0.75rem",
+                                    borderColor: state.isFocused ? "#3b82f6" : "#475569",
+                                    backgroundColor: "#1e293b80",
+                                    padding: "0.5rem",
+                                    boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.2)" : "none",
+                                  }),
+                                  menu: (base: any) => ({
+                                    ...base,
+                                    backgroundColor: "#1e293b",
+                                    borderRadius: "0.75rem",
+                                    border: "1px solid #475569",
+                                  }),
+                                  option: (base: any, state: any) => ({
+                                    ...base,
+                                    backgroundColor: state.isSelected ? "#3b82f6" : state.isFocused ? "#334155" : "#1e293b",
+                                    color: "#f8fafc",
+                                  }),
+                                  multiValue: (base: any) => ({
+                                    ...base,
+                                    backgroundColor: "#334155",
+                                    borderRadius: "0.5rem",
+                                  }),
+                                  multiValueLabel: (base: any) => ({
+                                    ...base,
+                                    color: "#f8fafc",
+                                  }),
+                                  multiValueRemove: (base: any) => ({
+                                    ...base,
+                                    color: "#94a3b8",
+                                  }),
+                                  input: (base: any) => ({
+                                    ...base,
+                                    color: "#f8fafc",
+                                  }),
+                                };
+
                                 return (
                                   <Select
                                     {...field}
@@ -1237,10 +1354,18 @@ export default function ContentManagementPage() {
                                       ...theme,
                                       colors: {
                                         ...theme.colors,
-                                        primary: "#4f46e5",
-                                        primary25: "#eef2ff",
+                                        primary: "#3b82f6",
+                                        primary25: "#1e293b",
+                                        primary50: "#334155",
+                                        neutral0: "#1e293b",
+                                        neutral80: "#f8fafc",
+                                        neutral50: "#94a3b8",
+                                        neutral40: "#64748b",
+                                        neutral30: "#475569",
+                                        neutral20: "#334155",
                                       },
                                     })}
+                                    styles={selectStyles}
                                   />
                                 );
                               }}
@@ -1248,16 +1373,16 @@ export default function ContentManagementPage() {
                           </div>
                         </div>
 
-                        <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                        <div className="mt-8 flex gap-3">
                           <button
                             type="submit"
                             disabled={updateMutation.isPending}
-                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+                            className="flex-1 inline-flex justify-center items-center gap-2 rounded-xl px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {updateMutation.isPending ? (
                               <>
                                 <svg
-                                  className="animate-spin -mx-1 mx-3 h-5 w-5 text-white"
+                                  className="animate-spin h-5 w-5 text-white"
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
                                   viewBox="0 0 24 24"
@@ -1284,7 +1409,7 @@ export default function ContentManagementPage() {
                           </button>
                           <button
                             type="button"
-                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                            className="px-6 py-3 inline-flex justify-center items-center rounded-xl border border-slate-600 bg-slate-800/50 text-base font-medium text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all"
                             onClick={() => setIsEditModalOpen(false)}
                           >
                             إلغاء
@@ -1305,10 +1430,11 @@ export default function ContentManagementPage() {
         <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
-              className="fixed inset-0 transition-opacity"
+              className="fixed inset-0 transition-opacity backdrop-blur-sm"
               aria-hidden="true"
+              onClick={() => setIsDeleteModalOpen(false)}
             >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+              <div className="absolute inset-0 bg-black/70"></div>
             </div>
 
             <span
@@ -1318,30 +1444,30 @@ export default function ContentManagementPage() {
               &#8203;
             </span>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-slate-900 px-6 pt-6 pb-4 sm:p-8">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:text-right sm:w-full">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
-                      تأكيد الحذف
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {`    هل أنت متأكد من رغبتك في حذف المحتوى "
-                        ${selectedContent?.title}"؟ هذا الإجراء لا يمكن التراجع
-                        عنه.`}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/20">
+                        <Trash2 className="h-6 w-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white">
+                        تأكيد الحذف
+                      </h3>
+                    </div>
+                    <div className="mt-4">
+                      <p className="text-sm text-slate-300 leading-relaxed">
+                        هل أنت متأكد من رغبتك في حذف المحتوى <span className="text-white font-semibold">"{selectedContent?.title}"</span>؟ هذا الإجراء لا يمكن التراجع عنه.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="bg-slate-800/50 px-6 py-4 sm:px-8 flex gap-3">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mx-3 sm:w-auto sm:text-sm"
+                  className="flex-1 inline-flex justify-center items-center gap-2 rounded-xl px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-base font-semibold text-white hover:from-red-700 hover:to-red-800 shadow-lg shadow-red-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => {
                     if (selectedContent) {
                       deleteMutation.mutate(selectedContent.id);
@@ -1352,7 +1478,7 @@ export default function ContentManagementPage() {
                   {deleteMutation.isPending ? (
                     <>
                       <svg
-                        className="animate-spin -mx-1 mx-3 h-5 w-5 text-white"
+                        className="animate-spin h-5 w-5 text-white"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -1374,12 +1500,15 @@ export default function ContentManagementPage() {
                       جاري الحذف...
                     </>
                   ) : (
-                    "نعم، حذف المحتوى"
+                    <>
+                      <Trash2 className="h-5 w-5" />
+                      نعم، حذف المحتوى
+                    </>
                   )}
                 </button>
                 <button
                   type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:mx-3 sm:w-auto sm:text-sm"
+                  className="px-6 py-3 inline-flex justify-center items-center rounded-xl border border-slate-600 bg-slate-800/50 text-base font-medium text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all"
                   onClick={() => setIsDeleteModalOpen(false)}
                 >
                   إلغاء

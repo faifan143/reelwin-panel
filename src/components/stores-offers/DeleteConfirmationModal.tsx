@@ -35,10 +35,10 @@ export const DeleteConfirmationModal: React.FC<{
             title={translations.confirmDelete || 'تأكيد الحذف'}
         >
             <div className="text-right">
-                <p className="text-red-600 font-medium mb-2">
+                <p className="text-red-400 font-medium mb-2">
                     {translations.deleteWarning || 'تحذير: هذا الإجراء لا يمكن التراجع عنه'}
                 </p>
-                <p className="mb-6">
+                <p className="mb-6 text-slate-200">
                     {translations.sureDelete || 'هل أنت متأكد من حذف'} {typeTranslation} "{itemName}"؟
                 </p>
                 <div className="flex justify-end gap-3 gap-reverse">

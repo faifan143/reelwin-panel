@@ -27,24 +27,24 @@ export const MediaUploader = ({
 
   return (
     <div className="mb-8">
-      <label className="block font-semibold text-gray-700 mb-3 flex items-center">
+      <label className="block font-semibold text-slate-200 mb-3 flex items-center">
         {icon}
         {label} *
       </label>
       <div className="flex flex-col space-y-4">
         <label
-          className={`flex items-center justify-center p-6 ${colorScheme.gradient} border-2 border-dashed ${colorScheme.border} rounded-xl cursor-pointer ${colorScheme.hover} group transition-all duration-300`}
+          className={`flex items-center justify-center p-8 bg-slate-800/50 border-2 border-dashed border-slate-600 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-700/50 group transition-all duration-300`}
         >
           <div className="flex flex-col items-center text-center">
             <div
-              className={`${colorScheme.bg} rounded-full p-3 mb-3 group-hover:bg-${colorScheme.hover} transition-colors`}
+              className={`${colorScheme.bg} rounded-full p-4 mb-4 group-hover:scale-110 transition-transform`}
             >
-              <Upload className={`h-6 w-6 ${colorScheme.text}`} />
+              <Upload className={`h-7 w-7 ${colorScheme.text}`} />
             </div>
-            <span className={`${colorScheme.text} font-semibold mb-1`}>
+            <span className={`text-slate-200 font-semibold mb-2 text-lg`}>
               اضغط أو اسحب لإضافة {fileType}
             </span>
-            <span className="text-gray-500 text-sm">
+            <span className="text-slate-400 text-sm">
               {accept} حتى {fileType === "صور" ? "10MB" : "100MB"}
             </span>
           </div>

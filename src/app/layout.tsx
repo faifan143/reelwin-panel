@@ -1,19 +1,20 @@
 "use client";
 import ContentManagementPage from "@/components/content/ContentManagementPage";
 import useStore from "@/store"; // Import the Zustand store
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  DatabaseOutlined,
-  GiftOutlined,
-  LogoutOutlined,
-  PlayCircleOutlined,
-  TagsOutlined,
-  TrophyOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+  PlayCircleIcon,
+  DatabaseIcon,
+  Tag01Icon,
+  GiftIcon,
+  Award01Icon,
+  Store01Icon,
+  UserCircleIcon,
+  Logout01Icon,
+} from "@hugeicons/core-free-icons";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Avatar, Button, Drawer, Layout, Menu, Modal, Tooltip } from "antd";
-import { StoreIcon } from "lucide-react";
+import { Drawer, Layout, Modal } from "antd";
 import { useEffect, useState } from "react";
 import AdminPage from "../components/AdminPage";
 import LoginPage from "../components/LoginPage"; // Import the login page component
@@ -22,6 +23,8 @@ import "./globals.css";
 import GemsVersionsManager from "@/components/gems-versions/GemsVersionsManager";
 import RewardsManagementPage from "@/components/pages/RewardsAndCategoriesPage";
 import StoresAndOffersPage from "@/components/pages/StoresAndOffersPage";
+import { cn } from "@/lib/utils";
+import { Tooltip as TooltipWrapper } from "@/components/ui/tooltip";
 
 const { Content } = Layout;
 
@@ -79,32 +82,32 @@ export default function RootLayout() {
   const menuItems = [
     {
       key: "content",
-      icon: <PlayCircleOutlined />,
+      icon: PlayCircleIcon,
       label: "إضافة محتوى",
     },
     {
       key: "content-management", // New key for content management
-      icon: <DatabaseOutlined />,
+      icon: DatabaseIcon,
       label: "إدارة المحتوى",
     },
     {
       key: "interests",
-      icon: <TagsOutlined />,
+      icon: Tag01Icon,
       label: "إدارة الاهتمامات",
     },
     {
       key: "generate-gem",
-      icon: <GiftOutlined />,
+      icon: GiftIcon,
       label: "الجواهر و الإصدارات",
     },
     {
       key: "rewards",
-      icon: <TrophyOutlined />,
+      icon: Award01Icon,
       label: "إدارة المكافآت",
     },
     {
       key: "stores",
-      icon: <StoreIcon />,
+      icon: Store01Icon,
       label: "إدارة المحلات و العروض",
     },
   ];
@@ -156,21 +159,21 @@ export default function RootLayout() {
   }
 
   const Sidebar = () => (
-    <div className="flex flex-col h-full bg-gradient-to-br from-blue-900 to-indigo-950 shadow-xl">
+    <div className="flex flex-col h-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 shadow-2xl border-l border-slate-700/50">
       {/* Logo Section */}
-      <div className="flex justify-center items-center h-20 border-b border-blue-800/50 px-4">
+      <div className="flex justify-center items-center h-24 border-b border-slate-700/50 px-6 bg-slate-800/50">
         {collapsed && !isMobile ? (
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg">
-            <span className="text-white text-xl font-bold">R</span>
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl">
+            <span className="text-white text-2xl font-bold">R</span>
           </div>
         ) : (
-          <div className="flex items-center w-full">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg mx-3">
-              <span className="text-white text-xl font-bold">R</span>
+          <div className="flex items-center w-full gap-4">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl">
+              <span className="text-white text-2xl font-bold">R</span>
             </div>
             <div className="flex flex-col">
-              <h1 className="text-xl font-bold text-white m-0">Radar</h1>
-              <span className="text-sm font-normal text-blue-200 opacity-90">
+              <h1 className="text-2xl font-bold text-white m-0 tracking-tight">Radar</h1>
+              <span className="text-sm font-medium text-slate-400">
                 لوحة الإدارة
               </span>
             </div>
@@ -178,85 +181,97 @@ export default function RootLayout() {
         )}
       </div>
 
-      {/* Menu Section with hover effects */}
-      <Menu
-        theme="dark"
-        mode="inline"
-        selectedKeys={[activeTab]}
-        onClick={({ key }) => handleMenuClick(key)}
-        className="bg-transparent border-r-0 flex-1 py-4"
-        items={menuItems.map((item) => ({
-          ...item,
-          className: `my-1 mx-2 rounded-lg transition-all !text-base ${isAddingContent && item.key !== activeTab
-            ? "opacity-50 cursor-not-allowed"
-            : ""
-            }`,
-          style: {
-            backgroundColor:
-              activeTab === item.key
-                ? "rgba(59, 130, 246, 0.2)"
-                : "transparent",
-            margin: "4px 8px",
-          },
-          disabled: isAddingContent && item.key !== activeTab,
-        }))}
-        style={{
-          backgroundColor: "transparent",
-        }}
-      />
+      {/* Menu Section with professional design */}
+      <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+        {menuItems.map((item) => {
+          const isActive = activeTab === item.key;
+          const isDisabled = isAddingContent && item.key !== activeTab;
+          
+          return (
+            <button
+              key={item.key}
+              onClick={() => !isDisabled && handleMenuClick(item.key)}
+              disabled={isDisabled}
+              className={cn(
+                "w-full flex items-center gap-4 px-5 py-4 rounded-xl text-base font-medium transition-all duration-300 group",
+                isActive
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-white",
+                isDisabled && "opacity-40 cursor-not-allowed"
+              )}
+            >
+              <span className={cn(
+                "transition-all duration-300 flex items-center pointer-events-none",
+                isActive ? "scale-100" : "scale-95 group-hover:scale-100"
+              )}>
+                <HugeiconsIcon icon={item.icon} size={24} color="currentColor" />
+              </span>
+              {!collapsed && (
+                <span className="flex-1 text-right text-base pointer-events-none">{item.label}</span>
+              )}
+              {isActive && !collapsed && (
+                <div className="w-2 h-2 rounded-full bg-white pointer-events-none" />
+              )}
+            </button>
+          );
+        })}
+      </nav>
 
       {/* User Profile Section */}
-      <div className="p-4 border-t border-blue-800/50 bg-blue-900/30">
-        <div className="flex items-center justify-between bg-blue-800/20 rounded-lg p-3">
-          <div className="flex items-center">
-            <Avatar
-              size="default"
-              className="bg-gradient-to-r from-blue-400 to-indigo-500 shadow-md"
-              icon={<UserOutlined />}
-            />
+      <div className="p-4 border-t border-slate-700/50 bg-slate-900/50">
+        <div className="flex items-center justify-between bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <HugeiconsIcon icon={UserCircleIcon} size={20} color="white" />
+            </div>
             {!collapsed && (
-              <div className="flex flex-col mx-3">
-                <span className="text-white text-sm font-medium">
+              <div className="flex flex-col">
+                <span className="text-white text-sm font-semibold">
                   مدير النظام
                 </span>
-                <span className="text-blue-300 text-xs">مرحباً بك!</span>
+                <span className="text-slate-400 text-xs">مرحباً بك!</span>
               </div>
             )}
           </div>
-          {/* Always show logout button regardless of collapsed state */}
-          <Tooltip
-            title={
+          {/* Logout button with tooltip */}
+          <TooltipWrapper
+            content={
               isAddingContent
                 ? "لا يمكن تسجيل الخروج أثناء إضافة المحتوى"
                 : "تسجيل الخروج"
             }
-            placement="bottom"
+            side="bottom"
           >
-            <Button
-              type="text"
-              icon={<LogoutOutlined />}
+            <button
               onClick={handleLogout}
-              className={`text-white/80 hover:text-white hover:bg-blue-700/50 rounded-lg ${isAddingContent ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              size="middle"
               disabled={isAddingContent}
-            />
-          </Tooltip>
+              className={cn(
+                "p-2.5 rounded-lg transition-all duration-200 flex items-center justify-center",
+                isAddingContent
+                  ? "opacity-40 cursor-not-allowed text-slate-500"
+                  : "text-slate-400 hover:text-white hover:bg-slate-700 hover:scale-105"
+              )}
+            >
+              <HugeiconsIcon icon={Logout01Icon} size={20} color="currentColor" />
+            </button>
+          </TooltipWrapper>
         </div>
-        <div className="text-blue-300/80 text-center text-xs mt-3">
-          {!collapsed && "Radar © 2025"}
-        </div>
+        {!collapsed && (
+          <div className="text-slate-500 text-center text-xs mt-4 font-medium">
+            Radar © 2025
+          </div>
+        )}
       </div>
     </div>
   );
 
   return (
     <html lang="ar" dir="rtl">
-      <body className="bg-gray-100">
+      <body className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
         <QueryClientProvider client={queryClient}>
           <StoreAuthProvider>
-            <Layout className="min-h-screen">
-              {/* Modal for navigation warning */}
+            <Layout className="min-h-screen bg-transparent">
+              {/* Modal for navigation warning using Ant Design (keeping for now) */}
               <Modal
                 title={
                   <div className="text-right font-bold text-red-600">تحذير</div>
@@ -264,13 +279,13 @@ export default function RootLayout() {
                 open={!!attemptedNavigation}
                 onCancel={() => setAttemptedNavigation(null)}
                 footer={[
-                  <Button
+                  <button
                     key="back"
                     onClick={() => setAttemptedNavigation(null)}
-                    className="bg-gray-200 hover:bg-gray-300"
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors"
                   >
                     البقاء هنا
-                  </Button>,
+                  </button>,
                 ]}
                 centered
               >
@@ -284,38 +299,34 @@ export default function RootLayout() {
 
               {/* Mobile Top Navbar */}
               {isMobile && (
-                <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-blue-900 to-indigo-950 h-16 flex items-center px-4 shadow-lg">
-                  <Button
-                    type="text"
-                    icon={
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="white"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="w-6 h-6"
-                      >
-                        <line x1="4" y1="6" x2="20" y2="6"></line>
-                        <line x1="4" y1="12" x2="20" y2="12"></line>
-                        <line x1="4" y1="18" x2="20" y2="18"></line>
-                      </svg>
-                    }
+                <div className="fixed top-0 right-0 left-0 z-50 bg-gradient-to-r from-slate-800 via-slate-900 to-slate-950 h-16 flex items-center px-4 shadow-xl border-b border-slate-700/50">
+                  <button
                     onClick={toggleMenu}
-                    className={`p-2 text-white hover:bg-blue-800/50 hover:text-blue-200 transition-all rounded-lg ${isAddingContent ? "opacity-50" : ""
-                      }`}
-                    disabled={isAddingContent}
-                  />
+                    className="p-2 hover:bg-slate-700 rounded-lg transition-all duration-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-6 h-6"
+                    >
+                      <line x1="4" y1="6" x2="20" y2="6"></line>
+                      <line x1="4" y1="12" x2="20" y2="12"></line>
+                      <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                  </button>
                   <div className="flex items-center mx-4">
                     <div className="flex flex-col">
                       <h1 className="text-lg font-bold text-white m-0 leading-tight">
                         Radar
                       </h1>
-                      <span className="text-xs font-normal text-blue-200">
+                      <span className="text-xs font-medium text-slate-400">
                         لوحة الإدارة
                       </span>
                     </div>
@@ -324,8 +335,8 @@ export default function RootLayout() {
                   {/* Show a loading indicator in the mobile header when content is being added */}
                   {isAddingContent && (
                     <div className="mx-auto flex items-center">
-                      <div className="animate-pulse w-3 h-3 rounded-full bg-yellow-400 mx-2"></div>
-                      <span className="text-yellow-200 text-xs">
+                      <div className="animate-pulse w-3 h-3 rounded-full bg-blue-500 mx-2"></div>
+                      <span className="text-slate-300 text-xs">
                         جاري الإضافة...
                       </span>
                     </div>
@@ -368,10 +379,10 @@ export default function RootLayout() {
                   marginRight: isMobile ? 0 : 280, // Increased width for desktop
                   marginTop: isMobile ? 64 : 0,
                   transition: "margin 0.3s ease",
-                  background: "#f5f7fa",
+                  background: "transparent",
                 }}
               >
-                <Content className="m-4 sm:m-6 p-6 bg-white rounded-xl shadow-sm">
+                <Content className="p-0 bg-transparent">
                   {activeTab === "content" && <AdminPage />}
                   {activeTab === "content-management" && (
                     <ContentManagementPage />

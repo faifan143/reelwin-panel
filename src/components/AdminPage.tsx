@@ -1,12 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import useStore from "@/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
+  AlertCircle,
   Calendar,
   Clock,
   Image,
+  Info,
+  Store as StoreIcon,
   Tag,
   Upload,
   User,
@@ -15,16 +23,14 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select, { SingleValue } from "react-select";
-import { FormSection } from "./content/FormSection";
 import { MediaPreview } from "./content/MediaPreview";
 import { MediaUploader } from "./content/MediaUploader";
 import { StatusMessage } from "./content/StatusMessage";
 import { ContentFormData, ContentOwnerType, Interest } from "./content/type";
 
 // Import the react-phone-number-input components and styles
-import PhoneInput from 'react-phone-number-input';
+import { Flag } from 'lucide-react';
 import 'react-phone-number-input/style.css';
-import { Flag, Globe } from 'lucide-react';
 
 interface Store {
   "id": string,
@@ -182,62 +188,74 @@ export default function AdminPage() {
 
   // Owner Section Render Method
   const renderOwnerSection = () => (
-    <FormSection
-      title="معلومات المالك"
-      icon={<User className="h-5 w-5 text-green-600" />}
-      bgColor="bg-green-100"
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
+          <User className="h-5 w-5 text-white" />
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-white">معلومات المالك</h3>
+          <p className="text-xs text-slate-400 mt-0.5">حدد نوع المالك والمعلومات</p>
+        </div>
+      </div>
+
+      <div className="space-y-5">
         {/* Owner Type Selection */}
-        <div className="md:col-span-2">
-          <label className="block font-semibold text-gray-700 mb-2">
-            نوع المالك
-          </label>
-          <div className="flex gap-4">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                value={"INDIVIDUAL"}
-                checked={ownerType === "INDIVIDUAL"}
-                onChange={() => setOwnerType("INDIVIDUAL")}
-                className="form-radio"
-              />
-              <span className="mx-2">فردي</span>
-            </label>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                value={"STORE"}
-                checked={ownerType === "STORE"}
-                onChange={() => setOwnerType("STORE")}
-                className="form-radio"
-              />
-              <span className="mx-2">متجر</span>
-            </label>
+        <div className="space-y-3">
+          <Label className="text-slate-200 font-medium text-sm">نوع المالك</Label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setOwnerType("INDIVIDUAL")}
+              className={`px-4 py-3 rounded-xl border-2 transition-all ${
+                ownerType === "INDIVIDUAL"
+                  ? "border-blue-500 bg-blue-500/10 text-blue-400"
+                  : "border-slate-600 bg-slate-800/30 text-slate-300 hover:border-slate-500"
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <User className="h-4 w-4" />
+                <span className="font-medium">فردي</span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setOwnerType("STORE")}
+              className={`px-4 py-3 rounded-xl border-2 transition-all ${
+                ownerType === "STORE"
+                  ? "border-blue-500 bg-blue-500/10 text-blue-400"
+                  : "border-slate-600 bg-slate-800/30 text-slate-300 hover:border-slate-500"
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <StoreIcon className="h-4 w-4" />
+                <span className="font-medium">متجر</span>
+              </div>
+            </button>
           </div>
         </div>
 
         {ownerType === "INDIVIDUAL" ? (
           <>
-            <div>
-              <label htmlFor="ownerName" className="block font-semibold text-gray-700 mb-2">
-                اسم المالك
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="ownerName" className="text-slate-200 font-medium text-sm">اسم المالك</Label>
+              <Input
+                id="ownerName"
                 {...register("ownerName", {
                   required: ownerType === "INDIVIDUAL"
                 })}
-                className="w-full px-4 py-3 border rounded-lg"
-                placeholder="أدخل اسم المالك"
+                className={`bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-11 ${errors.ownerName ? "border-red-500" : ""}`}
+                placeholder="الاسم الكامل"
               />
               {errors.ownerName && (
-                <p className="text-red-500 text-sm mt-2">اسم المالك مطلوب</p>
+                <p className="text-xs text-red-400 flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3" />
+                  اسم المالك مطلوب
+                </p>
               )}
             </div>
-            <div>
-              <label htmlFor="ownerNumber" className="block font-semibold text-gray-700 mb-2">
-                رقم المالك
-              </label>
+            <div className="space-y-2">
+              <Label htmlFor="ownerNumber" className="text-slate-200 font-medium text-sm">رقم الهاتف</Label>
               {/* Phone Input with Country Code Selector */}
               <div className="phone-input-rtl">
                 <Controller
@@ -369,19 +387,19 @@ export default function AdminPage() {
                       <>
                         <div className="relative w-full" ref={dropdownRef}>
                           {/* Main phone input container */}
-                          <div className="border border-gray-300 rounded-lg overflow-hidden  transition-all">
+                          <div className="border border-slate-600 bg-slate-700/50 rounded-lg overflow-hidden transition-all focus-within:border-blue-500">
                             <div className="flex items-center h-12">
                               {/* Country selector area */}
                               <button
                                 type="button"
-                                className="flex items-center gap-1 px-3 py-3 border-r border-gray-300 h-full focus:outline-none hover:bg-gray-50 transition-colors"
+                                className="flex items-center gap-1 px-3 py-3 border-r border-slate-600 h-full focus:outline-none hover:bg-slate-600/50 transition-colors text-white"
                                 onClick={() => setIsOpen(!isOpen)}
                               >
                                 <div className="flex items-center mr-2">
                                   <FlagIcon countryCode={selectedCountry.code} className="w-6 h-4" />
                                 </div>
-                                <span className="text-sm font-medium">{selectedCountry.code}</span>
-                                <svg className="h-4 w-4 text-gray-500 ml-2 transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span className="text-sm font-medium text-white">{selectedCountry.code}</span>
+                                <svg className="h-4 w-4 text-slate-400 ml-2 transition-transform" style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
                               </button>
@@ -398,14 +416,14 @@ export default function AdminPage() {
                                     value = value.replace(/^0+/, "");
                                     field.onChange(selectedCountry.dialCode + value);
                                   }}
-                                  className="w-full h-full p-4 focus:outline-none text-base bg-transparent"
+                                  className="w-full h-full p-4 focus:outline-none text-base bg-transparent text-white placeholder:text-slate-400"
                                   dir="ltr"
                                   placeholder="مثال: 998419869"
                                 />
                               </div>
 
                               {/* Country code display on the right */}
-                              <div className="px-4 text-base font-medium text-gray-600">
+                              <div className="px-4 text-base font-medium text-slate-300">
                                 {selectedCountry.dialCode}
                               </div>
                             </div>
@@ -413,11 +431,11 @@ export default function AdminPage() {
 
                           {/* Custom dropdown */}
                           {isOpen && (
-                            <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-white border border-gray-200 rounded-lg shadow-lg">
+                            <div className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-slate-700 border border-slate-600 rounded-lg shadow-2xl">
                               {countries.map((country) => (
                                 <div
                                   key={country.code}
-                                  className={`flex items-center  justify-between px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors ${selectedCountry.code === country.code ? 'bg-blue-100 text-blue-800' : 'text-gray-700'}`}
+                                  className={`flex items-center justify-between px-4 py-3 hover:bg-slate-600 cursor-pointer transition-colors ${selectedCountry.code === country.code ? 'bg-blue-600 text-white' : 'text-slate-200'}`}
                                   onClick={() => handleCountrySelect(country)}
                                 >
                                   <div className="flex items-center gap-1">
@@ -426,10 +444,10 @@ export default function AdminPage() {
                                     </div>
                                     <div className="flex flex-col">
                                       <span className="font-medium">{country.name}</span>
-                                      <span className="text-sm text-gray-500">{country.dialCode}</span>
+                                      <span className="text-sm text-slate-400">{country.dialCode}</span>
                                     </div>
                                   </div>
-                                  <span className="text-sm font-mono text-gray-400">{country.code}</span>
+                                  <span className="text-sm font-mono text-slate-400">{country.code}</span>
                                 </div>
                               ))}
                             </div>
@@ -443,7 +461,7 @@ export default function AdminPage() {
                 />
               </div>
               {errors.ownerNumber && (
-                <p className="text-red-500 text-sm mt-2">
+                <p className="text-red-400 text-sm mt-2">
                   {errors.ownerNumber.message || "رقم الهاتف مطلوب"}
                 </p>
               )}
@@ -451,10 +469,10 @@ export default function AdminPage() {
             </div>
           </>
         ) : (
-          <div className="md:col-span-2">
-            <label htmlFor="storeId" className="block font-semibold text-gray-700 mb-2">
+          <div className="space-y-2 relative z-50">
+            <Label htmlFor="storeId" className="text-slate-200 font-medium text-sm">
               اختر المتجر
-            </label>
+            </Label>
             <Controller
               name="storeId"
               control={control}
@@ -473,6 +491,9 @@ export default function AdminPage() {
                     options={storeOptions}
                     placeholder="اختر المتجر"
                     isLoading={storesLoading}
+                    classNamePrefix="react-select"
+                    noOptionsMessage={() => "لا توجد متاجر متاحة"}
+                    loadingMessage={() => "جاري التحميل..."}
                     value={
                       field.value
                         ? storeOptions.find(option => option.value === field.value)
@@ -483,168 +504,262 @@ export default function AdminPage() {
                     ) => {
                       field.onChange(newValue ? newValue.value : '');
                     }}
+                    theme={(theme) => ({
+                      ...theme,
+                      colors: {
+                        ...theme.colors,
+                        primary: "#3b82f6",
+                        primary25: "#1e3a8a",
+                        primary50: "#1e40af",
+                        neutral0: "#334155",
+                        neutral5: "#475569",
+                        neutral10: "#64748b",
+                        neutral20: "#475569",
+                        neutral30: "#64748b",
+                        neutral40: "#94a3b8",
+                        neutral50: "#cbd5e1",
+                        neutral60: "#e2e8f0",
+                        neutral70: "#f1f5f9",
+                        neutral80: "#ffffff",
+                        neutral90: "#ffffff",
+                      },
+                    })}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        borderRadius: "0.5rem",
+                        borderColor: state.isFocused ? "#3b82f6" : "#475569",
+                        backgroundColor: "#334155",
+                        padding: "2px",
+                        boxShadow: state.isFocused ? "0 0 0 2px rgba(59, 130, 246, 0.2)" : "none",
+                        minHeight: "44px",
+                        "&:hover": {
+                          borderColor: "#3b82f6",
+                        },
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        backgroundColor: "#334155",
+                        border: "1px solid #475569",
+                        borderRadius: "0.5rem",
+                        zIndex: 9999,
+                        boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2)",
+                      }),
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        backgroundColor: state.isSelected 
+                          ? "#1e40af" 
+                          : state.isFocused 
+                          ? "#1e3a8a" 
+                          : "#334155",
+                        color: "#ffffff",
+                        cursor: "pointer",
+                        "&:hover": {
+                          backgroundColor: "#1e40af",
+                        },
+                      }),
+                      input: (base) => ({
+                        ...base,
+                        color: "#ffffff",
+                      }),
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#94a3b8",
+                      }),
+                      singleValue: (base) => ({
+                        ...base,
+                        color: "#ffffff",
+                      }),
+                      indicatorSeparator: (base) => ({
+                        ...base,
+                        backgroundColor: "#475569",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#94a3b8",
+                        "&:hover": {
+                          color: "#ffffff",
+                        },
+                      }),
+                      clearIndicator: (base) => ({
+                        ...base,
+                        color: "#94a3b8",
+                        "&:hover": {
+                          color: "#ffffff",
+                        },
+                      }),
+                      loadingIndicator: (base) => ({
+                        ...base,
+                        color: "#3b82f6",
+                      }),
+                    }}
+                    menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                    menuPosition="fixed"
                   />
                 );
               }}
             />
             {errors.storeId && (
-              <p className="text-red-500 text-sm mt-2">يجب اختيار متجر</p>
+              <p className="text-xs text-red-400 flex items-center gap-1 mt-1">
+                <AlertCircle className="h-3 w-3" />
+                يجب اختيار متجر
+              </p>
             )}
           </div>
         )}
       </div>
-    </FormSection>
+    </div>
   );
 
   // Main render method
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 px-8 py-6">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-2xl font-bold text-white">إضافة محتوى جديد</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Professional Header */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <Upload className="h-7 w-7 text-white" />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-slate-900"></div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">إضافة محتوى جديد</h1>
+                <p className="text-slate-400 text-sm mt-0.5">قم بإنشاء وإدارة المحتوى الخاص بك بسهولة</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium"
+              >
+                مسودة
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Content Form */}
-      <div className="p-8">
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <form
           ref={formRef}
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-8"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         >
-          {/* Basic Info Section */}
-          <FormSection
-            title="المعلومات الأساسية"
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-blue-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            }
-            bgColor="bg-blue-100"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label
-                  htmlFor="title"
-                  className=" font-semibold text-gray-700 mb-2 flex items-center"
-                >
-                  <span className="text-red-500 mx-1">*</span> العنوان
-                </label>
-                <div className="relative">
-                  <input
+          {/* Left Column - Main Form */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Basic Information Card */}
+            <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">المعلومات الأساسية</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">عنوان ووصف المحتوى</p>
+                </div>
+              </div>
+              
+              <div className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="title" className="text-slate-200 font-medium text-sm flex items-center gap-2">
+                    <span className="text-red-400">*</span>
+                    عنوان المحتوى
+                  </Label>
+                  <Input
                     id="title"
-                    className={`w-full px-4 py-3 border ${errors.title ? "border-red-500" : "border-gray-300"
-                      } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
-                    placeholder="أدخل عنوان المحتوى"
+                    placeholder="مثال: عرض خاص على المنتجات"
+                    className={`bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-11 ${errors.title ? "border-red-500" : ""}`}
                     {...register("title", { required: "العنوان مطلوب" })}
                   />
                   {errors.title && (
-                    <p className="text-red-500 text-sm mt-2 flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mx-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                    <p className="text-xs text-red-400 flex items-center gap-1 mt-1">
+                      <AlertCircle className="h-3 w-3" />
                       {errors.title.message}
                     </p>
                   )}
                 </div>
-              </div>
 
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="description"
-                  className=" font-semibold text-gray-700 mb-2 flex items-center"
-                >
-                  <span className="text-red-500 mx-1">*</span> الوصف
-                </label>
-                <textarea
-                  id="description"
-                  rows={3}
-                  className={`w-full px-4 py-3 border ${errors.description ? "border-red-500" : "border-gray-300"
-                    } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
-                  placeholder="أدخل وصف المحتوى"
-                  {...register("description", { required: "الوصف مطلوب" })}
-                />
-                {errors.description && (
-                  <p className="text-red-500 text-sm mt-2 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mx-1"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {errors.description.message}
-                  </p>
-                )}
+                <div className="space-y-2">
+                  <Label htmlFor="description" className="text-slate-200 font-medium text-sm flex items-center gap-2">
+                    <span className="text-red-400">*</span>
+                    وصف المحتوى
+                  </Label>
+                  <Textarea
+                    id="description"
+                    rows={4}
+                    className={`bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-none ${errors.description ? "border-red-500" : ""}`}
+                    placeholder="اكتب وصفاً تفصيلياً للمحتوى..."
+                    {...register("description", { required: "الوصف مطلوب" })}
+                  />
+                  {errors.description && (
+                    <p className="text-xs text-red-400 flex items-center gap-1 mt-1">
+                      <AlertCircle className="h-3 w-3" />
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </FormSection>
 
 
           {/* Owner Section */}
           {renderOwnerSection()}
 
-          {/* Content Settings Section */}
-
-          <FormSection
-            title="إعدادات المحتوى"
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-purple-600"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            }
-            bgColor="bg-purple-100"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label
-                  htmlFor="intervalHours"
-                  className=" font-semibold text-gray-700 mb-2 flex items-center"
+          {/* Content Settings Card */}
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  <span className="text-red-500 mx-1">*</span> ساعات الفاصل
-                </label>
-                <div className="relative">
-                  <input
+                  <path
+                    fillRule="evenodd"
+                    d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">إعدادات المحتوى</h3>
+                <p className="text-xs text-slate-400 mt-0.5">الجدولة والاهتمامات</p>
+              </div>
+            </div>
+
+            <div className="space-y-5">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="intervalHours" className="text-slate-200 font-medium text-sm flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-slate-400" />
+                    <span className="text-red-400">*</span>
+                    ساعات الفاصل
+                  </Label>
+                  <Input
                     type="number"
                     id="intervalHours"
-                    className={`w-full px-4 py-3 pl-10 border ${errors.intervalHours ? "border-red-500" : "border-gray-300"
-                      } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
-                    placeholder="أدخل عدد ساعات الفاصل"
+                    className={`bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-11 ${errors.intervalHours ? "border-red-500" : ""}`}
+                    placeholder="22"
                     min={1}
                     {...register("intervalHours", {
                       required: "ساعات الفاصل مطلوبة",
@@ -654,35 +769,20 @@ export default function AdminPage() {
                       },
                     })}
                   />
-                  <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   {errors.intervalHours && (
-                    <p className="text-red-500 text-sm mt-2 flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mx-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                    <p className="text-xs text-red-400 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
                       {errors.intervalHours.message}
                     </p>
                   )}
                 </div>
-              </div>
 
-              <div>
-                <label
-                  htmlFor="endValidationDate"
-                  className="font-semibold text-gray-700 mb-2 flex items-center"
-                >
-                  <span className="text-red-500 mx-1">*</span> تاريخ انتهاء الصلاحية
-                </label>
-                <div className="relative">
+                <div className="space-y-2">
+                  <Label htmlFor="endValidationDate" className="text-slate-200 font-medium text-sm flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-slate-400" />
+                    <span className="text-red-400">*</span>
+                    تاريخ الانتهاء
+                  </Label>
                   <Controller
                     name="endValidationDate"
                     control={control}
@@ -691,49 +791,34 @@ export default function AdminPage() {
                       validate: (value) => {
                         const selectedDate = new Date(value);
                         const today = new Date();
-                        today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
+                        today.setHours(0, 0, 0, 0);
                         return selectedDate >= today || "لا يمكن اختيار تاريخ في الماضي";
                       },
                     }}
                     render={({ field }) => (
-                      <input
+                      <Input
                         type="datetime-local"
                         id="endValidationDate"
-                        className={`w-full px-4 py-3 pl-10 border ${errors.endValidationDate ? "border-red-500" : "border-gray-300"
-                          } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
-                        min={new Date().toISOString().slice(0, 16)} // Prevent past dates
+                        className={`bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 h-11 ${errors.endValidationDate ? "border-red-500" : ""}`}
+                        min={new Date().toISOString().slice(0, 16)}
                         {...field}
                       />
                     )}
                   />
-                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   {errors.endValidationDate && (
-                    <p className="text-red-500 text-sm mt-2 flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mx-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                    <p className="text-xs text-red-400 flex items-center gap-1">
+                      <AlertCircle className="h-3 w-3" />
                       {errors.endValidationDate.message}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="interestIds"
-                  className=" font-semibold text-gray-700 mb-2 flex items-center"
-                >
-                  <Tag className="h-5 w-5 mx-2 text-gray-500" />
+              
+              <div className="space-y-2">
+                <Label htmlFor="interestIds" className="flex items-center gap-2 text-slate-200 font-medium text-sm">
+                  <Tag className="h-4 w-4 text-slate-400" />
                   الاهتمامات (اختياري)
-                </label>
+                </Label>
                 <Controller
                   name="interestIds"
                   control={control}
@@ -766,221 +851,283 @@ export default function AdminPage() {
                           ...theme,
                           colors: {
                             ...theme.colors,
-                            primary: "#2563eb",
-                            primary25: "#dbeafe",
-                            primary50: "#bfdbfe",
+                            primary: "#3b82f6",
+                            primary25: "#1e3a8a",
+                            primary50: "#1e40af",
+                            neutral0: "#334155",
+                            neutral5: "#475569",
+                            neutral10: "#64748b",
+                            neutral20: "#475569",
+                            neutral30: "#64748b",
+                            neutral40: "#94a3b8",
+                            neutral50: "#cbd5e1",
+                            neutral60: "#e2e8f0",
+                            neutral70: "#f1f5f9",
+                            neutral80: "#ffffff",
+                            neutral90: "#ffffff",
                           },
                         })}
                         styles={{
                           control: (base) => ({
                             ...base,
                             borderRadius: "0.5rem",
-                            borderColor: "#e5e7eb",
+                            borderColor: "#475569",
+                            backgroundColor: "#334155",
                             padding: "2px",
                             boxShadow: "none",
                             "&:hover": {
-                              borderColor: "#93c5fd",
+                              borderColor: "#3b82f6",
+                            },
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            backgroundColor: "#334155",
+                            border: "1px solid #475569",
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isFocused ? "#1e3a8a" : "#334155",
+                            color: "#ffffff",
+                            "&:hover": {
+                              backgroundColor: "#1e40af",
                             },
                           }),
                           multiValue: (base) => ({
                             ...base,
-                            backgroundColor: "#dbeafe",
+                            backgroundColor: "#1e40af",
                             borderRadius: "0.5rem",
                           }),
                           multiValueLabel: (base) => ({
                             ...base,
-                            color: "#1e40af",
+                            color: "#ffffff",
                             padding: "2px 8px",
                           }),
                           multiValueRemove: (base) => ({
                             ...base,
-                            color: "#3b82f6",
+                            color: "#93c5fd",
                             ":hover": {
-                              backgroundColor: "#bfdbfe",
-                              color: "#1e3a8a",
+                              backgroundColor: "#1e3a8a",
+                              color: "#ffffff",
                             },
+                          }),
+                          input: (base) => ({
+                            ...base,
+                            color: "#ffffff",
+                          }),
+                          placeholder: (base) => ({
+                            ...base,
+                            color: "#94a3b8",
+                          }),
+                          singleValue: (base) => ({
+                            ...base,
+                            color: "#ffffff",
                           }),
                         }}
                       />
                     );
                   }}
                 />
-                <p className="text-gray-500 text-xs mt-2 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mx-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  اختر الاهتمامات المتعلقة بالمحتوى لتحسين استهداف الجمهور
+                <p className="text-xs text-slate-400 flex items-center gap-1 mt-2">
+                  <Info className="h-3 w-3" />
+                  اختر الاهتمامات لتحسين الاستهداف
                 </p>
               </div>
             </div>
-          </FormSection>
+          </div>
 
-          {/* Media Section */}
-          <FormSection
-            title="الوسائط"
-            icon={<Upload className="h-5 w-5 text-yellow-600" />}
-            bgColor="bg-yellow-100"
-          >
-            {/* Image Upload */}
-            <MediaUploader
-              label="الصور"
-              icon={<Image className="h-5 w-5 mx-2 text-gray-600" />}
-              fileType="صور"
-              accept="PNG, JPG أو JPEG"
-              colorScheme={{
-                gradient: "bg-gradient-to-br from-blue-50 to-blue-100",
-                border: "border-blue-300",
-                bg: "bg-blue-100",
-                hover: "hover:bg-blue-50",
-                text: "text-blue-600",
-              }}
-              files={imageFiles}
-              onFilesChange={setImageFiles}
-            />
-
-            {imageFiles.length > 0 && (
-              <MediaPreview files={imageFiles} removeFile={removeImageFile} />
-            )}
-
-            {/* Video Upload */}
-            <MediaUploader
-              label="الفيديوهات"
-              icon={<Video className="h-5 w-5 mx-2 text-gray-600" />}
-              fileType="فيديوهات"
-              accept="MP4 أو MOV"
-              colorScheme={{
-                gradient: "bg-gradient-to-br from-purple-50 to-purple-100",
-                border: "border-purple-300",
-                bg: "bg-purple-100",
-                hover: "hover:bg-purple-50",
-                text: "text-purple-600",
-              }}
-              files={videoFiles}
-              onFilesChange={setVideoFiles}
-            />
-
-            {videoFiles.length > 0 && (
-              <MediaPreview
-                files={videoFiles}
-                removeFile={removeVideoFile}
-                isVideo={true}
-              />
-            )}
-
-            <div className="mt-6 p-3 bg-blue-50 rounded-lg text-blue-800 text-sm border border-blue-200 flex items-start">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mx-2 mt-0.5 flex-shrink-0"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>
-                يجب إضافة صورة أو فيديو واحد على الأقل. يمكنك إضافة عدة صور وفيديوهات
-                معاً.
-              </span>
+          {/* Media Upload Card */}
+          <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+                <Upload className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">الوسائط</h3>
+                <p className="text-xs text-slate-400 mt-0.5">صور وفيديوهات المحتوى</p>
+              </div>
             </div>
-          </FormSection>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={addingContent}
-            className={`w-full py-4 px-6 rounded-xl shadow-lg font-bold text-lg transition-all duration-300 transform hover:translate-y-0 flex items-center justify-center ${addingContent
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-blue-600 to-indigo-700 text-white hover:from-blue-700 hover:to-indigo-800 hover:shadow-xl"
-              }`}
-          >
-            {addingContent ? (
-              <>
-                <svg
-                  className="animate-spin mx-3 h-6 w-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                جاري إنشاء المحتوى...
-              </>
-            ) : (
-              <span className="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mx-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            <div className="space-y-6">
+              {/* Image Upload */}
+              <div>
+                <MediaUploader
+                  label="الصور"
+                  icon={<Image className="h-5 w-5 mx-2 text-gray-600" />}
+                  fileType="صور"
+                  accept="PNG, JPG أو JPEG"
+                  colorScheme={{
+                    gradient: "bg-gradient-to-br from-blue-50 to-blue-100",
+                    border: "border-blue-300",
+                    bg: "bg-blue-500",
+                    hover: "hover:bg-blue-50",
+                    text: "text-white",
+                  }}
+                  files={imageFiles}
+                  onFilesChange={setImageFiles}
+                />
+
+                {imageFiles.length > 0 && (
+                  <MediaPreview files={imageFiles} removeFile={removeImageFile} />
+                )}
+              </div>
+
+              {/* Video Upload */}
+              <div>
+                <MediaUploader
+                  label="الفيديوهات"
+                  icon={<Video className="h-5 w-5 mx-2 text-gray-600" />}
+                  fileType="فيديوهات"
+                  accept="MP4 أو MOV"
+                  colorScheme={{
+                    gradient: "bg-gradient-to-br from-purple-50 to-purple-100",
+                    border: "border-purple-300",
+                    bg: "bg-purple-500",
+                    hover: "hover:bg-purple-50",
+                    text: "text-white",
+                  }}
+                  files={videoFiles}
+                  onFilesChange={setVideoFiles}
+                />
+
+                {videoFiles.length > 0 && (
+                  <MediaPreview
+                    files={videoFiles}
+                    removeFile={removeVideoFile}
+                    isVideo={true}
                   />
-                </svg>
-                إنشاء المحتوى
-              </span>
-            )}
-          </button>
+                )}
+              </div>
 
-          {/* Status Messages */}
-          {addingContent && (
+              <Alert variant="info" className="bg-blue-900/20 border-blue-500/30 text-blue-200">
+                <Info className="h-4 w-4 text-blue-400" />
+                <AlertDescription className="text-blue-200 text-sm">
+                  يجب إضافة صورة أو فيديو واحد على الأقل
+                </AlertDescription>
+              </Alert>
+            </div>
+          </div>
+          </div>
+
+          {/* Right Sidebar - Quick Actions & Info */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-6 space-y-6">
+              {/* Submit Actions Card */}
+              <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 shadow-xl">
+                <h3 className="text-lg font-semibold text-white mb-4">نشر المحتوى</h3>
+                
+                <Button
+                  type="submit"
+                  disabled={addingContent}
+                  className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20"
+                >
+                  {addingContent ? (
+                    <>
+                      <Clock className="ml-2 h-5 w-5 animate-spin" />
+                      جاري النشر...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="ml-2 h-5 w-5" />
+                      نشر المحتوى
+                    </>
+                  )}
+                </Button>
+
+                <div className="mt-4 pt-4 border-t border-slate-700/50 space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-400">الحالة</span>
+                    <span className="px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-xs font-medium">
+                      جاهز للنشر
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-400">النوع</span>
+                    <span className="text-white font-medium">REEL</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tips Card */}
+              <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-6">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <Info className="h-4 w-4 text-blue-400" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white text-sm">نصائح للمحتوى</h4>
+                </div>
+              </div>
+              <ul className="space-y-2 text-xs text-slate-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
+                  <span>استخدم عناوين واضحة وجذابة</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
+                  <span>أضف وصفاً تفصيلياً للمحتوى</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
+                  <span>اختر الاهتمامات المناسبة</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
+                  <span>استخدم صور عالية الجودة</span>
+                </li>
+              </ul>
+            </div>
+            </div>
+          </div>
+
+        </form>
+
+        {/* Status Messages */}
+        {addingContent && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
             <StatusMessage
               type="loading"
               title="يتم الآن معالجة المحتوى الخاص بك"
               message="قد يستغرق ذلك بين بضع ثوانٍ إلى 5 دقائق... يرجى الانتظار."
             />
-          )}
+          </div>
+        )}
 
-          {isSuccess && (
+        {isSuccess && (
+          <div className="mt-6">
             <StatusMessage
               type="success"
               title="تم بنجاح!"
               message="تم إنشاء المحتوى الخاص بك بنجاح وهو الآن جاهز للعرض."
             />
-          )}
+          </div>
+        )}
 
-          {isError && (
+        {isError && (
+          <div className="mt-6">
             <StatusMessage
               type="error"
               title="حدث خطأ"
               message="حدث خطأ أثناء إنشاء المحتوى. يرجى المحاولة مرة أخرى."
               error={error}
             />
-          )}
-        </form>
+          </div>
+        )}
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-50 px-8 py-4 border-t text-center text-gray-500 text-sm">
-        جميع الحقوق محفوظة © 2025 Radar
+      <div className="bg-slate-900/80 backdrop-blur-sm border-t border-slate-700/50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between text-sm">
+            <p className="text-slate-400">
+              جميع الحقوق محفوظة © 2025 Radar
+            </p>
+            <div className="flex items-center gap-4 text-slate-500">
+              <span>الإصدار 1.0.0</span>
+              <span>•</span>
+              <a href="#" className="hover:text-slate-300 transition-colors">الدعم</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

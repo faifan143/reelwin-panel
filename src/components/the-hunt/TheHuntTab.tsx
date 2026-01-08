@@ -84,19 +84,26 @@ const TheHuntTab: React.FC = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   if (isLoading) {
-    return <div className="p-6">جارٍ التحميل...</div>;
+    return (
+      <div className="p-6 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <p className="mt-4 text-slate-400">جارٍ التحميل...</p>
+        </div>
+      </div>
+    );
   }
 
   if (isError) {
     return (
       <div className="p-6">
-        <div className="mb-3 p-3 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+        <div className="mb-3 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm">
           {error instanceof Error
             ? error.message
             : (error as any)?.response?.data?.message || "تعذر تحميل الرحلات"}
         </div>
         <button
-          className="px-3 py-2 text-sm rounded bg-gray-100 hover:bg-gray-200"
+          className="px-4 py-2 text-sm rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 transition-all"
           onClick={() => queryClient.invalidateQueries({ queryKey: ["hunts"] })}
         >
           إعادة المحاولة
@@ -106,57 +113,81 @@ const TheHuntTab: React.FC = () => {
   }
 
   return (
-    <div className="w-full" dir="rtl">
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-4 flex justify-between items-center border-b">
-          <h2 className="text-lg font-semibold">إدارة الرحلة</h2>
+    <div className="w-full bg-slate-800 p-4 rounded-2xl" dir="rtl">
+      <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+        <div className="p-6 flex justify-between items-center border-b border-slate-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">إدارة الرحلة</h2>
+              <p className="text-slate-400 text-sm mt-0.5">إدارة رحلات المستخدمين والجوائز</p>
+            </div>
+          </div>
           <button
             onClick={() => setIsCreateOpen(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 flex items-center gap-2 font-semibold"
           >
-            <Plus size={16} className="ml-2" />
+            <Plus size={18} />
             إضافة الرحلة
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-slate-700/50">
+            <thead className="bg-slate-700/50">
               <tr>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                   الاسم
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                   الحالة
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                   الفترة
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                   إجراءات
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
               {data?.data.map((hunt: Hunt) => (
-                <tr key={hunt.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <tr key={hunt.id} className="hover:bg-slate-700/30 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                     {hunt.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {hunt.status}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className={`px-3 py-1.5 rounded-full text-xs font-medium ${
+                      hunt.status === "ACTIVE"
+                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                        : hunt.status === "DRAFT"
+                        ? "bg-slate-500/20 text-slate-400 border border-slate-500/30"
+                        : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                    }`}>
+                      {hunt.status === "ACTIVE" ? "نشط" : hunt.status === "DRAFT" ? "مسودة" : hunt.status}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    <span className="font-mono text-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                    <span className="font-mono">
                       {formatISODate(hunt.endsAt)}
                       {" → "}
                       {formatISODate(hunt.startsAt)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                    <div className="flex space-x-2 rtl:space-x-reverse">
+                  <td className="px-6 py-4 whitespace-nowrap text-left">
+                    <div className="flex gap-2 rtl:gap-reverse flex-wrap">
                       <button
                         onClick={() => downloadZip(hunt.id)}
-                        className={`text-green-600 hover:text-green-900 ${
+                        className={`px-3 py-2 rounded-xl bg-green-500/10 text-green-400 hover:bg-green-500/20 border border-green-500/20 transition-all flex items-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
                           downloadingId === hunt.id
                             ? "opacity-60 cursor-not-allowed"
                             : ""
@@ -170,7 +201,7 @@ const TheHuntTab: React.FC = () => {
                       >
                         {downloadingId === hunt.id ? (
                           <svg
-                            className="animate-spin h-4 w-4"
+                            className="animate-spin h-5 w-5"
                             viewBox="0 0 24 24"
                           >
                             <circle
@@ -190,11 +221,12 @@ const TheHuntTab: React.FC = () => {
                         ) : (
                           <Download size={18} />
                         )}
+                        <span>تحميل</span>
                       </button>
                       {hunt.status !== "ACTIVE" ? (
                         <button
                           onClick={() => handleToggleStatus(hunt.id, "ACTIVE")}
-                          className={`text-blue-600 hover:text-blue-900 ${
+                          className={`px-3 py-2 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all flex items-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
                             statusUpdatingId === hunt.id
                               ? "opacity-60 cursor-not-allowed"
                               : ""
@@ -204,7 +236,7 @@ const TheHuntTab: React.FC = () => {
                         >
                           {statusUpdatingId === hunt.id ? (
                             <svg
-                              className="animate-spin h-4 w-4"
+                              className="animate-spin h-5 w-5"
                               viewBox="0 0 24 24"
                             >
                               <circle
@@ -224,11 +256,12 @@ const TheHuntTab: React.FC = () => {
                           ) : (
                             <Check size={18} />
                           )}
+                          <span>تفعيل</span>
                         </button>
                       ) : (
                         <button
                           onClick={() => handleToggleStatus(hunt.id, "DRAFT")}
-                          className={`text-orange-600 hover:text-orange-900 ${
+                          className={`px-3 py-2 rounded-xl bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border border-orange-500/20 transition-all flex items-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
                             statusUpdatingId === hunt.id
                               ? "opacity-60 cursor-not-allowed"
                               : ""
@@ -238,7 +271,7 @@ const TheHuntTab: React.FC = () => {
                         >
                           {statusUpdatingId === hunt.id ? (
                             <svg
-                              className="animate-spin h-4 w-4"
+                              className="animate-spin h-5 w-5"
                               viewBox="0 0 24 24"
                             >
                               <circle
@@ -258,11 +291,12 @@ const TheHuntTab: React.FC = () => {
                           ) : (
                             <X size={18} />
                           )}
+                          <span>تعطيل</span>
                         </button>
                       )}
                       <button
                         onClick={() => handleDelete(hunt.id, hunt.status)}
-                        className={`text-red-600 hover:text-red-900 ${
+                        className={`px-3 py-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all flex items-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
                           hunt.status !== "DRAFT" || deletingId === hunt.id
                             ? "opacity-50 cursor-not-allowed"
                             : ""
@@ -278,7 +312,7 @@ const TheHuntTab: React.FC = () => {
                       >
                         {deletingId === hunt.id ? (
                           <svg
-                            className="animate-spin h-4 w-4"
+                            className="animate-spin h-5 w-5"
                             viewBox="0 0 24 24"
                           >
                             <circle
@@ -298,6 +332,7 @@ const TheHuntTab: React.FC = () => {
                         ) : (
                           <Trash2 size={18} />
                         )}
+                        <span>حذف</span>
                       </button>
                     </div>
                   </td>

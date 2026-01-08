@@ -5,6 +5,7 @@ import { CreateHuntDto } from "./types";
 import { createHunt } from "./api";
 import { api as storesApi } from "../stores-offers/api";
 import type { Store } from "../stores-offers/types";
+import { X } from "lucide-react";
 
 interface CreateHuntModalProps {
   onClose: () => void;
@@ -73,21 +74,21 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-700/50 max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold">إنشاء الرحلة جديدة</h3>
+            <h3 className="text-lg font-bold text-white">إنشاء الرحلة جديدة</h3>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-slate-400 hover:text-white bg-slate-700/50 rounded-lg p-2 transition-colors"
             >
-              ✕
+              <X size={20} />
             </button>
           </div>
 
           {errors.root?.message && (
-            <div className="mb-4 p-3 rounded border border-red-200 bg-red-50 text-red-700 text-sm">
+            <div className="mb-4 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm">
               {errors.root.message}
             </div>
           )}
@@ -95,53 +96,53 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   المتجر
                 </label>
                 <select
                   {...register("storeId", { required: "هذا الحقل مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.storeId ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white ${
+                    errors.storeId ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                   defaultValue=""
                 >
-                  <option value="" disabled>
+                  <option value="" disabled className="bg-slate-700">
                     {storesLoading ? "جارٍ التحميل..." : "اختر المتجر"}
                   </option>
                   {!storesLoading &&
                     Array.isArray(storesData) &&
                     (storesData as Store[]).map((s) => (
-                      <option key={s.id} value={s.id}>
+                      <option key={s.id} value={s.id} className="bg-slate-700">
                         {s.name}
                       </option>
                     ))}
                 </select>
                 {storesError && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {(storesErr as any)?.response?.data?.message ||
                       (storesErr as Error)?.message ||
                       "فشل تحميل قائمة المتاجر"}
                   </p>
                 )}
                 {errors.storeId && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.storeId.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   اسم الرحلة
                 </label>
                 <input
                   type="text"
                   {...register("name", { required: "هذا الحقل مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.name ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white placeholder:text-slate-400 ${
+                    errors.name ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.name && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.name.message}
                   </p>
                 )}
@@ -149,19 +150,19 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-2">
                 الصورة
               </label>
               <input
                 type="file"
                 accept="image/*"
                 {...register("image" as any)}
-                className={`w-full px-3 py-2 border rounded-md ${
-                  errors.image ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white ${
+                  errors.image ? "border-red-500" : "border-slate-600/50"
+                } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500/30`}
               />
               {errors.image && (
-                <p className="text-xs text-red-600 mt-1">
+                <p className="text-xs text-red-400 mt-1">
                   {String(errors.image.message)}
                 </p>
               )}
@@ -169,55 +170,55 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   عدد الفائزين
                 </label>
                 <input
                   type="number"
                   min={1}
                   {...register("winnersTarget", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.winnersTarget ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white placeholder:text-slate-400 ${
+                    errors.winnersTarget ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.winnersTarget && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.winnersTarget.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   صفوف الشبكة
                 </label>
                 <input
                   type="number"
                   min={1}
                   {...register("gridRows", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.gridRows ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white placeholder:text-slate-400 ${
+                    errors.gridRows ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.gridRows && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.gridRows.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   أعمدة الشبكة
                 </label>
                 <input
                   type="number"
                   min={1}
                   {...register("gridCols", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.gridCols ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white placeholder:text-slate-400 ${
+                    errors.gridCols ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.gridCols && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.gridCols.message}
                   </p>
                 )}
@@ -226,71 +227,71 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   أكواد لكل لوحة
                 </label>
                 <input
                   type="number"
                   min={1}
                   {...register("codesPerTile", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.codesPerTile ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white placeholder:text-slate-400 ${
+                    errors.codesPerTile ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.codesPerTile && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.codesPerTile.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   تبدأ في
                 </label>
                 <input
                   type="datetime-local"
                   {...register("startsAt", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.startsAt ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white ${
+                    errors.startsAt ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.startsAt && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.startsAt.message}
                   </p>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
                   تنتهي في
                 </label>
                 <input
                   type="datetime-local"
                   {...register("endsAt", { required: "مطلوب" })}
-                  className={`w-full px-3 py-2 border rounded-md ${
-                    errors.endsAt ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-4 py-3 bg-slate-700/50 border rounded-xl text-white ${
+                    errors.endsAt ? "border-red-500" : "border-slate-600/50"
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 />
                 {errors.endsAt && (
-                  <p className="text-xs text-red-600 mt-1">
+                  <p className="text-xs text-red-400 mt-1">
                     {errors.endsAt.message}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t">
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                className="px-4 py-2.5 bg-slate-700/50 text-slate-200 rounded-xl hover:bg-slate-700/70 border border-slate-600/50 transition-all font-medium"
               >
                 إلغاء
               </button>
               <button
                 type="submit"
                 disabled={mutation.isPending}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold disabled:opacity-50"
               >
                 {mutation.isPending ? "جارٍ الإنشاء..." : "إنشاء"}
               </button>

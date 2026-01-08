@@ -117,13 +117,13 @@ const CategoriesTab: React.FC = () => {
     };
 
     if (isLoading) {
-        return <div className="text-center py-4">جاري التحميل...</div>;
+        return <div className="text-center py-4 text-slate-300">جاري التحميل...</div>;
     }
 
     return (
         <div>
-            <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-xl font-bold">فئات المكافآت</h2>
+            <div className="mb-6 flex justify-between items-center">
+                <h2 className="text-xl font-bold text-white">فئات المكافآت</h2>
                 <Button
                     onClick={() => handleOpenModal()}
                     icon={<Plus size={16} />}
@@ -133,39 +133,39 @@ const CategoriesTab: React.FC = () => {
             </div>
 
             {/* Desktop Table View */}
-            <div className="hidden md:block overflow-hidden shadow-md rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="hidden md:block overflow-hidden shadow-xl rounded-xl border border-slate-700/50">
+                <table className="min-w-full divide-y divide-slate-700/50">
+                    <thead className="bg-slate-800/60">
                         <tr>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 الاسم
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 عدد المكافآت
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 الحالة
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 الإجراءات
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
                         {categories.map((category) => (
-                            <tr key={category.id}>
+                            <tr key={category.id} className="hover:bg-slate-700/30 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                                    <div className="text-sm font-medium text-white">{category.name}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900">{category.rewards?.length || 0}</div>
+                                    <div className="text-sm text-slate-200 font-semibold">{category.rewards?.length || 0}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${category.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${category.isActive ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
                                         {category.isActive ? 'مفعل' : 'غير مفعل'}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <div className="flex gap-2 rtl:gap-reverse">
                                         <Button
                                             variant="secondary"
@@ -194,16 +194,16 @@ const CategoriesTab: React.FC = () => {
             {/* Mobile Card View */}
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {categories.map((category) => (
-                    <div key={category.id} className="bg-white p-4 rounded-lg shadow-md">
+                    <div key={category.id} className="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700/50 shadow-xl">
                         <div className="flex justify-between">
-                            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${category.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                            <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${category.isActive ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
                                 {category.isActive ? 'مفعل' : 'غير مفعل'}
                             </span>
-                            <h3 className="text-lg font-medium">{category.name}</h3>
+                            <h3 className="text-lg font-medium text-white">{category.name}</h3>
                         </div>
                         <div className="mt-3 flex items-center">
-                            <Package size={16} className="text-blue-500 mx-1" />
-                            <span className="text-sm font-medium">{category.rewards?.length || 0} مكافأة</span>
+                            <Package size={16} className="text-blue-400 mx-1" />
+                            <span className="text-sm font-medium text-slate-200">{category.rewards?.length || 0} مكافأة</span>
                         </div>
                         <div className="mt-4 flex gap-2 rtl:gap-reverse">
                             <Button
@@ -238,7 +238,7 @@ const CategoriesTab: React.FC = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-slate-200 mb-1">
                                 الاسم
                             </label>
                             <input
@@ -246,7 +246,7 @@ const CategoriesTab: React.FC = () => {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleInputChange}
-                                className="py-2  w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                className="py-2 px-3 w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white placeholder-slate-400 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                 required
                             />
                         </div>
@@ -258,9 +258,9 @@ const CategoriesTab: React.FC = () => {
                                 name="isActive"
                                 checked={formData.isActive as boolean}
                                 onChange={handleInputChange}
-                                className="py-2  h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-600 bg-slate-700/50 rounded"
                             />
-                            <label htmlFor="isActive" className="mx-2 block text-sm text-gray-900">
+                            <label htmlFor="isActive" className="mx-2 block text-sm text-slate-200">
                                 مفعل
                             </label>
                         </div>

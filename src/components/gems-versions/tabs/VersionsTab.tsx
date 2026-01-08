@@ -1,10 +1,9 @@
 // components/tabs/VersionsTab.tsx
-import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, DownloadCloud, RefreshCw, AlertTriangle, CheckCircle } from 'lucide-react';
-import { getLatestVersion, createVersion, clearVersions } from '../api';
+import { AlertTriangle, CheckCircle, DownloadCloud, Plus, RefreshCw, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { clearVersions, createVersion, getLatestVersion } from '../api';
 import { CreateVersionDto } from '../types';
-import { Button } from '@/components/rewards-managment/Button';
 
 const VersionsTab: React.FC = () => {
     const queryClient = useQueryClient();
@@ -102,52 +101,59 @@ const VersionsTab: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="bg-slate-800 p-4 rounded-2xl">
             <div className="mb-6 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-900 flex items-center">
-                    <DownloadCloud className="ml-2 text-indigo-600" size={24} />
-                    {t.versionManagement}
-                </h2>
+                <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <DownloadCloud className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold text-white">{t.versionManagement}</h2>
+                        <p className="text-slate-400 text-sm mt-0.5">إدارة إصدارات التطبيق والتحديثات</p>
+                    </div>
+                </div>
                 <div className="flex gap-2">
-                    <Button
+                    <button
                         onClick={() => setIsModalOpen(true)}
-                        icon={<Plus size={16} />}
+                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 flex items-center gap-2 font-semibold"
                     >
+                        <Plus size={18} />
                         {t.addVersion}
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                         onClick={handleClearVersions}
-                        variant="danger"
                         disabled={clearVersionsMutation.isPending}
-                        icon={<RefreshCw size={16} />}
+                        className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white border-0 transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/30 flex items-center gap-2 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     >
+                        <RefreshCw size={18} className={clearVersionsMutation.isPending ? "animate-spin" : ""} />
                         {clearVersionsMutation.isPending ? t.clearing : t.clearVersions}
-                    </Button>
+                    </button>
                 </div>
             </div>
 
             {isLoading ? (
                 <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                    <span className="mr-2 text-gray-600">{t.loading}</span>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    <span className="mr-2 text-slate-400">{t.loading}</span>
                 </div>
             ) : isError ? (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-right">
+                <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-right">
                     <p>{t.error}</p>
                 </div>
             ) : (
                 <>
-                    {/* Version Card */}
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-                        <div className="p-5 border-b border-gray-200">
-                            <h3 className="text-lg font-medium text-gray-900 text-right">{t.currentVersion}</h3>
+                    {/* Version Card - Dark Theme */}
+                    <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden mb-6">
+                        <div className="p-5 border-b border-slate-700/50">
+                            <h3 className="text-lg font-semibold text-white text-right">{t.currentVersion}</h3>
                         </div>
                         {latestVersion ? (
                             <div className="p-5">
                                 <div className="flex justify-between items-start mb-4">
-                                    <div className={`flex items-center px-3 py-1 rounded-full text-sm ${latestVersion.isRequired
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-green-100 text-green-800'
+                                    <div className={`flex items-center px-3 py-1.5 rounded-full text-sm font-medium border ${
+                                        latestVersion.isRequired
+                                        ? 'bg-red-500/20 text-red-400 border-red-500/30'
+                                        : 'bg-green-500/20 text-green-400 border-green-500/30'
                                         }`}>
                                         {latestVersion.isRequired ? (
                                             <>
@@ -162,31 +168,31 @@ const VersionsTab: React.FC = () => {
                                         )}
                                     </div>
                                     <div className="text-right">
-                                        <h4 className="text-xl font-semibold">{latestVersion.version}</h4>
-                                        <p className="text-sm text-gray-500 mt-1">
+                                        <h4 className="text-xl font-bold text-white">{latestVersion.version}</h4>
+                                        <p className="text-sm text-slate-400 mt-1">
                                             {formatDate(latestVersion.createdAt)}
                                         </p>
                                     </div>
                                 </div>
 
-                                <p className="text-gray-700 mt-4 text-right">
+                                <p className="text-slate-300 mt-4 text-right p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
                                     {latestVersion.isRequired ? t.updatingRequired : t.updatingOptional}
                                 </p>
                             </div>
                         ) : (
-                            <div className="p-8 text-center text-gray-500">
+                            <div className="p-8 text-center text-slate-400">
                                 {t.noVersion}
                             </div>
                         )}
                     </div>
 
-                    {/* Instructions Card */}
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div className="p-5 border-b border-gray-200">
-                            <h3 className="text-lg font-medium text-gray-900 text-right">إرشادات تحديث الإصدار</h3>
+                    {/* Instructions Card - Dark Theme */}
+                    <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+                        <div className="p-5 border-b border-slate-700/50">
+                            <h3 className="text-lg font-semibold text-white text-right">إرشادات تحديث الإصدار</h3>
                         </div>
                         <div className="p-5">
-                            <ul className="list-disc list-inside space-y-2 text-gray-700 text-right">
+                            <ul className="list-disc list-inside space-y-2 text-slate-300 text-right">
                                 <li>إضافة إصدار جديد سيغير الإصدار الحالي للتطبيق</li>
                                 <li>الإصدارات الإجبارية ستجبر المستخدمين على التحديث قبل استخدام التطبيق</li>
                                 <li>يجب أن تكون صيغة الإصدار متوافقة مع نظام الإصدارات الدلالي (مثل 1.0.0)</li>
@@ -197,22 +203,22 @@ const VersionsTab: React.FC = () => {
                 </>
             )}
 
-            {/* Create Version Modal */}
+            {/* Create Version Modal - Dark Theme */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 backdrop-md flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-                        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                    <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700/50">
+                        <div className="p-4 border-b border-slate-700/50 flex justify-between items-center">
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="text-gray-400 hover:text-gray-500"
+                                className="text-slate-400 hover:text-white bg-slate-700/50 rounded-lg p-2 transition-colors"
                             >
-                                &times;
+                                <X size={20} />
                             </button>
-                            <h3 className="text-lg font-medium text-right text-gray-900">{t.newVersion}</h3>
+                            <h3 className="text-lg font-bold text-right text-white">{t.newVersion}</h3>
                         </div>
                         <form onSubmit={handleSubmit} className="p-4">
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                                <label className="block text-sm font-medium text-slate-200 mb-2 text-right">
                                     {t.version}
                                 </label>
                                 <input
@@ -220,7 +226,7 @@ const VersionsTab: React.FC = () => {
                                     name="version"
                                     value={formData.version}
                                     onChange={handleInputChange}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-right"
+                                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right"
                                     placeholder={t.versionFormat}
                                     required
                                 />
@@ -232,28 +238,27 @@ const VersionsTab: React.FC = () => {
                                     name="isRequired"
                                     checked={formData.isRequired}
                                     onChange={handleInputChange}
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-600 rounded bg-slate-700/50"
                                 />
-                                <label htmlFor="isRequired" className="mr-2 block text-sm text-gray-900">
+                                <label htmlFor="isRequired" className="mr-2 block text-sm text-slate-200">
                                     {t.isRequired}
                                 </label>
                             </div>
                             <div className="flex justify-start gap-3">
-                                <Button
+                                <button
                                     type="submit"
                                     disabled={createVersionMutation.isPending}
-                                    fullWidth
+                                    className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {createVersionMutation.isPending ? t.adding : t.addNew}
-                                </Button>
-                                <Button
+                                </button>
+                                <button
                                     type="button"
-                                    variant="secondary"
                                     onClick={() => setIsModalOpen(false)}
-                                    fullWidth
+                                    className="flex-1 px-4 py-3 rounded-xl bg-slate-700/50 hover:bg-slate-700/70 text-slate-200 border border-slate-600/50 transition-all font-semibold"
                                 >
                                     {t.cancel}
-                                </Button>
+                                </button>
                             </div>
                         </form>
                     </div>

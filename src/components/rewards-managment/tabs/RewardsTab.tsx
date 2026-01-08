@@ -330,13 +330,13 @@ const RewardsTab: React.FC = () => {
   };
 
   if (isLoadingRewards || isLoadingCategories) {
-    return <div className="text-center py-4">جاري التحميل...</div>;
+    return <div className="text-center py-4 text-slate-300">جاري التحميل...</div>;
   }
 
   return (
     <div>
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-xl font-bold">المكافآت</h2>
+      <div className="mb-6 flex justify-between items-center">
+        <h2 className="text-xl font-bold text-white">المكافآت</h2>
         <Button onClick={() => handleOpenModal()} icon={<Plus size={16} />}>
           إضافة مكافأة
         </Button>
@@ -345,63 +345,63 @@ const RewardsTab: React.FC = () => {
       {/* Removed the simple modal version to avoid duplication with the detailed one below */}
 
       {/* Desktop Table View */}
-      <div className="hidden md:block overflow-hidden shadow-md rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="hidden md:block overflow-hidden shadow-xl rounded-xl border border-slate-700/50">
+        <table className="min-w-full divide-y divide-slate-700/50">
+          <thead className="bg-slate-800/60">
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 الصورة
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 العنوان
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 الوصف
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 التكلفة (النقاط)
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 المخزون
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 الفئة
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 الحالة
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider"
               >
                 الإجراءات
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
             {rewards.map((reward) => (
-              <tr key={reward.id}>
+              <tr key={reward.id} className="hover:bg-slate-700/30 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   {reward.images && reward.images.length > 0 ? (
                     <img
@@ -410,46 +410,46 @@ const RewardsTab: React.FC = () => {
                       className="h-10 w-10 object-cover rounded"
                     />
                   ) : (
-                    <div className="h-10 w-10 bg-gray-100 rounded" />
+                    <div className="h-10 w-10 bg-slate-700 rounded" />
                   )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-white">
                     {reward.title}
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <div className="text-sm text-gray-500 line-clamp-2">
+                  <div className="text-sm text-slate-400 line-clamp-2">
                     {reward.description}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-slate-200 font-semibold">
                     {reward.pointsCost}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-slate-200">
                     {typeof reward.stock === "number" ? reward.stock : 0}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-slate-300">
                     {reward.category?.name}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${
                       reward.isActive
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
+                        ? "bg-green-500/20 text-green-400 border-green-500/30"
+                        : "bg-red-500/20 text-red-400 border-red-500/30"
                     }`}
                   >
                     {reward.isActive ? "مفعل" : "غير مفعل"}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <div className="flex gap-2 rtl:gap-reverse">
                     <Button
                       variant="secondary"
@@ -478,7 +478,7 @@ const RewardsTab: React.FC = () => {
       {/* Mobile Card View */}
       <div className="grid grid-cols-1 gap-4 md:hidden">
         {rewards.map((reward) => (
-          <div key={reward.id} className="bg-white p-4 rounded-lg shadow-md">
+          <div key={reward.id} className="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700/50 shadow-xl">
             {reward.images && reward.images.length > 0 && (
               <>
                 <img
@@ -502,37 +502,37 @@ const RewardsTab: React.FC = () => {
             )}
             <div className="flex justify-between">
               <span
-                className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                className={`px-2 py-1 text-xs font-semibold rounded-full border ${
                   reward.isActive
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
+                    ? "bg-green-500/20 text-green-400 border-green-500/30"
+                    : "bg-red-500/20 text-red-400 border-red-500/30"
                 }`}
               >
                 {reward.isActive ? "مفعل" : "غير مفعل"}
               </span>
-              <h3 className="text-lg font-medium">{reward.title}</h3>
+              <h3 className="text-lg font-medium text-white">{reward.title}</h3>
             </div>
             <div className="mt-2">
-              <p className="text-sm text-gray-600">{reward.description}</p>
+              <p className="text-sm text-slate-400">{reward.description}</p>
             </div>
             <div className="mt-3 flex justify-between items-center">
               <div className="flex items-center">
-                <Award size={16} className="text-blue-500 mx-1" />
-                <span className="text-sm font-medium">
+                <Award size={16} className="text-blue-400 mx-1" />
+                <span className="text-sm font-medium text-slate-200">
                   {reward.pointsCost} نقطة
                 </span>
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-slate-400">
                 {reward.category?.name}
               </div>
             </div>
             <div className="mt-2">
               {typeof reward.stock === "number" && reward.stock > 0 ? (
-                <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded">
                   {reward.stock} متبقي
                 </span>
               ) : (
-                <span className="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded">
+                <span className="text-xs px-2 py-1 bg-slate-700/50 text-slate-400 border border-slate-600/50 rounded">
                   غير متوفر
                 </span>
               )}
@@ -571,7 +571,7 @@ const RewardsTab: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-1">
                 العنوان
               </label>
               <input
@@ -579,13 +579,13 @@ const RewardsTab: React.FC = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50  py-2"
+                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white placeholder-slate-400 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 py-2 px-3"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-1">
                 الوصف
               </label>
               <textarea
@@ -593,13 +593,13 @@ const RewardsTab: React.FC = () => {
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={3}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50  py-2"
+                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white placeholder-slate-400 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 py-2 px-3"
                 required
               ></textarea>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-1">
                 التكلفة (النقاط)
               </label>
               <input
@@ -608,13 +608,13 @@ const RewardsTab: React.FC = () => {
                 value={formData.pointsCost}
                 onChange={handleInputChange}
                 min={1}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50  py-2"
+                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white placeholder-slate-400 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 py-2 px-3"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-1">
                 المخزون
               </label>
               <input
@@ -623,23 +623,23 @@ const RewardsTab: React.FC = () => {
                 value={(formData as any).stock ?? 0}
                 onChange={handleInputChange}
                 min={0}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50  py-2"
+                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white placeholder-slate-400 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 py-2 px-3"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-200 mb-1">
                 الفئة
               </label>
               <select
                 name="categoryId"
                 value={formData.categoryId}
                 onChange={handleInputChange}
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50  py-2"
+                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 text-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 py-2 px-3"
                 required
               >
                 {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option key={category.id} value={category.id} className="bg-slate-700">
                     {category.name}
                   </option>
                 ))}
@@ -647,18 +647,18 @@ const RewardsTab: React.FC = () => {
             </div>
 
             <div>
-              <div className="block text-sm font-medium text-gray-700 mb-1">
+              <div className="block text-sm font-medium text-slate-200 mb-1">
                 المتجر (اختياري)
               </div>
               <select
                 name="storeId"
                 value={formData.storeId || ""}
                 onChange={handleInputChange}
-                className="w-full border rounded p-2"
+                className="w-full border border-slate-600 bg-slate-700/50 text-white rounded-xl p-2 focus:border-blue-500 focus:ring focus:ring-blue-500"
               >
-                <option value="">بدون متجر (اختياري)</option>
+                <option value="" className="bg-slate-700">بدون متجر (اختياري)</option>
                 {stores.map((store: any) => (
-                  <option key={store.id} value={store.id}>
+                  <option key={store.id} value={store.id} className="bg-slate-700">
                     {store.name}
                   </option>
                 ))}
@@ -677,11 +677,11 @@ const RewardsTab: React.FC = () => {
                     isActive: e.target.checked,
                   }))
                 }
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-600 bg-slate-700/50 rounded"
               />
               <label
                 htmlFor="isActive"
-                className="mx-2 block text-sm text-gray-900"
+                className="mx-2 block text-sm text-slate-200"
               >
                 مفعل
               </label>
@@ -690,16 +690,16 @@ const RewardsTab: React.FC = () => {
             {/* Images Uploader */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-slate-200">
                   الصور (حتى 5)
                 </label>
                 {selectedReward && (
-                  <div className="text-sm">
+                  <div className="text-sm text-slate-300">
                     <label className="mr-2">
                       <input
                         type="radio"
                         name="imageMode"
-                        className="ml-1"
+                        className="ml-1 text-blue-600"
                         checked={imageMode === "append"}
                         onChange={() => setImageMode("append")}
                       />
@@ -709,7 +709,7 @@ const RewardsTab: React.FC = () => {
                       <input
                         type="radio"
                         name="imageMode"
-                        className="ml-1"
+                        className="ml-1 text-blue-600"
                         checked={imageMode === "replace"}
                         onChange={() => setImageMode("replace")}
                       />
@@ -723,7 +723,7 @@ const RewardsTab: React.FC = () => {
                 imageMode === "replace" &&
                 existingImages.length > 0 && (
                   <div className="mb-3">
-                    <div className="text-sm text-gray-600 mb-1">
+                    <div className="text-sm text-slate-300 mb-1">
                       الصور الحالية
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -749,7 +749,7 @@ const RewardsTab: React.FC = () => {
 
               {filePreviews.length > 0 && (
                 <div className="mb-3">
-                  <div className="text-sm text-gray-600 mb-1">صور جديدة</div>
+                  <div className="text-sm text-slate-300 mb-1">صور جديدة</div>
                   <div className="flex flex-wrap gap-2">
                     {filePreviews.map((src, idx) => (
                       <div key={`preview-${idx}`} className="relative">
@@ -774,14 +774,14 @@ const RewardsTab: React.FC = () => {
               <div
                 className={`${
                   filePreviews.length > 0
-                    ? "border-2 border-dashed border-gray-300 rounded-lg p-4"
-                    : "mt-1 flex justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg"
+                    ? "border-2 border-dashed border-slate-600 rounded-xl p-4 bg-slate-700/30"
+                    : "mt-1 flex justify-center p-6 border-2 border-dashed border-slate-600 rounded-xl bg-slate-700/30"
                 }`}
               >
                 <div className="text-center">
                   <label
                     htmlFor="images-upload"
-                    className="cursor-pointer inline-flex items-center px-3 py-2 bg-white text-sm font-medium rounded-md border border-gray-300 shadow-sm hover:bg-gray-50"
+                    className="cursor-pointer inline-flex items-center px-3 py-2 bg-slate-700 text-white text-sm font-medium rounded-xl border border-slate-600 shadow-sm hover:bg-slate-600 transition-colors"
                   >
                     اختر صور
                   </label>
@@ -796,21 +796,21 @@ const RewardsTab: React.FC = () => {
                   {filePreviews.length > 0 && (
                     <button
                       type="button"
-                      className="ml-3 text-sm text-red-600"
+                      className="ml-3 text-sm text-red-400 hover:text-red-300"
                       onClick={handleRemoveAllSelected}
                     >
                       إزالة الكل
                     </button>
                   )}
                   {uploadProgress !== null && (
-                    <div className="mt-2 text-sm text-gray-600">
+                    <div className="mt-2 text-sm text-slate-300">
                       {uploadProgress}%
                     </div>
                   )}
                 </div>
               </div>
               {uploadErrors.length > 0 && (
-                <ul className="mt-2 text-sm text-red-600 list-disc pr-6">
+                <ul className="mt-2 text-sm text-red-400 list-disc pr-6">
                   {uploadErrors.map((err, idx) => (
                     <li key={`err-${idx}`}>{err}</li>
                   ))}

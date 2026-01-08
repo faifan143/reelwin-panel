@@ -82,26 +82,26 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
     pdfMutation.mutate(id);
   };
 
-  // Render status badge
+  // Render status badge - Dark Theme
   const renderStatusBadge = (status: QrStatus) => {
     switch (status) {
       case QrStatus.ACTIVE:
         return (
-          <span className="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800 flex items-center">
+          <span className="px-3 py-1.5 text-sm rounded-full bg-green-500/20 text-green-400 border border-green-500/30 flex items-center font-medium">
             <Check size={14} className="ml-1" />
             نشط
           </span>
         );
       case QrStatus.INACTIVE:
         return (
-          <span className="px-3 py-1 text-sm rounded-full bg-gray-100 text-gray-800 flex items-center">
+          <span className="px-3 py-1.5 text-sm rounded-full bg-slate-500/20 text-slate-400 border border-slate-500/30 flex items-center font-medium">
             <X size={14} className="ml-1" />
             غير نشط
           </span>
         );
       case QrStatus.COMPLETED:
         return (
-          <span className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800 flex items-center">
+          <span className="px-3 py-1.5 text-sm rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center font-medium">
             <Check size={14} className="ml-1" />
             مكتمل
           </span>
@@ -111,18 +111,18 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
     }
   };
 
-  // Render type badge
+  // Render type badge - Dark Theme
   const renderTypeBadge = (type: QrCodeType) => {
     switch (type) {
       case QrCodeType.PERMANENT:
         return (
-          <span className="px-3 py-1 text-sm rounded-full bg-purple-100 text-purple-800">
+          <span className="px-3 py-1.5 text-sm rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 font-medium">
             دائم
           </span>
         );
       case QrCodeType.ONCE:
         return (
-          <span className="px-3 py-1 text-sm rounded-full bg-orange-100 text-orange-800">
+          <span className="px-3 py-1.5 text-sm rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-medium">
             مرة واحدة
           </span>
         );
@@ -132,12 +132,12 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-gray-50 border-b">
+    <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 overflow-hidden">
+      {/* Header - Dark Theme */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-slate-700/30 border-b border-slate-700/50">
         <div className="flex items-center mb-4 md:mb-0">
-          <QrCode size={24} className="ml-2 text-blue-600" />
-          <h3 className="text-xl font-bold text-gray-900">{qrCode.name}</h3>
+          <QrCode size={24} className="ml-2 text-blue-400" />
+          <h3 className="text-xl font-bold text-white">{qrCode.name}</h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {renderTypeBadge(qrCode.type)}
@@ -145,24 +145,24 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b">
+      {/* Tabs - Dark Theme */}
+      <div className="border-b border-slate-700/50">
         <nav className="flex">
           <button
-            className={`px-4 py-2 border-b-2 font-medium text-sm ${
+            className={`px-4 py-3 border-b-2 font-semibold text-sm transition-all ${
               activeTab === 'details'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-blue-500 text-blue-400 bg-blue-500/10'
+                : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600'
             }`}
             onClick={() => setActiveTab('details')}
           >
             تفاصيل الرمز
           </button>
           <button
-            className={`px-4 py-2 border-b-2 font-medium text-sm ${
+            className={`px-4 py-3 border-b-2 font-semibold text-sm transition-all ${
               activeTab === 'scans'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-blue-500 text-blue-400 bg-blue-500/10'
+                : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-600'
             }`}
             onClick={() => setActiveTab('scans')}
           >
@@ -171,86 +171,86 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
         </nav>
       </div>
 
-      {/* Content */}
+      {/* Content - Dark Theme */}
       {activeTab === 'details' ? (
         <div className="p-6">
           {/* Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="text-sm font-medium text-gray-500 mb-1">الوصف</h4>
-              <p className="text-gray-900">{qrCode.description || 'لا يوجد وصف'}</p>
+              <h4 className="text-sm font-medium text-slate-400 mb-2">الوصف</h4>
+              <p className="text-white">{qrCode.description || 'لا يوجد وصف'}</p>
             </div>
             
             <div>
-              <h4 className="text-sm font-medium text-gray-500 mb-1">تاريخ الإنشاء</h4>
-              <p className="text-gray-900 flex items-center">
-                <Clock size={16} className="ml-1 text-gray-400" />
+              <h4 className="text-sm font-medium text-slate-400 mb-2">تاريخ الإنشاء</h4>
+              <p className="text-white flex items-center">
+                <Clock size={16} className="ml-1 text-slate-400" />
                 {new Date(qrCode.createdAt).toLocaleString('ar-SA')}
               </p>
             </div>
           </div>
 
-          {/* Rewards Information */}
+          {/* Rewards Information - Dark Theme */}
           <div className="mt-8">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">معلومات المكافآت</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">معلومات المكافآت</h3>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-red-50 p-4 rounded-lg border border-red-100">
-                <h4 className="text-sm font-medium text-red-800 mb-1">مكافأة 1000 نقطة</h4>
-                <p className="text-2xl font-bold text-red-600">{qrCode.reward1000Count}</p>
+              <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/30">
+                <h4 className="text-sm font-medium text-red-400 mb-1">مكافأة 1000 نقطة</h4>
+                <p className="text-2xl font-bold text-red-400">{qrCode.reward1000Count}</p>
                 <p className="text-xs text-red-500 mt-1">متبقي</p>
               </div>
               
-              <div className="bg-orange-50 p-4 rounded-lg border border-orange-100">
-                <h4 className="text-sm font-medium text-orange-800 mb-1">مكافأة 500 نقطة</h4>
-                <p className="text-2xl font-bold text-orange-600">{qrCode.reward500Count}</p>
+              <div className="bg-orange-500/10 p-4 rounded-xl border border-orange-500/30">
+                <h4 className="text-sm font-medium text-orange-400 mb-1">مكافأة 500 نقطة</h4>
+                <p className="text-2xl font-bold text-orange-400">{qrCode.reward500Count}</p>
                 <p className="text-xs text-orange-500 mt-1">متبقي</p>
               </div>
               
-              <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-                <h4 className="text-sm font-medium text-yellow-800 mb-1">مكافأة 250 نقطة</h4>
-                <p className="text-2xl font-bold text-yellow-600">{qrCode.reward250Count}</p>
+              <div className="bg-yellow-500/10 p-4 rounded-xl border border-yellow-500/30">
+                <h4 className="text-sm font-medium text-yellow-400 mb-1">مكافأة 250 نقطة</h4>
+                <p className="text-2xl font-bold text-yellow-400">{qrCode.reward250Count}</p>
                 <p className="text-xs text-yellow-500 mt-1">متبقي</p>
               </div>
               
-              <div className="bg-green-50 p-4 rounded-lg border border-green-100">
-                <h4 className="text-sm font-medium text-green-800 mb-1">مكافأة 125 نقطة</h4>
-                <p className="text-2xl font-bold text-green-600">{qrCode.reward125Count}</p>
+              <div className="bg-green-500/10 p-4 rounded-xl border border-green-500/30">
+                <h4 className="text-sm font-medium text-green-400 mb-1">مكافأة 125 نقطة</h4>
+                <p className="text-2xl font-bold text-green-400">{qrCode.reward125Count}</p>
                 <p className="text-xs text-green-500 mt-1">متبقي</p>
               </div>
             </div>
             
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/30 mt-4">
+              <p className="text-sm text-blue-300">
                 <strong>ملاحظة:</strong> بالإضافة إلى المكافآت الخاصة أعلاه، قد يحصل المستخدمون على مكافآت عشوائية بين 1-100 نقطة عند مسح الرمز.
               </p>
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-wrap gap-2 mt-8 pt-4 border-t">
+          {/* Actions - Dark Theme */}
+          <div className="flex flex-wrap gap-2 mt-8 pt-4 border-t border-slate-700/50">
             <button
               onClick={() => handleDownloadPdf(qrCode.id)}
-              className="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 flex items-center"
+              className="px-4 py-2.5 bg-green-500/10 text-green-400 rounded-xl hover:bg-green-500/20 border border-green-500/20 transition-all flex items-center gap-2 font-medium"
             >
-              <Download size={16} className="ml-2" />
+              <Download size={18} />
               تنزيل PDF
             </button>
             
             {qrCode.status === QrStatus.ACTIVE ? (
               <button
                 onClick={() => handleDeactivate(qrCode.id)}
-                className="px-4 py-2 bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 flex items-center"
+                className="px-4 py-2.5 bg-orange-500/10 text-orange-400 rounded-xl hover:bg-orange-500/20 border border-orange-500/20 transition-all flex items-center gap-2 font-medium"
               >
-                <X size={16} className="ml-2" />
+                <X size={18} />
                 تعطيل
               </button>
             ) : qrCode.status === QrStatus.INACTIVE ? (
               <button
                 onClick={() => handleActivate(qrCode.id)}
-                className="px-4 py-2 bg-green-100 text-green-700 rounded-md hover:bg-green-200 flex items-center"
+                className="px-4 py-2.5 bg-green-500/10 text-green-400 rounded-xl hover:bg-green-500/20 border border-green-500/20 transition-all flex items-center gap-2 font-medium"
               >
-                <Check size={16} className="ml-2" />
+                <Check size={18} />
                 تفعيل
               </button>
             ) : null}
@@ -258,17 +258,17 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
             {qrCode.scansCount > 0 ? (
               <button
                 onClick={() => handleLottery(qrCode.id)}
-                className="px-4 py-2 bg-purple-100 text-purple-700 rounded-md hover:bg-purple-200 flex items-center"
+                className="px-4 py-2.5 bg-purple-500/10 text-purple-400 rounded-xl hover:bg-purple-500/20 border border-purple-500/20 transition-all flex items-center gap-2 font-medium"
               >
-                <Gift size={16} className="ml-2" />
+                <Gift size={18} />
                 اختيار فائز عشوائي
               </button>
             ) : (
               <button
                 onClick={() => handleDelete(qrCode.id)}
-                className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 flex items-center"
+                className="px-4 py-2.5 bg-red-500/10 text-red-400 rounded-xl hover:bg-red-500/20 border border-red-500/20 transition-all flex items-center gap-2 font-medium"
               >
-                <Trash2 size={16} className="ml-2" />
+                <Trash2 size={18} />
                 حذف
               </button>
             )}
@@ -276,32 +276,32 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
         </div>
       ) : (
         <div className="p-6">
-          {/* Scans */}
+          {/* Scans - Dark Theme */}
           {qrCode.scans.length === 0 ? (
             <div className="text-center py-8">
-              <Users size={48} className="mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium text-gray-900 mb-1">لا توجد عمليات مسح بعد</h3>
-              <p className="text-gray-500">لم يقم أي مستخدم بمسح هذا الرمز حتى الآن.</p>
+              <Users size={48} className="mx-auto mb-4 text-slate-500" />
+              <h3 className="text-lg font-semibold text-white mb-1">لا توجد عمليات مسح بعد</h3>
+              <p className="text-slate-400">لم يقم أي مستخدم بمسح هذا الرمز حتى الآن.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-slate-700/50">
+                <thead className="bg-slate-700/50">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                       المستخدم
                     </th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                       النقاط
                     </th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-semibold text-slate-200 uppercase tracking-wider">
                       تاريخ المسح
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
                   {qrCode.scans.map((scan) => (
-                    <tr key={scan.id} className="hover:bg-gray-50">
+                    <tr key={scan.id} className="hover:bg-slate-700/30 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {scan.user?.profilePhoto ? (
@@ -311,30 +311,30 @@ const QrCodeDetails: React.FC<QrCodeDetailsProps> = ({ qrCode, onClose }) => {
                               className="h-8 w-8 rounded-full ml-3"
                             />
                           ) : (
-                            <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center ml-3">
-                              <User size={16} className="text-gray-500" />
+                            <div className="h-8 w-8 rounded-full bg-slate-700 flex items-center justify-center ml-3">
+                              <User size={16} className="text-slate-400" />
                             </div>
                           )}
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{scan.user?.name}</div>
-                            <div className="text-sm text-gray-500">{scan.user?.phone}</div>
+                            <div className="text-sm font-medium text-white">{scan.user?.name}</div>
+                            <div className="text-sm text-slate-400">{scan.user?.phone}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-sm rounded-full ${
+                        <span className={`px-3 py-1.5 text-sm rounded-full font-medium border ${
                           scan.points >= 500
-                            ? 'bg-red-100 text-red-800'
+                            ? 'bg-red-500/20 text-red-400 border-red-500/30'
                             : scan.points >= 250
-                            ? 'bg-orange-100 text-orange-800'
+                            ? 'bg-orange-500/20 text-orange-400 border-orange-500/30'
                             : scan.points >= 100
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                            : 'bg-green-500/20 text-green-400 border-green-500/30'
                         }`}>
                           {scan.points} نقطة
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                         {new Date(scan.scannedAt).toLocaleString('ar-SA')}
                       </td>
                     </tr>

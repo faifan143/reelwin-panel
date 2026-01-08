@@ -22,28 +22,39 @@ const RewardsManagementPage: NextPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100" dir="rtl">
-            <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                            <Settings className="inline mx-2" size={24} />
-                            إدارة المكافآت
-                        </h1>
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" dir="rtl">
+            {/* Professional Dark Header */}
+            <header className="bg-slate-800/40 backdrop-blur-xl border-b border-slate-700/50 shadow-xl">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="flex items-center gap-4">
+                        {/* Icon Badge */}
+                        <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <Settings className="w-7 h-7 text-white" />
+                        </div>
+                        
+                        {/* Title */}
+                        <div>
+                            <h1 className="text-3xl font-bold text-white">
+                                إدارة المكافآت
+                            </h1>
+                            <p className="text-slate-400 text-sm mt-1">
+                                إدارة المكافآت والفئات وطلبات المستخدمين
+                            </p>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div className="bg-white shadow rounded-lg overflow-hidden">
-                    <div className="p-4 sm:p-6">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl overflow-hidden">
+                    <div className="p-4 sm:p-6 bg-transparent">
                         {/* Tabs */}
                         <Tabs
                             tabs={tabs.map(tab => ({
                                 id: tab.id,
                                 label: (
-                                    <div className="flex items-center">
-                                        {tab.icon}
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-inherit">{tab.icon}</span>
                                         <span className="mx-1">{tab.label}</span>
                                     </div>
                                 ) as unknown as string, // Type assertion needed due to JSX in label
@@ -53,17 +64,19 @@ const RewardsManagementPage: NextPage = () => {
                         />
 
                         {/* Tab Contents */}
-                        <TabContent id="rewards" activeTab={activeTab}>
-                            <RewardsTab />
-                        </TabContent>
+                        <div className="mt-6 bg-transparent">
+                            <TabContent id="rewards" activeTab={activeTab}>
+                                <RewardsTab />
+                            </TabContent>
 
-                        <TabContent id="categories" activeTab={activeTab}>
-                            <CategoriesTab />
-                        </TabContent>
+                            <TabContent id="categories" activeTab={activeTab}>
+                                <CategoriesTab />
+                            </TabContent>
 
-                        <TabContent id="requests" activeTab={activeTab}>
-                            <UserRequestsTab />
-                        </TabContent>
+                            <TabContent id="requests" activeTab={activeTab}>
+                                <UserRequestsTab />
+                            </TabContent>
+                        </div>
                     </div>
                 </div>
             </main>

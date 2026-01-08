@@ -188,15 +188,15 @@ export const OfferEditForm: React.FC<{
         return (
             <div
                 {...innerProps}
-                className={`p-2 cursor-pointer hover:bg-gray-50 ${isSelected ? 'bg-blue-50' : ''}`}
+                className={`p-2 cursor-pointer hover:bg-slate-700/50 ${isSelected ? 'bg-blue-500/20' : 'bg-slate-800/50'}`}
             >
-                <div className="font-semibold">{contentItem.title}</div>
-                <div className="text-gray-600 text-sm truncate">
+                <div className="font-semibold text-white">{contentItem.title}</div>
+                <div className="text-slate-300 text-sm truncate">
                     {contentItem.description.length > 50
                         ? `${contentItem.description.substring(0, 50)}...`
                         : contentItem.description}
                 </div>
-                <div className="text-gray-500 text-xs mt-1">
+                <div className="text-slate-400 text-xs mt-1">
                     {contentItem.ownerType} • {contentItem.type}
                 </div>
             </div>
@@ -315,7 +315,7 @@ export const OfferEditForm: React.FC<{
 
                 {/* Content ID Selection */}
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                    <label className="block text-sm font-medium text-slate-300 mb-1 text-right">
                         {translations.contentIdOptional}
                     </label>
                     <Select
@@ -346,16 +346,16 @@ export const OfferEditForm: React.FC<{
                             content: selectedContent
                         } : null}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-slate-400 mt-1">
                         اختر محتوى معين أو اتركه فارغاً
                     </p>
                 </div>
 
                 <div className="sm:col-span-2 flex items-center justify-end">
-                    <label className="inline-flex items-center text-sm text-gray-700">
+                    <label className="inline-flex items-center text-sm text-slate-300">
                         <input
                             type="checkbox"
-                            className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mx-2"
+                            className="w-4 h-4 text-blue-600 bg-slate-700 border-slate-600 rounded focus:ring-blue-500 mx-2"
                             name="isActive"
                             checked={formData.isActive}
                             onChange={handleChange}
@@ -381,14 +381,14 @@ export const OfferEditForm: React.FC<{
                 />
 
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                    <label className="block text-sm font-medium text-slate-300 mb-1 text-right">
                         {translations.description} <span className="text-red-500">*</span>
                     </label>
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 h-24 transition-all duration-200 text-right"
+                        className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 transition-all duration-200 text-right placeholder:text-slate-400"
                         required
                         dir="rtl"
                     />
@@ -402,7 +402,7 @@ export const OfferEditForm: React.FC<{
                         </label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                             {existingImages.map((image, index) => (
-                                <div key={index} className="relative aspect-square border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                <div key={index} className="relative aspect-square border border-slate-600/50 rounded-lg overflow-hidden bg-slate-700/50">
                                     <img
                                         src={image}
                                         alt={`Offer image ${index + 1}`}
@@ -433,7 +433,7 @@ export const OfferEditForm: React.FC<{
                                 {/* New Image Preview Gallery */}
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-3">
                                     {newImagePreviews.map((preview, index) => (
-                                        <div key={index} className="relative aspect-square border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                        <div key={index} className="relative aspect-square border border-slate-600/50 rounded-lg overflow-hidden bg-slate-700/50">
                                             <img
                                                 src={preview}
                                                 alt={`New image ${index + 1}`}
@@ -461,7 +461,7 @@ export const OfferEditForm: React.FC<{
                                         <X size={14} className="mx-1" />
                                         {translations.removeAll}
                                     </button>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-slate-300">
                                         {translations.selectedFiles}: {newFiles.length}
                                     </p>
                                 </div>
@@ -470,7 +470,7 @@ export const OfferEditForm: React.FC<{
                     ) : (
                         <></>
                     )}
-                    <div className="mt-1 flex justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg">
+                    <div className="mt-1 flex justify-center p-6 border-2 border-dashed border-slate-600/50 rounded-lg">
                         <div className="space-y-1 text-center">
                             <svg
                                 className="mx-auto h-12 w-12 text-gray-400"
@@ -486,7 +486,7 @@ export const OfferEditForm: React.FC<{
                                     strokeLinejoin="round"
                                 />
                             </svg>
-                            <div className="flex justify-center text-sm text-gray-600">
+                            <div className="flex justify-center text-sm text-slate-300">
                                 <label
                                     htmlFor="images-upload"
                                     className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"

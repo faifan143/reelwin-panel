@@ -10,29 +10,38 @@ interface TabProps {
 }
 
 const Tab: React.FC<TabProps> = ({ label, isActive, onClick, mobileView = false }) => {
-    // Desktop tab style
+    // Desktop tab style - Dark Theme
     if (!mobileView) {
         return (
             <button
                 onClick={onClick}
-                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                type="button"
+                className={`flex items-center px-5 py-3 text-sm font-semibold rounded-xl transition-all duration-200 border-0 ${isActive
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20'
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white border border-slate-600/50'
                     }`}
+                style={{ 
+                    backgroundColor: isActive ? undefined : '#334155',
+                    color: isActive ? 'white' : 'rgb(203, 213, 225)'
+                }}
             >
                 {label}
             </button>
         );
     }
 
-    // Mobile menu-style tab
+    // Mobile menu-style tab - Dark Theme
     return (
         <button
+            type="button"
             className={`flex items-center justify-start w-full gap-2 px-4 py-3 font-medium text-sm transition-all duration-200 ${isActive
-                ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-500'
-                : 'text-gray-600 hover:text-blue-500 hover:bg-gray-50 border-r-4 border-transparent'
+                ? 'bg-blue-500/20 text-blue-400 border-r-4 border-blue-500'
+                : 'bg-slate-700/50 text-slate-300 hover:text-blue-400 hover:bg-slate-700/70 border-r-4 border-transparent'
                 }`}
             onClick={onClick}
+            style={{ 
+                backgroundColor: isActive ? 'rgba(59, 130, 246, 0.2)' : 'rgba(51, 65, 85, 0.5)'
+            }}
         >
             {label}
         </button>
@@ -78,12 +87,12 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
 
     return (
         <>
-            {/* Mobile version with toggle button */}
+            {/* Mobile version with toggle button - Dark Theme */}
             {isMobile && (
-                <div className="mb-4">
+                <div className="mb-6">
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 w-full justify-between"
+                        className="flex items-center gap-2 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 bg-slate-700/40 text-slate-200 hover:bg-slate-700/60 w-full justify-between border border-slate-600/50"
                     >
                         <span>
                             {tabs.find(tab => tab.id === activeTab)?.label || 'القائمة'}
@@ -92,7 +101,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
                     </button>
 
                     {isMobileMenuOpen && (
-                        <div className="mt-2 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden">
+                        <div className="mt-2 bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
                             {tabs.map((tab) => (
                                 <Tab
                                     key={tab.id}
@@ -107,10 +116,10 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
                 </div>
             )}
 
-            {/* Desktop version with horizontal tabs */}
+            {/* Desktop version with horizontal tabs - Dark Theme */}
             {!isMobile && (
-                <div className="overflow-x-auto pb-2 mb-4">
-                    <div className="flex gap-2 rtl:gap-reverse">
+                <div className="overflow-x-auto pb-2 mb-6 bg-transparent">
+                    <div className="flex gap-3 rtl:gap-reverse bg-transparent">
                         {tabs.map((tab) => (
                             <Tab
                                 key={tab.id}
@@ -138,5 +147,5 @@ export const TabContent: React.FC<TabContentProps> = ({
     children,
 }) => {
     if (id !== activeTab) return null;
-    return <div className="animate-fadeIn">{children}</div>;
+    return <div className="animate-fadeIn bg-transparent">{children}</div>;
 };

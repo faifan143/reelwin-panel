@@ -106,8 +106,8 @@ export const StoreCategoriesTab: React.FC = () => {
                 <StatusMessage type={statusMessage.type} message={statusMessage.message} />
             )}
             {/* Add New Store Category Form */}
-            <Card className="mb-6">
-                <h3 className="text-lg font-medium mb-4 text-gray-800 text-right">
+            <Card className="mb-6 bg-slate-800/50 backdrop-blur-sm border-slate-700/50">
+                <h3 className="text-lg font-medium mb-4 text-white text-right">
                     {translations.addNewStoreCategory}
                 </h3>
                 <form onSubmit={handleCreateSubmit} className="flex flex-col sm:flex-row gap-4">
@@ -122,41 +122,41 @@ export const StoreCategoriesTab: React.FC = () => {
                         />
                     </div>
                     <Button type="submit" disabled={createMutation.isPending} className="shrink-0 mt-auto">
-                        {createMutation.isPending ? <Loader2 className="animate-spin mx-1" size={18} /> : <Plus size={18} className="mx-1" />}
+                        {createMutation.isPending ? <Loader2 className="animate-spin w-5 h-5" /> : <Plus className="w-5 h-5" />}
                         {translations.addCategory}
                     </Button>
                 </form>
             </Card>
 
             {/* Store Categories List */}
-            <Card>
-                <h3 className="text-lg font-medium mb-4 text-gray-800 text-right">
+            <Card className="bg-slate-800/50 backdrop-blur-sm border-slate-700/50">
+                <h3 className="text-lg font-medium mb-4 text-white text-right">
                     {translations.storeCategoriesTitle}
                 </h3>
                 {storeCategories && storeCategories.length === 0 ? (
-                    <p className="text-gray-600 text-right">{translations.noStoreCategories}</p>
+                    <p className="text-slate-400 text-right">{translations.noStoreCategories}</p>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-slate-700/50">
+                            <thead className="bg-slate-800/60">
                                 <tr>
 
-                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                         {translations.name}
                                     </th>
-                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                         {translations.status}
                                     </th>
-                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                         {translations.actions}
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
                                 {storeCategories?.map(category => (
-                                    <tr key={category.id}>
+                                    <tr key={category.id} className="hover:bg-slate-700/30 transition-colors">
 
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                                             {editingCategory?.id === category.id ? (
                                                 <Input
                                                     name="editCategoryName"
@@ -168,16 +168,16 @@ export const StoreCategoriesTab: React.FC = () => {
                                                 category.name
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             {editingCategory?.id === category.id ? (
                                                 <input
                                                     type="checkbox"
                                                     checked={editingCategory.isActive}
                                                     onChange={(e) => setEditingCategory(prev => prev ? { ...prev, isActive: e.target.checked } : null)}
-                                                    className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
+                                                    className="h-5 w-5 text-blue-600 bg-slate-700 border-slate-600 rounded focus:ring-blue-500 focus:ring-2 transition duration-150 ease-in-out"
                                                 />
                                             ) : (
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${category.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full border ${category.isActive ? 'bg-green-500/20 text-green-400 border-green-500/30' : 'bg-red-500/20 text-red-400 border-red-500/30'}`}>
                                                     {category.isActive ? translations.active : translations.inactive}
                                                 </span>
                                             )}
@@ -186,7 +186,7 @@ export const StoreCategoriesTab: React.FC = () => {
                                             {editingCategory?.id === category.id ? (
                                                 <div className="flex gap-2">
                                                     <Button onClick={handleUpdateSubmit} disabled={updateMutation.isPending} size="sm">
-                                                        {updateMutation.isPending ? <Loader2 className="animate-spin mx-1" size={16} /> : <Edit size={16} className="mx-1" />}
+                                                        {updateMutation.isPending ? <Loader2 className="animate-spin w-5 h-5" /> : <Edit className="w-5 h-5" />}
                                                         {translations.save}
                                                     </Button>
                                                     <Button onClick={() => setEditingCategory(null)} variant="secondary" size="sm">
@@ -196,11 +196,11 @@ export const StoreCategoriesTab: React.FC = () => {
                                             ) : (
                                                 <div className="flex gap-2">
                                                     <Button onClick={() => setEditingCategory(category)} variant="secondary" size="sm">
-                                                        <Edit size={16} className="mx-1" />
+                                                        <Edit className="w-5 h-5" />
                                                         {translations.edit}
                                                     </Button>
                                                     <Button onClick={() => handleDeleteClick(category.id)} variant="danger" size="sm">
-                                                        <Trash size={16} className="mx-1" />
+                                                        <Trash className="w-5 h-5" />
                                                         {translations.delete}
                                                     </Button>
                                                 </div>
@@ -220,10 +220,10 @@ export const StoreCategoriesTab: React.FC = () => {
                 onClose={() => setShowDeleteModal(false)}
                 title={translations.confirmDelete}
             >
-                <p className="text-gray-700 mb-4 text-right">
+                <p className="text-slate-200 mb-4 text-right">
                     {translations.sureDelete} <span className="font-semibold">{storeCategories?.find(cat => cat.id === categoryToDelete)?.name}</span>?
                 </p>
-                <p className="text-red-500 text-sm mb-4 text-right">
+                <p className="text-red-400 text-sm mb-4 text-right">
                     {translations.deleteWarning}
                 </p>
                 <div className="flex justify-end gap-2">
@@ -239,7 +239,7 @@ export const StoreCategoriesTab: React.FC = () => {
                         variant="danger"
                         disabled={deleteMutation.isPending}
                     >
-                        {deleteMutation.isPending ? <Loader2 className="animate-spin mx-1" size={18} /> : <Trash size={18} className="mx-1" />}
+                        {deleteMutation.isPending ? <Loader2 className="animate-spin w-5 h-5" /> : <Trash className="w-5 h-5" />}
                         {translations.delete}
                     </Button>
                 </div>

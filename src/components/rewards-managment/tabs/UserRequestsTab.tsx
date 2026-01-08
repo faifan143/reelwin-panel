@@ -80,54 +80,54 @@ const UserRequestsTab: React.FC = () => {
     };
 
     if (isLoading) {
-        return <div className="text-center py-4">جاري التحميل...</div>;
+        return <div className="text-center py-4 text-slate-300">جاري التحميل...</div>;
     }
 
     return (
         <div>
-            <div className="mb-4">
-                <h2 className="text-xl font-bold">طلبات المستخدمين</h2>
-                <p className="text-gray-500 text-sm mt-1">
+            <div className="mb-6">
+                <h2 className="text-xl font-bold text-white">طلبات المستخدمين</h2>
+                <p className="text-slate-400 text-sm mt-1">
                     {pendingRequests.length} طلب في انتظار المراجعة
                 </p>
             </div>
 
             {/* Desktop Table View */}
-            <div className="hidden md:block overflow-hidden shadow-md rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="hidden md:block overflow-hidden shadow-xl rounded-xl border border-slate-700/50">
+                <table className="min-w-full divide-y divide-slate-700/50">
+                    <thead className="bg-slate-800/60">
                         <tr>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 المستخدم
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 المكافأة
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 النقاط المستخدمة
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 تاريخ الطلب
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 الحالة
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-300 uppercase tracking-wider">
                                 الإجراءات
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-slate-800/30 divide-y divide-slate-700/50">
                         {userRequests.map((request) => (
-                            <tr key={request.id}>
+                            <tr key={request.id} className="hover:bg-slate-700/30 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">
-                                        <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                                            <User size={20} className="text-gray-600" />
+                                        <div className="flex-shrink-0 h-10 w-10 bg-slate-700 rounded-full flex items-center justify-center">
+                                            <User size={20} className="text-slate-300" />
                                         </div>
                                         <div className="mx-4">
-                                            <div className="text-sm font-medium text-gray-900">{request.user?.name}</div>
-                                            <div className="text-sm text-gray-500 flex items-center">
+                                            <div className="text-sm font-medium text-white">{request.user?.name}</div>
+                                            <div className="text-sm text-slate-400 flex items-center">
                                                 <Phone size={12} className="inline mx-1" />
                                                 {request.user?.phone}
                                             </div>
@@ -135,14 +135,14 @@ const UserRequestsTab: React.FC = () => {
                                     </div>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <div className="text-sm font-medium text-gray-900">{request.reward?.title}</div>
-                                    <div className="text-xs text-gray-500">{request.reward?.category?.name}</div>
+                                    <div className="text-sm font-medium text-white">{request.reward?.title}</div>
+                                    <div className="text-xs text-slate-400">{request.reward?.category?.name}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900">{request.pointsSpent} نقطة</div>
+                                    <div className="text-sm text-slate-200 font-semibold">{request.pointsSpent} نقطة</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <div className="text-sm text-gray-900 flex items-center">
+                                    <div className="text-sm text-slate-300 flex items-center">
                                         <Calendar size={14} className="inline mx-1" />
                                         {formatDate(request.createdAt)}
                                     </div>
@@ -150,7 +150,7 @@ const UserRequestsTab: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <StatusBadge status={request.status} />
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     {request.status === RewardStatus.PENDING && (
                                         <div className="flex gap-2 rtl:gap-reverse">
                                             <Button
@@ -181,34 +181,34 @@ const UserRequestsTab: React.FC = () => {
             {/* Mobile Card View */}
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {userRequests.map((request) => (
-                    <div key={request.id} className="bg-white p-4 rounded-lg shadow-md">
+                    <div key={request.id} className="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl border border-slate-700/50 shadow-xl">
                         <div className="flex justify-between items-center mb-3">
                             <StatusBadge status={request.status} />
-                            <div className="flex items-center text-xs text-gray-500">
+                            <div className="flex items-center text-xs text-slate-400">
                                 <Clock size={12} className="mx-1" />
                                 {formatDate(request.createdAt)}
                             </div>
                         </div>
 
-                        <div className="border-b pb-2 mb-2">
-                            <h3 className="text-md font-medium">{request.reward?.title}</h3>
-                            <p className="text-xs text-gray-500">{request.reward?.category?.name}</p>
+                        <div className="border-b border-slate-700/50 pb-2 mb-2">
+                            <h3 className="text-md font-medium text-white">{request.reward?.title}</h3>
+                            <p className="text-xs text-slate-400">{request.reward?.category?.name}</p>
                         </div>
 
                         <div className="flex justify-between items-center py-2">
                             <div className="flex items-center">
-                                <Award size={16} className="text-blue-500 mx-1" />
-                                <span className="text-sm font-medium">{request.pointsSpent} نقطة</span>
+                                <Award size={16} className="text-blue-400 mx-1" />
+                                <span className="text-sm font-medium text-slate-200">{request.pointsSpent} نقطة</span>
                             </div>
                         </div>
 
-                        <div className="flex items-center py-2 border-t">
-                            <div className="flex-shrink-0 h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                <User size={14} className="text-gray-600" />
+                        <div className="flex items-center py-2 border-t border-slate-700/50">
+                            <div className="flex-shrink-0 h-8 w-8 bg-slate-700 rounded-full flex items-center justify-center">
+                                <User size={14} className="text-slate-300" />
                             </div>
                             <div className="mx-2">
-                                <div className="text-sm font-medium">{request.user?.name}</div>
-                                <div className="text-xs text-gray-500 flex items-center">
+                                <div className="text-sm font-medium text-white">{request.user?.name}</div>
+                                <div className="text-xs text-slate-400 flex items-center">
                                     <Phone size={10} className="inline mx-1" />
                                     {request.user?.phone}
                                 </div>
@@ -260,16 +260,16 @@ const UserRequestsTab: React.FC = () => {
                         )}
                     </div>
 
-                    <p className="text-center text-gray-700 mb-4">
+                    <p className="text-center text-slate-200 mb-4">
                         {statusToUpdate === RewardStatus.FULFILLED
                             ? 'هل أنت متأكد من قبول هذا الطلب؟'
                             : 'هل أنت متأكد من رفض هذا الطلب؟'}
                     </p>
 
                     {selectedRequest && (
-                        <div className="bg-gray-50 p-3 rounded-md mb-4">
-                            <p className="text-sm font-medium text-gray-700">تفاصيل الطلب:</p>
-                            <div className="mt-2 text-sm">
+                        <div className="bg-slate-700/50 p-3 rounded-xl border border-slate-600/50 mb-4">
+                            <p className="text-sm font-medium text-slate-200">تفاصيل الطلب:</p>
+                            <div className="mt-2 text-sm text-slate-300">
                                 <p><span className="font-medium">المستخدم:</span> {selectedRequest.user?.name}</p>
                                 <p><span className="font-medium">المكافأة:</span> {selectedRequest.reward?.title}</p>
                                 <p><span className="font-medium">النقاط:</span> {selectedRequest.pointsSpent}</p>

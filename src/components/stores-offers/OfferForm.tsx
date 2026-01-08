@@ -158,15 +158,15 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
         return (
             <div
                 {...innerProps}
-                className={`p-2 cursor-pointer hover:bg-gray-50 ${isSelected ? 'bg-blue-50' : ''}`}
+                className={`p-2 cursor-pointer hover:bg-slate-700/50 ${isSelected ? 'bg-blue-500/20' : 'bg-slate-800/50'}`}
             >
-                <div className="font-semibold">{contentItem.title}</div>
-                <div className="text-gray-600 text-sm truncate">
+                <div className="font-semibold text-white">{contentItem.title}</div>
+                <div className="text-slate-300 text-sm truncate">
                     {contentItem.description.length > 50
                         ? `${contentItem.description.substring(0, 50)}...`
                         : contentItem.description}
                 </div>
-                <div className="text-gray-500 text-xs mt-1">
+                <div className="text-slate-400 text-xs mt-1">
                     {contentItem.ownerType} • {contentItem.type}
                 </div>
             </div>
@@ -254,8 +254,8 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
     }));
 
     return (
-        <Card className="mb-6">
-            <h3 className="text-lg font-medium mb-4 text-gray-800 text-right">
+        <Card className="mb-6 bg-slate-800/50 backdrop-blur-sm border-slate-700/50">
+            <h3 className="text-lg font-medium mb-4 text-white text-right">
                 {translations.addNewOffer}
             </h3>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4" dir="rtl">
@@ -294,8 +294,8 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                 {/* Show calculated discount percentage */}
                 {formData.price && formData.priceAfterDiscount && (
                     <div className="sm:col-span-2">
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-right">
-                            <p className="text-sm text-green-800 font-medium">
+                    <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-right">
+                        <p className="text-sm text-green-400 font-medium">
                                 {translations.discountPercentage}: {(
                                     ((parseFloat(formData.price) - parseFloat(formData.priceAfterDiscount)) / parseFloat(formData.price)) * 100
                                 ).toFixed(1)}%
@@ -330,7 +330,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     required
                 />
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                    <label className="block text-sm font-medium text-slate-300 mb-1 text-right">
                         {translations.contentIdOptional}
                     </label>
                     <Select
@@ -361,27 +361,27 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                             content: selectedContent
                         } : null}
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-slate-400 mt-1">
                         اختر محتوى معين أو اتركه فارغاً
                     </p>
                 </div>
 
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                    <label className="block text-sm font-medium text-slate-300 mb-1 text-right">
                         {translations.description} <span className="text-red-500">*</span>
                     </label>
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 h-24 transition-all duration-200 text-right"
+                        className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 transition-all duration-200 text-right placeholder:text-slate-400"
                         required
                         dir="rtl"
                     />
                 </div>
 
                 <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+                    <label className="block text-sm font-medium text-slate-300 mb-1 text-right">
                         {translations.images} <span className="text-red-500">*</span>
                     </label>
 
@@ -392,7 +392,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                                 {/* Image Gallery */}
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-3">
                                     {imagePreviews.map((preview, index) => (
-                                        <div key={index} className="relative aspect-square border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                        <div key={index} className="relative aspect-square border border-slate-600/50 rounded-lg overflow-hidden bg-slate-700/50">
                                             <img
                                                 src={preview}
                                                 alt={`Preview ${index + 1}`}
@@ -421,7 +421,7 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                                         <X size={14} className="mx-1" />
                                         {translations.removeAll}
                                     </button>
-                                    <p className="text-sm text-gray-600">
+                                    <p className="text-sm text-slate-300">
                                         {translations.selectedFiles}: {selectedFiles.length}
                                     </p>
                                 </div>
@@ -430,13 +430,13 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                     )}
 
                     {/* Always show the upload button/area */}
-                    <div className={`${imagePreviews.length > 0 ? 'border-2 border-dashed border-gray-300 rounded-lg p-4' : 'mt-1 flex justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg'}`}>
+                    <div className={`${imagePreviews.length > 0 ? 'border-2 border-dashed border-slate-600/50 rounded-lg p-4' : 'mt-1 flex justify-center p-6 border-2 border-dashed border-slate-600/50 rounded-lg'}`}>
                         <div className="space-y-1 text-center">
                             {imagePreviews.length === 0 ? (
                                 // Full upload UI when no images are selected
                                 <>
                                     <svg
-                                        className="mx-auto h-12 w-12 text-gray-400"
+                                        className="mx-auto h-12 w-12 text-slate-400"
                                         stroke="currentColor"
                                         fill="none"
                                         viewBox="0 0 48 48"
@@ -449,10 +449,10 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                                             strokeLinejoin="round"
                                         />
                                     </svg>
-                                    <div className="flex justify-center text-sm text-gray-600">
+                                    <div className="flex justify-center text-sm text-slate-300">
                                         <label
                                             htmlFor="images-upload"
-                                            className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-ring-indigo-500"
+                                            className="relative cursor-pointer bg-blue-600/20 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-ring-blue-500 border border-blue-500/30 px-3 py-1"
                                         >
                                             <span>{translations.uploadFile}</span>
                                             <input
@@ -468,14 +468,14 @@ export const OfferForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) =>
                                         </label>
                                         <p className="pr-1">{translations.orDragDrop}</p>
                                     </div>
-                                    <p className="text-xs text-gray-500">{translations.fileTypes}</p>
+                                    <p className="text-xs text-slate-400">{translations.fileTypes}</p>
                                 </>
                             ) : (
                                 // Compact upload button when images are already selected
                                 <div className="flex justify-center">
                                     <label
                                         htmlFor="images-upload"
-                                        className="relative cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="relative cursor-pointer inline-flex items-center px-4 py-2 border border-slate-600/50 shadow-sm text-sm font-medium rounded-md text-slate-200 bg-slate-700/50 hover:bg-slate-700/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                     >
                                         <Upload size={16} className="ml-2" />
                                         {translations.addMoreImages}

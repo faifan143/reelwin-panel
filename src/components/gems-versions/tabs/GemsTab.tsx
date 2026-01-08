@@ -133,41 +133,66 @@ const GemGenerationDropdown: React.FC = () => {
         }));
     };
 
-    // Custom styles for react-select
+    // Custom styles for react-select - Dark Theme
     const customStyles = {
-        control: (provided: any) => ({
+        control: (provided: any, state: any) => ({
             ...provided,
-            borderColor: '#d1d5db',
-            boxShadow: 'none',
+            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+            borderColor: state.isFocused ? '#3b82f6' : 'rgba(71, 85, 105, 0.5)',
+            boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.2)' : 'none',
+            color: '#f8fafc',
             '&:hover': {
-                borderColor: '#9ca3af',
+                borderColor: '#3b82f6',
             }
         }),
         menu: (provided: any) => ({
             ...provided,
+            backgroundColor: '#1e293b',
+            border: '1px solid rgba(71, 85, 105, 0.5)',
             zIndex: 50,
         }),
-        option: (provided: any) => ({
+        option: (provided: any, state: any) => ({
             ...provided,
+            backgroundColor: state.isSelected 
+                ? 'rgba(59, 130, 246, 0.2)' 
+                : state.isFocused 
+                ? 'rgba(59, 130, 246, 0.1)' 
+                : 'transparent',
+            color: '#f8fafc',
             padding: '8px 12px',
+            '&:hover': {
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            }
+        }),
+        input: (provided: any) => ({
+            ...provided,
+            color: '#f8fafc',
+        }),
+        singleValue: (provided: any) => ({
+            ...provided,
+            color: '#f8fafc',
+        }),
+        placeholder: (provided: any) => ({
+            ...provided,
+            color: '#64748b',
         }),
     };
 
-    // Custom Option component
+    // Custom Option component - Dark Theme
     const CustomOption = ({ innerProps, data, isSelected }: any) => {
         const content = data.content;
         return (
             <div
                 {...innerProps}
-                className={`p-2 cursor-pointer hover:bg-gray-50 ${isSelected ? 'bg-blue-50' : ''}`}
+                className={`p-2 cursor-pointer hover:bg-slate-700/50 ${isSelected ? 'bg-blue-500/20' : ''}`}
             >
-                <div className="font-semibold">{content.title}</div>
-                <div className="text-gray-600 text-sm truncate">
+                <div className="font-semibold text-white">{content.title}</div>
+                <div className="text-slate-300 text-sm truncate">
                     {content.description.length > 50
                         ? `${content.description.substring(0, 50)}...`
                         : content.description}
                 </div>
-                <div className="text-gray-500 text-xs mt-1">
+                <div className="text-slate-400 text-xs mt-1">
                     {content.ownerType} • {content.type}
                 </div>
             </div>
@@ -175,21 +200,25 @@ const GemGenerationDropdown: React.FC = () => {
     };
 
     return (
-        <div className="w-full" dir="rtl">
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-                <div className="flex items-center text-xl font-bold mb-2">
-                    <Gift className="ml-2" size={24} />
-                    <h2>إنشاء جوهرة</h2>
+        <div className="w-full bg-slate-800 p-4 rounded-2xl" dir="rtl">
+            <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6 mb-6 shadow-xl">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <Gift className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold text-white">إنشاء جوهرة</h2>
+                        <p className="text-slate-400 text-sm">
+                            إنشاء جواهر للمحتوى التي ستكافئ المستخدمين عند مشاهدة المحتوى
+                        </p>
+                    </div>
                 </div>
-                <p className="text-gray-600 mb-6">
-                    إنشاء جواهر للمحتوى التي ستكافئ المستخدمين عند مشاهدة المحتوى
-                </p>
 
-                <div className="border-t border-gray-200 my-4"></div>
+                <div className="border-t border-slate-700/50 my-6"></div>
 
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-slate-200 mb-2">
                             اختر المحتوى
                         </label>
                         <Select
@@ -207,7 +236,7 @@ const GemGenerationDropdown: React.FC = () => {
                                 );
                             }}
                             components={{
-                                DropdownIndicator: () => <Search size={16} className="mx-2 text-gray-400" />,
+                                DropdownIndicator: () => <Search size={16} className="mx-2 text-slate-400" />,
                                 Option: CustomOption
                             }}
                             classNames={{
@@ -220,13 +249,13 @@ const GemGenerationDropdown: React.FC = () => {
                                 content: selectedContent
                             } : null}
                         />
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-slate-400 mt-2">
                             اختر محتوى معين أو اتركه فارغاً للاختيار العشوائي
                         </p>
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-slate-200 mb-2">
                             نقاط الجوهرة
                         </label>
                         <input
@@ -234,22 +263,22 @@ const GemGenerationDropdown: React.FC = () => {
                             min="1"
                             value={points}
                             onChange={(e) => setPoints(Math.max(1, parseInt(e.target.value) || 1))}
-                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-right"
+                            className="mt-1 block w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-slate-400 text-right"
                             placeholder="أدخل القيمة"
                             required
                         />
                     </div>
 
                     {selectedContent && (
-                        <div className="mb-4 p-3 bg-gray-50 rounded-md border border-gray-200">
-                            <p className="text-sm">
-                                <span className="font-medium">المحتوى المختار:</span> {selectedContent.title}
+                        <div className="mb-4 p-4 bg-blue-500/10 rounded-xl border border-blue-500/30">
+                            <p className="text-sm text-slate-200">
+                                <span className="font-medium text-blue-400">المحتوى المختار:</span> {selectedContent.title}
                             </p>
                         </div>
                     )}
 
                     {errorMessage && (
-                        <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+                        <div className="mb-4 p-4 bg-red-500/10 text-red-400 rounded-xl border border-red-500/30">
                             {errorMessage}
                         </div>
                     )}
@@ -257,11 +286,11 @@ const GemGenerationDropdown: React.FC = () => {
                     <button
                         type="submit"
                         disabled={mutation.isPending}
-                        className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 shadow-blue-500/20 transition-all"
                     >
                         {mutation.isPending ? (
                             <span className="flex items-center">
-                                <svg className="animate-spin -mr-1 ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg className="animate-spin -mr-1 ml-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
@@ -269,7 +298,7 @@ const GemGenerationDropdown: React.FC = () => {
                             </span>
                         ) : (
                             <span className="flex items-center">
-                                <Send size={16} className="ml-2" />
+                                <Send size={18} className="ml-2" />
                                 إنشاء جوهرة
                             </span>
                         )}
@@ -277,41 +306,45 @@ const GemGenerationDropdown: React.FC = () => {
                 </form>
             </div>
 
-            {/* Success Modal */}
+            {/* Success Modal - Dark Theme */}
             {successModalVisible && (
                 <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                     <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0 bg-black/75 backdrop-md transition-opacity" aria-hidden="true"></div>
+                        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
                         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                        <div className="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                        <div className="inline-block align-bottom bg-slate-800 rounded-2xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-700/50">
                             <div className="absolute top-0 left-0 pt-4 pl-4">
                                 <button
                                     type="button"
-                                    className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                                    className="bg-slate-700/50 rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none transition-colors"
                                     onClick={closeSuccessModal}
                                 >
                                     <span className="sr-only">إغلاق</span>
                                     <X size={20} />
                                 </button>
                             </div>
-                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div className="bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="sm:flex sm:items-start">
-                                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                                        <Gift className="h-6 w-6 text-green-600" />
+                                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 sm:mx-0 shadow-lg shadow-green-500/20">
+                                        <Gift className="h-7 w-7 text-white" />
                                     </div>
                                     <div className="mt-3 text-center sm:mt-0 sm:mr-4 sm:text-right">
-                                        <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                        <h3 className="text-xl leading-6 font-bold text-white mb-4" id="modal-title">
                                             تم إنشاء الجوهرة بنجاح
                                         </h3>
                                         {generatedGem && (
-                                            <div className="mt-4">
-                                                <p className="text-sm text-gray-500 mb-2">
-                                                    <span className="font-medium">المحتوى:</span> {generatedGem.contentTitle}
-                                                </p>
-                                                <p className="text-sm text-gray-500 mb-2">
-                                                    <span className="font-medium">النقاط:</span> {generatedGem.points}
-                                                </p>
-                                                <p className="text-sm text-gray-600 mt-4">
+                                            <div className="mt-4 space-y-3">
+                                                <div className="p-3 bg-slate-700/50 rounded-xl border border-slate-600/50">
+                                                    <p className="text-sm text-slate-300">
+                                                        <span className="font-medium text-blue-400">المحتوى:</span> {generatedGem.contentTitle}
+                                                    </p>
+                                                </div>
+                                                <div className="p-3 bg-slate-700/50 rounded-xl border border-slate-600/50">
+                                                    <p className="text-sm text-slate-300">
+                                                        <span className="font-medium text-blue-400">النقاط:</span> {generatedGem.points}
+                                                    </p>
+                                                </div>
+                                                <p className="text-sm text-slate-400 mt-4 p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
                                                     سيتم منح هذه الجوهرة لأول مستخدم يشاهد هذا المحتوى.
                                                 </p>
                                             </div>
@@ -319,10 +352,10 @@ const GemGenerationDropdown: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row">
+                            <div className="bg-slate-700/30 px-4 py-3 sm:px-6 sm:flex sm:flex-row border-t border-slate-700/50">
                                 <button
                                     type="button"
-                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    className="w-full inline-flex justify-center rounded-xl border border-transparent shadow-lg px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto shadow-blue-500/20 transition-all"
                                     onClick={closeSuccessModal}
                                 >
                                     موافق

@@ -183,14 +183,15 @@ const ManageInterests: React.FC = () => {
 
   return (
     <div
-      className="bg-white p-4 sm:p-6 rounded-xl shadow-md max-w-6xl mx-auto"
+      className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 sm:p-6"
       dir="rtl"
     >
+      <div className="max-w-7xl mx-auto">
       {/* Header and info */}
       <Header onAdd={handleAddNew} isMobile={isMobile} />
 
       {/* Content Area - Table or Cards based on device */}
-      <div className="bg-white rounded-xl overflow-hidden border border-gray-200">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl">
         {isMobile ? (
           <InterestCardView
             interests={interests}
@@ -223,6 +224,7 @@ const ManageInterests: React.FC = () => {
 
       {/* Global Styles */}
       <GlobalStyles />
+      </div>
     </div>
   );
 };
