@@ -87,13 +87,13 @@ const StoresAndOffersPage: React.FC = () => {
                   <Tag size={18} className="text-inherit" />
                   {translations.categories}
                 </TabsTrigger>
-                <TabsTrigger
+                {/* <TabsTrigger
                   value="storeCategories"
                   className="gap-2 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-blue-500/10 data-[state=active]:text-blue-400 text-slate-400 hover:text-slate-300 px-6 py-4"
                 >
                   <Building2 size={18} className="text-inherit" />
                   {translations.storeCategories}
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
             </div>
 
