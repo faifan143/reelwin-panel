@@ -3,16 +3,35 @@
 # Navigate to the project directory
 cd /opt/reelwin-panel
 
-# Stop the current container
-docker-compose down
+# Create logs directory if it doesn't exist
+mkdir -p logs
 
-# Rebuild the container with the new configuration
-docker-compose up -d --build
+# Install dependencies if needed
+if [ ! -d "node_modules" ]; then
+    echo "Installing dependencies..."
+    npm ci --production=false
+fi
 
-# Show container status
-echo "Container status:"
-docker ps | grep reelwin
+# Build the application
+echo "Building application..."
+npm run build
 
-echo "Deployment completed"
+# Check if PM2 process is running
+if pm2 list | grep -q "reelwin-panel"; then
+    echo "Restarting existing PM2 process..."
+    pm2 restart reelwin-panel
+else
+    echo "Starting new PM2 process..."
+    pm2 start ecosystem.config.cjs
+    pm2 save
+fi
 
-docker-compose logs -f 
+# Show PM2 status
+echo ""
+echo "PM2 process status:"
+pm2 status
+
+echo ""
+echo "Deployment completed successfully!"
+echo "Use 'pm2 logs reelwin-panel' to view logs"
+echo "Use 'pm2 monit' to monitor the application"

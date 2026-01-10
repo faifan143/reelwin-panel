@@ -6,7 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:stop": "pm2 stop reelwin-panel",
+    "pm2:restart": "pm2 restart reelwin-panel",
+    "pm2:delete": "pm2 delete reelwin-panel",
+    "pm2:logs": "pm2 logs reelwin-panel",
+    "pm2:status": "pm2 status",
+    "pm2:monit": "pm2 monit",
+    "pm2:save": "pm2 save",
+    "pm2:startup": "pm2 startup"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^3.1.1",
@@ -37,6 +46,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.1",
+    "pm2": "^5.4.2",
     "tailwindcss": "^4",
     "typescript": "^5.9.3"
   }
