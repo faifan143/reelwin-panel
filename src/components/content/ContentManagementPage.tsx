@@ -476,185 +476,202 @@ export default function ContentManagementPage() {
           </div>
         ) : contentData && contentData.length > 0 ? (
           <>
-            {/* Desktop Table View */}
-            <div className="hidden md:block bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+            {/* Desktop Compact Table View */}
+            <div className="hidden md:block bg-slate-900/50 backdrop-blur-sm rounded-xl border border-slate-700/50 shadow-xl overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-700/50">
-                  <thead className="bg-slate-800/50">
+                <table className="min-w-full divide-y divide-slate-700/30">
+                  <thead className="bg-gradient-to-r from-slate-800/90 to-slate-800/70 backdrop-blur-sm border-b-2 border-slate-700/50 sticky top-0 z-10">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
-                        معرف المحتوى
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider w-16">
+                        #
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
-                        العنوان
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider min-w-[280px]">
+                        المحتوى
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider w-24">
                         الوسائط
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider min-w-[160px]">
                         المالك
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider w-32">
                         الإعدادات
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider w-32">
                         الإحصائيات
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider"
-                      >
+                      <th scope="col" className="px-3 py-2.5 text-right text-xs font-bold text-slate-200 uppercase tracking-wider w-28">
                         الإجراءات
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-700/50">
-                    {currentItems.map((content) => (
-                      <tr key={content.id} className="hover:bg-slate-800/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-slate-400 font-mono">{content.id.slice(0, 8)}...</div>
+                  <tbody className="divide-y divide-slate-800/40 bg-slate-900/20">
+                    {currentItems.map((content, index) => (
+                      <tr 
+                        key={content.id} 
+                        className="hover:bg-slate-800/40 transition-colors duration-150 group"
+                      >
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500/70 group-hover:bg-blue-400 transition-colors"></div>
+                            <span className="text-xs text-slate-500 font-mono font-medium">
+                              {startIndex + index + 1}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col gap-2">
-                            <div className="text-sm font-semibold text-white">
-                              {content.title}
-                            </div>
-                            <div className="text-sm text-slate-400 line-clamp-2">
-                              {content.description}
+                        <td className="px-3 py-2.5">
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-start gap-2">
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-bold text-white truncate group-hover:text-blue-300 transition-colors">
+                                  {content.title}
+                                </div>
+                                <div className="text-xs text-slate-500 mt-0.5 line-clamp-1">
+                                  {content.description}
+                                </div>
+                              </div>
+                              <div className="text-[10px] text-slate-600 font-mono bg-slate-800/50 px-1.5 py-0.5 rounded border border-slate-700/50 flex-shrink-0">
+                                {content.id.slice(0, 6)}
+                              </div>
                             </div>
                             <div className="flex flex-wrap gap-1">
-                              {(content.interests || []).map((interest) => (
-                                <span
-                                  key={interest.id}
-                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                                >
-                                  {interest.name}
+                              {(content.interests || []).slice(0, 3).map((interest, idx) => {
+                                const colors = [
+                                  "bg-blue-500/15 text-blue-400 border-blue-500/30",
+                                  "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+                                  "bg-purple-500/15 text-purple-400 border-purple-500/30",
+                                ];
+                                const colorClass = colors[idx % colors.length];
+                                return (
+                                  <span
+                                    key={interest.id}
+                                    className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border ${colorClass}`}
+                                  >
+                                    {interest.name}
+                                  </span>
+                                );
+                              })}
+                              {(content.interests || []).length > 3 && (
+                                <span className="text-[10px] text-slate-500 px-1.5 py-0.5">
+                                  +{(content.interests || []).length - 3}
                                 </span>
-                              ))}
+                              )}
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex gap-2">
-                            {content.mediaUrls.map((media, index) => (
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex gap-1">
+                            {content.mediaUrls.slice(0, 2).map((media, index) => (
                               <button
                                 key={index}
                                 onClick={() => handleMediaClick(media)}
-                                className={`p-2 rounded-lg transition-all ${media.type === "IMAGE"
-                                  ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
-                                  : "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20"
-                                  }`}
+                                className={`p-1.5 rounded-lg transition-all duration-150 hover:scale-110 ${
+                                  media.type === "IMAGE"
+                                    ? "bg-blue-500/15 text-blue-400 hover:bg-blue-500/25 border border-blue-500/30"
+                                    : "bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 border border-purple-500/30"
+                                }`}
+                                title={media.type === "IMAGE" ? "صورة" : "فيديو"}
                               >
                                 {media.type === "IMAGE" ? (
-                                  <Image className="h-4 w-4" />
+                                  <Image className="h-3.5 w-3.5" />
                                 ) : (
-                                  <Video className="h-4 w-4" />
+                                  <Video className="h-3.5 w-3.5" />
                                 )}
                               </button>
                             ))}
+                            {content.mediaUrls.length > 2 && (
+                              <span className="text-[10px] text-slate-500 px-1 py-1">
+                                +{content.mediaUrls.length - 2}
+                              </span>
+                            )}
                           </div>
                         </td>
-
-
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col gap-2">
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex flex-col gap-1">
                             {content.ownerType === "INDIVIDUAL" ? (
                               <>
-                                <div className="text-sm font-medium text-white flex items-center gap-2">
-                                  <User className="h-4 w-4 text-slate-400" />
-                                  {content.ownerName}
+                                <div className="flex items-center gap-1.5 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">
+                                  <User className="h-3 w-3 text-blue-400" />
+                                  <span className="text-xs font-semibold text-white truncate max-w-[120px]">
+                                    {content.ownerName}
+                                  </span>
                                 </div>
-                                <div className="text-sm text-slate-400 flex items-center gap-2">
-                                  <Phone className="h-4 w-4 text-slate-400" />
-                                  {content.ownerNumber}
+                                <div className="flex items-center gap-1 text-[10px] text-slate-500">
+                                  <Phone className="h-3 w-3" />
+                                  <span className="font-mono">{content.ownerNumber}</span>
                                 </div>
+                                <span className="text-[10px] px-1.5 py-0.5 bg-blue-500/15 text-blue-400 rounded border border-blue-500/30 inline-block w-fit font-semibold">
+                                  فردي
+                                </span>
                               </>
                             ) : (
-                              <div className="text-sm font-medium text-white flex items-center gap-2">
-                                <Store className="h-4 w-4 text-slate-400" />
-                                {content.store?.name || "متجر"}
-                              </div>
+                              <>
+                                <div className="flex items-center gap-1.5 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">
+                                  <Store className="h-3 w-3 text-indigo-400" />
+                                  <span className="text-xs font-semibold text-white truncate max-w-[120px]">
+                                    {content.store?.name || "متجر"}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] px-1.5 py-0.5 bg-indigo-500/15 text-indigo-400 rounded border border-indigo-500/30 inline-block w-fit font-semibold">
+                                  متجر
+                                </span>
+                              </>
                             )}
-                            <div className="text-xs px-2 py-1 bg-slate-700/50 rounded-lg text-slate-300 inline-block w-fit border border-slate-600">
-                              {content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">
+                              <Clock className="h-3 w-3 text-amber-400" />
+                              <span className="text-xs font-semibold text-white">{content.intervalHours}</span>
+                              <span className="text-[10px] text-slate-500">س</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">
+                              <Calendar className="h-3 w-3 text-cyan-400" />
+                              <span className="text-[10px] font-medium text-slate-300">
+                                {new Date(content.endValidationDate).toLocaleDateString("ar-SA", { month: "short", day: "numeric" })}
+                              </span>
                             </div>
                           </div>
                         </td>
-
-
-
-
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col gap-2">
-                            <div className="text-sm text-slate-300 flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-slate-400" />
-                              {content.intervalHours} ساعة
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5 bg-blue-500/10 px-2 py-1 rounded border border-blue-500/20">
+                              <Eye className="h-3 w-3 text-blue-400" />
+                              <span className="text-xs font-bold text-blue-400">{content._count?.viewedBy || 0}</span>
                             </div>
-                            <div className="text-sm text-slate-300 flex items-center gap-2">
-                              <Calendar className="h-4 w-4 text-slate-400" />
-                              {new Date(
-                                content.endValidationDate
-                              ).toLocaleDateString("ar")}
+                            <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">
+                              <ThumbsUp className="h-3 w-3 text-emerald-400" />
+                              <span className="text-xs font-bold text-emerald-400">{content._count?.likedBy || 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 bg-purple-500/10 px-2 py-1 rounded border border-purple-500/20">
+                              <MessageCircle className="h-3 w-3 text-purple-400" />
+                              <span className="text-xs font-bold text-purple-400">{content._count?.whatsappedBy || 0}</span>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex flex-col gap-2">
-                            <div className="text-sm text-slate-300 flex items-center gap-2">
-                              <Eye className="h-4 w-4 text-blue-400" />
-                              <span className="text-white font-medium">{content._count?.viewedBy || 0}</span> مشاهدة
-                            </div>
-                            <div className="text-sm text-slate-300 flex items-center gap-2">
-                              <ThumbsUp className="h-4 w-4 text-green-400" />
-                              <span className="text-white font-medium">{content._count?.likedBy || 0}</span> إعجاب
-                            </div>
-                            <div className="text-sm text-slate-300 flex items-center gap-2">
-                              <MessageCircle className="h-4 w-4 text-purple-400" />
-                              <span className="text-white font-medium">{content._count?.whatsappedBy || 0}</span> تواصل
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex gap-2">
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          <div className="flex gap-1">
                             <button
                               onClick={() => handleGemClick(content)}
-                              className="p-2 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all"
+                              className="p-1.5 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/30 transition-all duration-150 hover:scale-110"
                               title="إنشاء جائزة"
                             >
-                              <Gem className="h-4 w-4" />
+                              <Gem className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => handleEditClick(content)}
-                              className="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all"
+                              className="p-1.5 rounded-lg bg-blue-500/15 text-blue-400 hover:bg-blue-500/25 border border-blue-500/30 transition-all duration-150 hover:scale-110"
                               title="تعديل"
                             >
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(content)}
-                              className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                              className="p-1.5 rounded-lg bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/30 transition-all duration-150 hover:scale-110"
                               title="حذف"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         </td>
@@ -665,39 +682,44 @@ export default function ContentManagementPage() {
               </div>
             </div>
 
-            {/* Mobile Card Grid View */}
-            <div className="md:hidden grid grid-cols-1 gap-4">
+            {/* Mobile Compact Card Grid View */}
+            <div className="md:hidden grid grid-cols-1 gap-3">
               {currentItems.map((content) => (
                 <div
                   key={content.id}
-                  className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl p-5"
+                  className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-2xl p-6 hover:shadow-blue-500/10 transition-all duration-200"
                 >
                   {/* Card Header */}
-                  <div className="flex justify-between flex-wrap items-start mb-4">
-                    <h3 className="text-lg font-semibold text-white">
-                      {content.title}
-                    </h3>
-                    <div className="text-xs text-slate-400 font-mono mt-1 w-full">
-                      معرف: {content.id.slice(0, 12)}...
+                  <div className="flex justify-between items-start mb-4 pb-4 border-b border-slate-700/50">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                        <div className="text-xs text-slate-500 font-mono font-medium bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">
+                          {content.id.slice(0, 12)}...
+                        </div>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2 leading-tight">
+                        {content.title}
+                      </h3>
                     </div>
-                    <div className="flex gap-2 mt-3">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => handleGemClick(content)}
-                        className="p-2 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20 transition-all"
+                        className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 text-amber-400 hover:from-amber-500/30 hover:to-amber-600/20 border border-amber-500/30 transition-all duration-200 shadow-md hover:shadow-lg"
                         title="إنشاء جائزة"
                       >
                         <Gem className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleEditClick(content)}
-                        className="p-2 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all"
+                        className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400 hover:from-blue-500/30 hover:to-blue-600/20 border border-blue-500/30 transition-all duration-200 shadow-md hover:shadow-lg"
                         title="تعديل"
                       >
                         <Edit className="h-5 w-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(content)}
-                        className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                        className="p-2.5 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/10 text-red-400 hover:from-red-500/30 hover:to-red-600/20 border border-red-500/30 transition-all duration-200 shadow-md hover:shadow-lg"
                         title="حذف"
                       >
                         <Trash2 className="h-5 w-5" />
@@ -706,27 +728,38 @@ export default function ContentManagementPage() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                  <p className="text-sm text-slate-400 mb-4 leading-relaxed line-clamp-3">
                     {content.description}
                   </p>
 
                   {/* Tags/Interests */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {(content.interests || []).map((interest) => (
-                      <span
-                        key={interest.id}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                      >
-                        {interest.name}
-                      </span>
-                    ))}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {(content.interests || []).map((interest, idx) => {
+                      const colors = [
+                        "bg-blue-500/10 text-blue-400 border-blue-500/30",
+                        "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+                        "bg-purple-500/10 text-purple-400 border-purple-500/30",
+                        "bg-amber-500/10 text-amber-400 border-amber-500/30",
+                        "bg-pink-500/10 text-pink-400 border-pink-500/30",
+                      ];
+                      const colorClass = colors[idx % colors.length];
+                      return (
+                        <span
+                          key={interest.id}
+                          className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold border ${colorClass} shadow-sm`}
+                        >
+                          {interest.name}
+                        </span>
+                      );
+                    })}
                   </div>
 
                   {/* Media, Owner, and Settings */}
                   <div className="grid grid-cols-2 gap-3 mb-3">
                     {/* Media */}
-                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
-                      <div className="text-xs font-semibold text-slate-300 mb-2">
+                    <div className="bg-gradient-to-br from-slate-800/60 to-slate-800/40 border border-slate-700/50 p-3 rounded-xl shadow-lg">
+                      <div className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div>
                         الوسائط
                       </div>
                       <div className="flex gap-2">
@@ -734,10 +767,11 @@ export default function ContentManagementPage() {
                           <button
                             key={index}
                             onClick={() => handleMediaClick(media)}
-                            className={`p-2 rounded-lg transition-all ${media.type === "IMAGE"
-                              ? "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
-                              : "bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20"
-                              }`}
+                            className={`p-2.5 rounded-xl transition-all duration-200 hover:scale-110 shadow-md hover:shadow-lg ${
+                              media.type === "IMAGE"
+                                ? "bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400 hover:from-blue-500/30 hover:to-blue-600/20 border border-blue-500/30"
+                                : "bg-gradient-to-br from-purple-500/20 to-purple-600/10 text-purple-400 hover:from-purple-500/30 hover:to-purple-600/20 border border-purple-500/30"
+                            }`}
                           >
                             {media.type === "IMAGE" ? (
                               <Image className="h-4 w-4" />
@@ -750,26 +784,39 @@ export default function ContentManagementPage() {
                     </div>
 
                     {/* Owner */}
-                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
-                      <div className="text-xs font-semibold text-slate-300 mb-2">
-                        المالك ({content.ownerType === "INDIVIDUAL" ? "فردي" : "متجر"})
+                    <div className="bg-gradient-to-br from-slate-800/60 to-slate-800/40 border border-slate-700/50 p-3 rounded-xl shadow-lg">
+                      <div className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
+                        المالك
                       </div>
                       {content.ownerType === "INDIVIDUAL" ? (
                         <>
-                          <div className="text-sm font-medium text-white flex items-center gap-2 mb-1">
-                            <User className="h-4 w-4 text-slate-400" />
-                            {content.ownerName}
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 rounded-lg bg-blue-500/20">
+                              <User className="h-3.5 w-3.5 text-blue-400" />
+                            </div>
+                            <span className="text-sm font-bold text-white">{content.ownerName}</span>
                           </div>
-                          <div className="text-sm text-slate-400 flex items-center gap-2">
-                            <Phone className="h-4 w-4 text-slate-400" />
-                            {content.ownerNumber}
+                          <div className="flex items-center gap-2 text-xs text-slate-400">
+                            <Phone className="h-3.5 w-3.5 text-slate-500" />
+                            <span className="font-mono">{content.ownerNumber}</span>
+                          </div>
+                          <div className="mt-2 text-xs px-2 py-1 bg-blue-500/10 text-blue-400 rounded-lg font-semibold inline-block border border-blue-500/30">
+                            فردي
                           </div>
                         </>
                       ) : (
-                        <div className="text-sm font-medium text-white flex items-center gap-2">
-                          <Store className="h-4 w-4 text-slate-400" />
-                          {content.store?.name || "متجر"}
-                        </div>
+                        <>
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 rounded-lg bg-indigo-500/20">
+                              <Store className="h-3.5 w-3.5 text-indigo-400" />
+                            </div>
+                            <span className="text-sm font-bold text-white">{content.store?.name || "متجر"}</span>
+                          </div>
+                          <div className="mt-2 text-xs px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded-lg font-semibold inline-block border border-indigo-500/30">
+                            متجر
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
@@ -777,45 +824,45 @@ export default function ContentManagementPage() {
                   {/* Settings and Stats */}
                   <div className="grid grid-cols-2 gap-3">
                     {/* Settings */}
-                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
-                      <div className="text-xs font-semibold text-slate-300 mb-2">
+                    <div className="bg-gradient-to-br from-slate-800/60 to-slate-800/40 border border-slate-700/50 p-3 rounded-xl shadow-lg">
+                      <div className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
                         الإعدادات
                       </div>
-                      <div className="text-sm text-slate-300 flex items-center gap-2 mb-1">
-                        <Clock className="h-4 w-4 text-slate-400" />
-                        {content.intervalHours} ساعة
+                      <div className="flex items-center gap-2 mb-2 bg-slate-900/50 px-2 py-1.5 rounded-lg border border-slate-700/50">
+                        <Clock className="h-4 w-4 text-amber-400" />
+                        <span className="text-sm font-semibold text-white">{content.intervalHours}</span>
+                        <span className="text-xs text-slate-400">ساعة</span>
                       </div>
-                      <div className="text-sm text-slate-300 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-slate-400" />
-                        {new Date(content.endValidationDate).toLocaleDateString(
-                          "ar"
-                        )}
+                      <div className="flex items-center gap-2 bg-slate-900/50 px-2 py-1.5 rounded-lg border border-slate-700/50">
+                        <Calendar className="h-4 w-4 text-cyan-400" />
+                        <span className="text-xs font-medium text-slate-300">
+                          {new Date(content.endValidationDate).toLocaleDateString("ar")}
+                        </span>
                       </div>
                     </div>
 
                     {/* Stats */}
-                    <div className="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl">
-                      <div className="text-xs font-semibold text-slate-300 mb-2">
+                    <div className="bg-gradient-to-br from-slate-800/60 to-slate-800/40 border border-slate-700/50 p-3 rounded-xl shadow-lg">
+                      <div className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
                         الإحصائيات
                       </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="text-xs text-center">
-                          <div className="flex justify-center mb-1">
-                            <Eye className="h-4 w-4 text-blue-400" />
-                          </div>
-                          <div className="text-white font-medium">{content._count?.viewedBy || 0}</div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 bg-blue-500/10 px-2 py-1.5 rounded-lg border border-blue-500/20">
+                          <Eye className="h-3.5 w-3.5 text-blue-400" />
+                          <span className="text-sm font-bold text-blue-400">{content._count?.viewedBy || 0}</span>
+                          <span className="text-xs text-slate-400">مشاهدة</span>
                         </div>
-                        <div className="text-xs text-center">
-                          <div className="flex justify-center mb-1">
-                            <ThumbsUp className="h-4 w-4 text-green-400" />
-                          </div>
-                          <div className="text-white font-medium">{content._count?.likedBy || 0}</div>
+                        <div className="flex items-center gap-2 bg-emerald-500/10 px-2 py-1.5 rounded-lg border border-emerald-500/20">
+                          <ThumbsUp className="h-3.5 w-3.5 text-emerald-400" />
+                          <span className="text-sm font-bold text-emerald-400">{content._count?.likedBy || 0}</span>
+                          <span className="text-xs text-slate-400">إعجاب</span>
                         </div>
-                        <div className="text-xs text-center">
-                          <div className="flex justify-center mb-1">
-                            <MessageCircle className="h-4 w-4 text-purple-400" />
-                          </div>
-                          <div className="text-white font-medium">{content._count?.whatsappedBy || 0}</div>
+                        <div className="flex items-center gap-2 bg-purple-500/10 px-2 py-1.5 rounded-lg border border-purple-500/20">
+                          <MessageCircle className="h-3.5 w-3.5 text-purple-400" />
+                          <span className="text-sm font-bold text-purple-400">{content._count?.whatsappedBy || 0}</span>
+                          <span className="text-xs text-slate-400">تواصل</span>
                         </div>
                       </div>
                     </div>
