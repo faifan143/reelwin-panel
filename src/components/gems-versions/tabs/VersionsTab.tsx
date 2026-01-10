@@ -57,10 +57,16 @@ const VersionsTab: React.FC<VersionsTabProps> = ({
     });
 
     const resetForm = () => {
-        setFormData({
+        const resetData = {
             version: '',
             isRequired: false,
-        });
+        };
+        
+        if (onFormDataChange) {
+            onFormDataChange(resetData);
+        } else {
+            setInternalFormData(resetData);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
