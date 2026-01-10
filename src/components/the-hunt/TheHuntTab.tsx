@@ -8,7 +8,7 @@ import {
   updateHuntStatus,
 } from "./api";
 import type { Hunt, HuntStatus } from "./types";
-import CreateHuntModal from "./CreateHuntModal";
+// Modal import removed - modal is now rendered at page level
 
 // Minimal, efficient date formatting reused across rows
 const dateFmt = new Intl.DateTimeFormat("en-GB", {
@@ -21,7 +21,11 @@ const formatISODate = (iso: string): string => {
   return isNaN(d.getTime()) ? "-" : dateFmt.format(d);
 };
 
-const TheHuntTab: React.FC = () => {
+interface TheHuntTabProps {
+  onOpenCreate?: () => void;
+}
+
+const TheHuntTab: React.FC<TheHuntTabProps> = ({ onOpenCreate }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [statusUpdatingId, setStatusUpdatingId] = useState<string | null>(null);
@@ -81,7 +85,6 @@ const TheHuntTab: React.FC = () => {
     }
   };
 
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -134,7 +137,7 @@ const TheHuntTab: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={() => setIsCreateOpen(true)}
+            onClick={() => onOpenCreate?.()}
             className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 flex items-center gap-2 font-semibold"
           >
             <Plus size={18} />
@@ -343,9 +346,6 @@ const TheHuntTab: React.FC = () => {
         </div>
       </div>
 
-      {isCreateOpen && (
-        <CreateHuntModal onClose={() => setIsCreateOpen(false)} />
-      )}
     </div>
   );
 };

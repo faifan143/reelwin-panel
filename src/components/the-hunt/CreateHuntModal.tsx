@@ -75,9 +75,9 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-700/50 max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
+      <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-700/50 max-h-[80vh] flex flex-col">
+        <div className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-slate-700/50">
+          <div className="flex justify-between items-center">
             <h3 className="text-lg font-bold text-white">إنشاء الرحلة جديدة</h3>
             <button
               onClick={onClose}
@@ -86,14 +86,14 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
               <X size={20} />
             </button>
           </div>
-
-          {errors.root?.message && (
-            <div className="mb-4 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm">
-              {errors.root.message}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto no-scrollbar px-6 py-6 space-y-4">
+            {errors.root?.message && (
+              <div className="mb-4 p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm">
+                {errors.root.message}
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-200 mb-2">
@@ -279,25 +279,24 @@ const CreateHuntModal: React.FC<CreateHuntModalProps> = ({ onClose }) => {
                 )}
               </div>
             </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2.5 bg-slate-700/50 text-slate-200 rounded-xl hover:bg-slate-700/70 border border-slate-600/50 transition-all font-medium"
-              >
-                إلغاء
-              </button>
-              <button
-                type="submit"
-                disabled={mutation.isPending}
-                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold disabled:opacity-50"
-              >
-                {mutation.isPending ? "جارٍ الإنشاء..." : "إنشاء"}
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div className="flex-shrink-0 flex justify-end gap-3 px-6 py-4 border-t border-slate-700/50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2.5 bg-slate-700/50 text-slate-200 rounded-xl hover:bg-slate-700/70 border border-slate-600/50 transition-all font-medium"
+            >
+              إلغاء
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold disabled:opacity-50"
+            >
+              {mutation.isPending ? "جارٍ الإنشاء..." : "إنشاء"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

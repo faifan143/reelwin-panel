@@ -5,13 +5,32 @@ import React, { useState } from 'react';
 import { clearVersions, createVersion, getLatestVersion } from '../api';
 import { CreateVersionDto } from '../types';
 
-const VersionsTab: React.FC = () => {
+interface VersionsTabProps {
+    onOpenCreate?: () => void;
+    onCloseCreate?: () => void;
+    formData?: CreateVersionDto;
+    onFormDataChange?: (data: CreateVersionDto) => void;
+    onSubmit?: (e: React.FormEvent) => void;
+    isSubmitting?: boolean;
+}
+
+const VersionsTab: React.FC<VersionsTabProps> = ({ 
+    onOpenCreate,
+    onCloseCreate,
+    formData: externalFormData,
+    onFormDataChange,
+    onSubmit: externalOnSubmit,
+    isSubmitting: externalIsSubmitting
+}) => {
     const queryClient = useQueryClient();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState<CreateVersionDto>({
+    const [internalFormData, setInternalFormData] = useState<CreateVersionDto>({
         version: '',
         isRequired: false,
     });
+    
+    // Use external form data if provided (controlled), otherwise use internal state
+    const formData = externalFormData ?? internalFormData;
+    const isControlled = externalFormData !== undefined;
 
     // Query to fetch the latest version
     const { data: latestVersion, isLoading, isError } = useQuery({
@@ -22,10 +41,10 @@ const VersionsTab: React.FC = () => {
     // Mutation to add a new version
     const createVersionMutation = useMutation({
         mutationFn: createVersion,
-        onSuccess: () => {
+            onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['latest-version'] });
-            setIsModalOpen(false);
             resetForm();
+            onCloseCreate?.(); // Call parent callback to close modal
         },
     });
 
@@ -46,15 +65,25 @@ const VersionsTab: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        createVersionMutation.mutate(formData);
+        if (externalOnSubmit) {
+            externalOnSubmit(e);
+        } else {
+            createVersionMutation.mutate(formData);
+        }
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-        setFormData((prev) => ({
-            ...prev,
+        const newData = {
+            ...formData,
             [name]: type === 'checkbox' ? checked : value,
-        }));
+        };
+        
+        if (onFormDataChange) {
+            onFormDataChange(newData);
+        } else {
+            setInternalFormData(newData);
+        }
     };
 
     const handleClearVersions = () => {
@@ -114,7 +143,7 @@ const VersionsTab: React.FC = () => {
                 </div>
                 <div className="flex gap-2">
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => onOpenCreate?.()}
                         className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 flex items-center gap-2 font-semibold"
                     >
                         <Plus size={18} />
@@ -203,67 +232,7 @@ const VersionsTab: React.FC = () => {
                 </>
             )}
 
-            {/* Create Version Modal - Dark Theme */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md border border-slate-700/50">
-                        <div className="p-4 border-b border-slate-700/50 flex justify-between items-center">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="text-slate-400 hover:text-white bg-slate-700/50 rounded-lg p-2 transition-colors"
-                            >
-                                <X size={20} />
-                            </button>
-                            <h3 className="text-lg font-bold text-right text-white">{t.newVersion}</h3>
-                        </div>
-                        <form onSubmit={handleSubmit} className="p-4">
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-slate-200 mb-2 text-right">
-                                    {t.version}
-                                </label>
-                                <input
-                                    type="text"
-                                    name="version"
-                                    value={formData.version}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right"
-                                    placeholder={t.versionFormat}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-6 flex items-center justify-end">
-                                <input
-                                    type="checkbox"
-                                    id="isRequired"
-                                    name="isRequired"
-                                    checked={formData.isRequired}
-                                    onChange={handleInputChange}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-slate-600 rounded bg-slate-700/50"
-                                />
-                                <label htmlFor="isRequired" className="mr-2 block text-sm text-slate-200">
-                                    {t.isRequired}
-                                </label>
-                            </div>
-                            <div className="flex justify-start gap-3">
-                                <button
-                                    type="submit"
-                                    disabled={createVersionMutation.isPending}
-                                    className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {createVersionMutation.isPending ? t.adding : t.addNew}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="flex-1 px-4 py-3 rounded-xl bg-slate-700/50 hover:bg-slate-700/70 text-slate-200 border border-slate-600/50 transition-all font-semibold"
-                                >
-                                    {t.cancel}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {/* Modal rendering moved to page level */}
         </div>
     );
 };

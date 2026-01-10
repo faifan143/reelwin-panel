@@ -44,12 +44,14 @@ interface GenerateGemParams {
     points: number;
 }
 
-const GemGenerationDropdown: React.FC = () => {
+interface GemGenerationDropdownProps {
+    onGemSuccess?: (gem: GemGenerationResponse['gem']) => void;
+}
+
+const GemGenerationDropdown: React.FC<GemGenerationDropdownProps> = ({ onGemSuccess }) => {
     const [contents, setContents] = useState<Content[]>([]);
     const [selectedContent, setSelectedContent] = useState<Content | null>(null);
     const [points, setPoints] = useState<number>(10);
-    const [successModalVisible, setSuccessModalVisible] = useState(false);
-    const [generatedGem, setGeneratedGem] = useState<GemGenerationResponse['gem'] | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
 
     // Fetch content using useQuery
@@ -80,8 +82,7 @@ const GemGenerationDropdown: React.FC = () => {
         },
         onSuccess: (data: GemGenerationResponse) => {
             if (data.success) {
-                setGeneratedGem(data.gem);
-                setSuccessModalVisible(true);
+                onGemSuccess?.(data.gem);
                 setSelectedContent(null);
                 setPoints(10);
             } else {
@@ -119,10 +120,6 @@ const GemGenerationDropdown: React.FC = () => {
         setSelectedContent(option ? option.content : null);
     };
 
-    const closeSuccessModal = () => {
-        setSuccessModalVisible(false);
-        setGeneratedGem(null);
-    };
 
     // Format content options for react-select
     const getSelectOptions = (): ContentOption[] => {
@@ -306,65 +303,7 @@ const GemGenerationDropdown: React.FC = () => {
                 </form>
             </div>
 
-            {/* Success Modal - Dark Theme */}
-            {successModalVisible && (
-                <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
-                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                        <div className="inline-block align-bottom bg-slate-800 rounded-2xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-700/50">
-                            <div className="absolute top-0 left-0 pt-4 pl-4">
-                                <button
-                                    type="button"
-                                    className="bg-slate-700/50 rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-700 focus:outline-none transition-colors"
-                                    onClick={closeSuccessModal}
-                                >
-                                    <span className="sr-only">إغلاق</span>
-                                    <X size={20} />
-                                </button>
-                            </div>
-                            <div className="bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <div className="sm:flex sm:items-start">
-                                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 sm:mx-0 shadow-lg shadow-green-500/20">
-                                        <Gift className="h-7 w-7 text-white" />
-                                    </div>
-                                    <div className="mt-3 text-center sm:mt-0 sm:mr-4 sm:text-right">
-                                        <h3 className="text-xl leading-6 font-bold text-white mb-4" id="modal-title">
-                                            تم إنشاء الجوهرة بنجاح
-                                        </h3>
-                                        {generatedGem && (
-                                            <div className="mt-4 space-y-3">
-                                                <div className="p-3 bg-slate-700/50 rounded-xl border border-slate-600/50">
-                                                    <p className="text-sm text-slate-300">
-                                                        <span className="font-medium text-blue-400">المحتوى:</span> {generatedGem.contentTitle}
-                                                    </p>
-                                                </div>
-                                                <div className="p-3 bg-slate-700/50 rounded-xl border border-slate-600/50">
-                                                    <p className="text-sm text-slate-300">
-                                                        <span className="font-medium text-blue-400">النقاط:</span> {generatedGem.points}
-                                                    </p>
-                                                </div>
-                                                <p className="text-sm text-slate-400 mt-4 p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
-                                                    سيتم منح هذه الجوهرة لأول مستخدم يشاهد هذا المحتوى.
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-slate-700/30 px-4 py-3 sm:px-6 sm:flex sm:flex-row border-t border-slate-700/50">
-                                <button
-                                    type="button"
-                                    className="w-full inline-flex justify-center rounded-xl border border-transparent shadow-lg px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto shadow-blue-500/20 transition-all"
-                                    onClick={closeSuccessModal}
-                                >
-                                    موافق
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Success Modal moved to page level */}
         </div>
     );
 };

@@ -970,33 +970,35 @@ export default function ContentManagementPage() {
               &#8203;
             </span>
 
-            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
-              <div className="bg-slate-900 px-6 pt-6 pb-4 sm:p-8 sm:pb-6">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:text-right sm:w-full">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-white flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                          <Edit className="h-5 w-5 text-white" />
-                        </div>
-                        تعديل المحتوى
-                      </h3>
-                      <button
-                        onClick={() => setIsEditModalOpen(false)}
-                        className="p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-white transition-all"
-                      >
-                        <X className="h-5 w-5" />
-                      </button>
+            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-y-auto no-scrollbar shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full max-h-[80vh] flex flex-col">
+              {/* Fixed Header */}
+              <div className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-slate-800">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+                      <Edit className="h-5 w-5 text-white" />
                     </div>
-                    <div className="mt-2">
-                      <p className="text-sm text-slate-400 mb-6">
-                        تعديل تفاصيل المحتوى (لا يمكن تعديل الوسائط)
-                      </p>
+                    تعديل المحتوى
+                  </h3>
+                  <button
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="p-2 rounded-lg bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-white transition-all"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+                <p className="text-sm text-slate-400 mt-2">
+                  تعديل تفاصيل المحتوى (لا يمكن تعديل الوسائط)
+                </p>
+              </div>
 
-                      <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        className="space-y-6"
-                      >
+              {/* Scrollable Content */}
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                id="edit-content-form"
+                className="flex-1 flex flex-col overflow-auto"
+              >
+                <div className="flex-1 overflow-y-auto no-scrollbar px-6 py-6 space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="md:col-span-2">
                             <label
@@ -1372,54 +1374,52 @@ export default function ContentManagementPage() {
                             />
                           </div>
                         </div>
-
-                        <div className="mt-8 flex gap-3">
-                          <button
-                            type="submit"
-                            disabled={updateMutation.isPending}
-                            className="flex-1 inline-flex justify-center items-center gap-2 rounded-xl px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {updateMutation.isPending ? (
-                              <>
-                                <svg
-                                  className="animate-spin h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                  ></path>
-                                </svg>
-                                جاري الحفظ...
-                              </>
-                            ) : (
-                              "حفظ التغييرات"
-                            )}
-                          </button>
-                          <button
-                            type="button"
-                            className="px-6 py-3 inline-flex justify-center items-center rounded-xl border border-slate-600 bg-slate-800/50 text-base font-medium text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all"
-                            onClick={() => setIsEditModalOpen(false)}
-                          >
-                            إلغاء
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
                 </div>
-              </div>
+
+                {/* Fixed Footer */}
+                <div className="flex-shrink-0 px-6 py-4 border-t border-slate-800 bg-slate-900 flex gap-3">
+                  <button
+                    type="submit"
+                    disabled={updateMutation.isPending}
+                    className="flex-1 inline-flex justify-center items-center gap-2 rounded-xl px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-base font-semibold text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {updateMutation.isPending ? (
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        جاري الحفظ...
+                      </>
+                    ) : (
+                      "حفظ التغييرات"
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    className="px-6 py-3 inline-flex justify-center items-center rounded-xl border border-slate-600 bg-slate-800/50 text-base font-medium text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 transition-all"
+                    onClick={() => setIsEditModalOpen(false)}
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -1444,8 +1444,8 @@ export default function ContentManagementPage() {
               &#8203;
             </span>
 
-            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-slate-900 px-6 pt-6 pb-4 sm:p-8">
+            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full max-h-[80vh] flex flex-col">
+              <div className="flex-1 overflow-y-auto no-scrollbar bg-slate-900 px-6 pt-6 pb-4 sm:p-8">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:text-right sm:w-full">
                     <div className="flex items-center gap-3 mb-4">
@@ -1537,21 +1537,21 @@ export default function ContentManagementPage() {
               &#8203;
             </span>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom bg-slate-900 rounded-2xl text-right overflow-hidden shadow-2xl border border-slate-700/50 transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full max-h-[80vh] flex flex-col">
+              <div className="flex-1 overflow-y-auto no-scrollbar bg-slate-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  <h3 className="text-lg font-medium leading-6 text-white">
                     عرض الوسائط
                   </h3>
                   <button
                     type="button"
-                    className="text-gray-400 hover:text-gray-500"
+                    className="text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-all"
                     onClick={() => setIsMediaModalOpen(false)}
                   >
                     <X className="h-6 w-6" />
                   </button>
                 </div>
-                <div className="mt-2 bg-gray-100 rounded-lg overflow-hidden">
+                <div className="mt-2 bg-slate-800/50 rounded-lg overflow-hidden">
                   {selectedMedia?.type === "IMAGE" ? (
                     <img
                       src={selectedMedia.url}
@@ -1568,14 +1568,14 @@ export default function ContentManagementPage() {
                     />
                   )}
                 </div>
-                <div className="mt-4 text-center text-sm text-gray-500">
+                <div className="mt-4 text-center text-sm text-slate-400">
                   {selectedMedia?.type === "IMAGE" ? "صورة" : "فيديو"}
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="bg-slate-800/50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-slate-700/50">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                  className="w-full inline-flex justify-center rounded-xl border border-slate-600 shadow-sm px-4 py-2.5 bg-slate-800/50 text-base font-medium text-slate-200 hover:bg-slate-700/50 hover:border-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={() => setIsMediaModalOpen(false)}
                 >
                   إغلاق
@@ -1598,9 +1598,9 @@ export default function ContentManagementPage() {
             />
 
             {/* Modal Content */}
-            <div className="relative inline-block align-bottom bg-slate-900 border border-slate-800 rounded-xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+            <div className="relative inline-block align-bottom bg-slate-900 border border-slate-800 rounded-xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full max-h-[80vh] flex flex-col">
               {/* Header */}
-              <div className="px-6 pt-6 pb-4 border-b border-slate-800">
+              <div className="flex-shrink-0 px-6 pt-6 pb-4 border-b border-slate-800">
                 <h3
                   className="text-xl font-bold text-white mb-2"
                   id="modal-title"
@@ -1613,7 +1613,7 @@ export default function ContentManagementPage() {
               </div>
 
               {/* Body */}
-              <div className="px-6 py-6">
+              <div className="flex-1 overflow-y-auto no-scrollbar px-6 py-6">
                 <div className="space-y-4">
                   <div>
                     <label
@@ -1638,7 +1638,7 @@ export default function ContentManagementPage() {
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex flex-row-reverse gap-3">
+              <div className="flex-shrink-0 px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex flex-row-reverse gap-3">
                 <button
                   type="button"
                   className="inline-flex items-center justify-center h-11 px-6 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold rounded-lg shadow-lg shadow-yellow-500/25 hover:shadow-xl hover:shadow-yellow-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"

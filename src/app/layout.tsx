@@ -288,8 +288,12 @@ export default function RootLayout() {
                   </button>,
                 ]}
                 centered
+                styles={{
+                  body: { maxHeight: '80vh', overflowY: 'auto' }
+                }}
+                bodyStyle={{ maxHeight: '80vh', overflowY: 'auto' }}
               >
-                <div className="text-right">
+                <div className="text-right no-scrollbar">
                   <p className="text-lg">جاري إضافة المحتوى...</p>
                   <p className="text-gray-600">
                     لا يمكنك الانتقال إلى صفحة أخرى حتى يتم الانتهاء من العملية.

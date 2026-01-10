@@ -91,13 +91,15 @@ const DialogContent = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          "relative z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg",
+          "relative z-50 grid w-full max-w-lg gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg max-h-[80vh] flex flex-col overflow-hidden",
           className
         )}
         onClick={(e) => e.stopPropagation()}
         {...props}
       >
-        {children}
+        <div className="flex-1 overflow-y-auto no-scrollbar">
+          {children}
+        </div>
         <DialogClose />
       </div>
     </div>

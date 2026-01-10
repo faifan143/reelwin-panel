@@ -53,14 +53,17 @@ const InterestFormModal: React.FC<InterestFormModalProps> = ({
       centered
       className="dark-modal"
       styles={{
-        mask: { backdropFilter: 'blur(8px)' }
+        mask: { backdropFilter: 'blur(8px)' },
+        body: { maxHeight: '80vh', overflowY: 'auto' }
       }}
+      bodyStyle={{ maxHeight: '80vh', overflowY: 'auto' }}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onSubmit}
-        className="mt-4"
+      <div className="no-scrollbar">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onSubmit}
+          className="mt-4"
         validateMessages={{
           required: "${label} مطلوب",
           types: {
@@ -161,6 +164,7 @@ const InterestFormModal: React.FC<InterestFormModalProps> = ({
           </Button>
         </Form.Item>
       </Form>
+      </div>
     </Modal>
   );
 };

@@ -30,18 +30,20 @@ import {
   selectRandomWinner,
   generateQrCodePdf,
 } from "../api";
-import QrCodeForm from "./qr/QrCodeForm";
-import BulkOncePdfModal from "./qr/BulkOncePdfModal";
-import QrCodeDetails from "./qr/QrCodeDetails";
+// Modal imports removed - modals are now rendered at page level
 
-const QrCodeTab: React.FC = () => {
+interface QrCodeTabProps {
+  onOpenCreate?: () => void;
+  onOpenDetails?: (qrCode: QrCodeWithScans) => void;
+  onOpenBulk?: () => void;
+}
+
+const QrCodeTab: React.FC<QrCodeTabProps> = ({ 
+  onOpenCreate, 
+  onOpenDetails, 
+  onOpenBulk 
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedQrCode, setSelectedQrCode] = useState<QrCodeWithScans | null>(
-    null
-  );
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // Queries
@@ -99,23 +101,15 @@ const QrCodeTab: React.FC = () => {
   };
 
   const handleCreateQrCode = () => {
-    setIsCreateModalOpen(true);
+    onOpenCreate?.();
   };
 
   const handleOpenBulkModal = () => {
-    setIsBulkModalOpen(true);
+    onOpenBulk?.();
   };
 
   const handleViewDetails = (qrCode: QrCodeWithScans) => {
-    setSelectedQrCode(qrCode);
-    setIsDetailsModalOpen(true);
-  };
-
-  const handleCloseModals = () => {
-    setIsCreateModalOpen(false);
-    setIsDetailsModalOpen(false);
-    setIsBulkModalOpen(false);
-    setSelectedQrCode(null);
+    onOpenDetails?.(qrCode);
   };
 
   const handleActivate = (id: string) => {
@@ -512,51 +506,6 @@ const QrCodeTab: React.FC = () => {
         )}
       </div>
 
-      {/* Create QR Code Modal - Dark Theme */}
-      {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl border border-slate-700/50 max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold text-white">إنشاء رمز QR جديد</h3>
-                <button
-                  onClick={handleCloseModals}
-                  className="text-slate-400 hover:text-white bg-slate-700/50 rounded-lg p-2 transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              <QrCodeForm onClose={handleCloseModals} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* QR Code Details Modal - Dark Theme */}
-      {isDetailsModalOpen && selectedQrCode && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl border border-slate-700/50 max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold text-white">تفاصيل رمز QR</h3>
-                <button
-                  onClick={handleCloseModals}
-                  className="text-slate-400 hover:text-white bg-slate-700/50 rounded-lg p-2 transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              <QrCodeDetails
-                qrCode={selectedQrCode}
-                onClose={handleCloseModals}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Bulk Once PDF Modal */}
-      {isBulkModalOpen && <BulkOncePdfModal onClose={handleCloseModals} />}
     </div>
   );
 };
