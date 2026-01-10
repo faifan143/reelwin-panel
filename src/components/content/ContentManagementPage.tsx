@@ -1589,63 +1589,59 @@ export default function ContentManagementPage() {
       {/* Gem Creation Modal */}
       {isGemModalOpen && (
         <div className="fixed z-50 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
+            {/* Backdrop */}
             <div
-              className="fixed inset-0 transition-opacity"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
               aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
+              onClick={() => setIsGemModalOpen(false)}
+            />
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
+            {/* Modal Content */}
+            <div className="relative inline-block align-bottom bg-slate-900 border border-slate-800 rounded-xl text-right overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+              {/* Header */}
+              <div className="px-6 pt-6 pb-4 border-b border-slate-800">
+                <h3
+                  className="text-xl font-bold text-white mb-2"
+                  id="modal-title"
+                >
+                  إنشاء جائزة جديدة
+                </h3>
+                <p className="text-sm text-slate-400">
+                  ستتم إضافة جائزة لهذا المحتوى يمكن للمستخدمين الحصول عليها
+                </p>
+              </div>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-right overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:text-right sm:w-full">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
+              {/* Body */}
+              <div className="px-6 py-6">
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="gemPoints"
+                      className="block text-sm font-medium text-slate-300 mb-2"
                     >
-                      إنشاء جائزة جديدة
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500 mb-4">
-                        ستتم إضافة جائزة لهذا المحتوى يمكن للمستخدمين الحصول
-                        عليها
-                      </p>
-
-                      <div className="mb-4">
-                        <label
-                          htmlFor="gemPoints"
-                          className="block text-sm font-medium text-gray-700 mb-1"
-                        >
-                          عدد النقاط
-                        </label>
-                        <input
-                          type="number"
-                          id="gemPoints"
-                          min={1}
-                          value={gemPoints}
-                          onChange={(e) =>
-                            setGemPoints(parseInt(e.target.value))
-                          }
-                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-                    </div>
+                      عدد النقاط
+                    </label>
+                    <input
+                      type="number"
+                      id="gemPoints"
+                      min={1}
+                      value={gemPoints}
+                      onChange={(e) =>
+                        setGemPoints(parseInt(e.target.value) || 0)
+                      }
+                      className="w-full h-12 px-4 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder="أدخل عدد النقاط"
+                    />
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+
+              {/* Footer */}
+              <div className="px-6 py-4 bg-slate-900/50 border-t border-slate-800 flex flex-row-reverse gap-3">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-500 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:mx-3 sm:w-auto sm:text-sm"
+                  className="inline-flex items-center justify-center h-11 px-6 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold rounded-lg shadow-lg shadow-yellow-500/25 hover:shadow-xl hover:shadow-yellow-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => {
                     if (selectedContent && gemPoints > 0) {
                       generateGemMutation.mutate({
@@ -1654,7 +1650,7 @@ export default function ContentManagementPage() {
                       });
                     }
                   }}
-                  disabled={generateGemMutation.isPending}
+                  disabled={generateGemMutation.isPending || gemPoints <= 0}
                 >
                   {generateGemMutation.isPending ? (
                     <>
@@ -1686,7 +1682,7 @@ export default function ContentManagementPage() {
                 </button>
                 <button
                   type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:mx-3 sm:w-auto sm:text-sm"
+                  className="inline-flex items-center justify-center h-11 px-6 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-lg border border-slate-700 hover:border-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 focus:ring-offset-slate-900"
                   onClick={() => setIsGemModalOpen(false)}
                 >
                   إلغاء

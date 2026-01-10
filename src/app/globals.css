@@ -58,7 +58,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
 }
 
 @keyframes progress-indeterminate {
@@ -87,7 +91,11 @@ body {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
 }
 
 /* Add these styles to your globals.css file */
