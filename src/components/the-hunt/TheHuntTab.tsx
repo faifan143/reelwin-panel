@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Download, Eye, Trash2, Check, X, Plus } from "lucide-react";
+import { Download, Eye, Trash2, Check, X, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   listHunts,
   deleteHunt,
@@ -82,6 +82,21 @@ const TheHuntTab: React.FC<TheHuntTabProps> = ({ onOpenCreate }) => {
       await deleteMutation.mutateAsync(id);
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  // Pagination helpers
+  const totalPages = data?.pagination.pages || 0;
+  const totalItems = data?.pagination.total || 0;
+  const pageSize = data?.pagination.limit || 10;
+  const startIndex = data?.pagination.page ? (data.pagination.page - 1) * pageSize : 0;
+  const endIndex = data?.pagination.page
+    ? Math.min(data.pagination.page * pageSize, totalItems)
+    : 0;
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
     }
   };
 
@@ -344,6 +359,107 @@ const TheHuntTab: React.FC<TheHuntTabProps> = ({ onOpenCreate }) => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {data && data.pagination.pages > 1 && (
+          <div className="flex items-center justify-between mt-6 bg-slate-900/50 backdrop-blur-sm px-6 py-4 border-t border-slate-700/50 rounded-2xl shadow-xl">
+            {/* Mobile pagination */}
+            <div className="flex justify-between items-center w-full sm:hidden">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`relative inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium rounded-xl transition-all ${currentPage === 1
+                  ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                  : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
+                  }`}
+              >
+                <ChevronRight className="h-4 w-4" />
+                السابق
+              </button>
+              <span className="text-sm text-slate-300 font-medium">
+                {currentPage} من {totalPages}
+              </span>
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className={`relative inline-flex items-center gap-2 px-4 py-2 border text-sm font-medium rounded-xl transition-all ${currentPage === totalPages || totalPages === 0
+                  ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                  : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
+                  }`}
+              >
+                التالي
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Desktop pagination */}
+            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm text-slate-300">
+                  عرض <span className="font-semibold text-white">{startIndex + 1}</span>{" "}
+                  إلى{" "}
+                  <span className="font-semibold text-white">
+                    {endIndex}
+                  </span>{" "}
+                  من <span className="font-semibold text-white">{totalItems}</span> عنصر
+                </p>
+              </div>
+              <div>
+                <nav
+                  className="relative z-0 inline-flex gap-2"
+                  aria-label="Pagination"
+                >
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`relative inline-flex items-center px-3 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === 1
+                      ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                      : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
+                      }`}
+                  >
+                    <span className="sr-only">السابق</span>
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNumber;
+                    if (totalPages <= 5) {
+                      pageNumber = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNumber = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNumber = totalPages - 4 + i;
+                    } else {
+                      pageNumber = currentPage - 2 + i;
+                    }
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        className={`relative inline-flex items-center px-4 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === pageNumber
+                          ? "z-10 bg-blue-500 border-blue-500 text-white shadow-lg shadow-blue-500/20"
+                          : "bg-slate-800/50 border-slate-600 text-slate-200 hover:bg-slate-700/50"
+                          }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  })}
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages || totalPages === 0}
+                    className={`relative inline-flex items-center px-3 py-2 rounded-xl border text-sm font-medium transition-all ${currentPage === totalPages || totalPages === 0
+                      ? "bg-slate-800/50 text-slate-500 border-slate-700 cursor-not-allowed"
+                      : "bg-slate-800/50 text-slate-200 border-slate-600 hover:bg-slate-700/50"
+                      }`}
+                  >
+                    <span className="sr-only">التالي</span>
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
     </div>
